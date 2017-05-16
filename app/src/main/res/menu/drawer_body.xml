@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="@string/menu_title_map">
+        <menu>
+            <item
+                android:id="@+id/btn_map"
+                android:icon="@drawable/ic_map_marker_radius"
+                android:title="@string/btn_map" />
+        </menu>
+    </item>
+
+    <item android:title="@string/menu_title_actions">
+        <menu>
+            <item
+                android:id="@+id/btn_check_ins"
+                android:icon="@drawable/ic_playlist_check"
+                android:title="@string/btn_check_ins" />
+            <item
+                android:id="@+id/btn_profile"
+                android:icon="@drawable/ic_account_box_outline"
+                android:title="@string/btn_profile" />
+        </menu>
+    </item>
+
+</menu>

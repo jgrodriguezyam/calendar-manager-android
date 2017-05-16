@@ -1,0 +1,80 @@
+<resources>
+    <string name="app_name">My Calendario</string>
+    <string name="url_base">http://workermanagerapi.gear.host</string>
+    <!--<string name="url_base">http://192.168.1.217:1986</string>-->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <!-- Field Validation -->
+    <string name="required_fields">Campos requeridos</string>
+    <string name="required_field">Campo requerido</string>
+
+    <!-- Permission Validation -->
+    <string name="without_permission">Sin permisos</string>
+    <string name="permissions_required">Permisos requeridos</string>
+    <string name="without_permission_device">Sin permisos para obtener dispositivo</string>
+    <string name="without_permission_location">Sin permisos para obtener ubicación</string>
+
+    <!-- Google maps -->
+    <string name="google_maps_key">AIzaSyDY3o0cmVaR61xAn_uVBP8ClkbIQmhpXbo</string>
+    <string name="notification_geofence_transition_enter">Bienvenido, Ya puedes checar</string>
+    <string name="notification_geofence_transition_exit">Adios</string>
+    <string name="notification_geofence_transition_dwell">Ya puedes checar</string>
+
+    <!-- Drawer body -->
+    <string name="menu_title_map">Mapa</string>
+    <string name="btn_map">Mapa</string>
+    <string name="menu_title_actions">Menu</string>
+    <string name="btn_check_ins">Entradas</string>
+    <string name="btn_profile">Perfil</string>
+
+    <!-- Splash Activity -->
+    <string name="title_splash_activity">Worker Manager App</string>
+
+    <!-- Splash Fragment -->
+    <string name="without_device">Sin dispositivo</string>
+    <string name="no_found_device">Error no se encontro el dispositivo</string>
+
+    <!-- Check In Activity -->
+    <string name="title_check_in_activity">Mapa</string>
+
+    <!-- Check In Fragment -->
+    <string name="check_in_error">Error no se encontro numero telefonico</string>
+    <string name="btn_check_in">Registrar</string>
+    <string name="check_in">Registro</string>
+    <string name="init_check_in">Registrando...</string>
+    <string name="welcome">Bienvenido</string>
+    <string name="btn_check_in_records">Ver entradas</string>
+    <string name="check_in_post_success">Registro exitoso bienvenido :)</string>
+    <string name="check_in_without_location">No se ha podido obtener la ubicación</string>
+    <string name="check_in_before_hour">09:10</string>
+
+    <!-- Worker Activity -->
+    <string name="title_worker_check_ins_activity">Entradas</string>
+    <string name="title_worker_new_activity">Registro</string>
+
+    <!-- Worker Check Ins Fragment -->
+    <string name="init_worker_check_in_find">Iniciando busqueda...</string>
+
+    <!-- Worker New Fragment -->
+    <string name="init_worker_save">Registrando...</string>
+    <string name="btn_worker_save">Registrar</string>
+    <string name="hint_worker_first_name">Nombre</string>
+    <string name="hint_worker_last_name">Apellido</string>
+    <string name="hint_worker_email">Correo electrónico</string>
+    <string name="hint_worker_gender">Género</string>
+    <string name="hint_worker_cell_number">Telefono</string>
+    <string name="hint_worker_location">Ubicación</string>
+
+    <!-- Profile Activity -->
+    <string name="title_Profile_activity">Perfil</string>
+
+    <!-- Profile Fragment -->
+    <string name="tv_worker_full_name">Nombre</string>
+    <string name="tv_worker_email">Correo electrónico</string>
+    <string name="tv_worker_gender">Género</string>
+    <string name="tv_worker_cell_number">Telefono</string>
+    <string name="tv_worker_location">Ubicación</string>
+    <string name="profile_in_error">Error no se encontro al trabajador</string>
+    <string name="init_get_worker">Cargando...</string>
+</resources>

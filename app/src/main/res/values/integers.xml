@@ -1,0 +1,4 @@
+<resources>
+    <!-- Google maps -->
+    <integer name="google_maps_zoom">16</integer>
+</resources>
