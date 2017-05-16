@@ -95,6 +95,7 @@ public class LoginFragment extends Fragment implements LoginView, OnClickListene
         btnUserLogin.setOnClickListener(this);
         etUserName.addTextChangedListener(this);
         etUserPassword.addTextChangedListener(this);
+        linkCreateAccount.setOnClickListener(this);
         return root;
     }
 
@@ -158,7 +159,16 @@ public class LoginFragment extends Fragment implements LoginView, OnClickListene
 
     @Override
     public void onClick(View view) {
-        userLogin();
+        switch (view.getId()) {
+            case R.id.btn_user_login:
+                userLogin();
+                break;
+            case R.id.link_create_account:
+                Util.sendTo(getActivity(), AccountActivity.class);
+                break;
+            default:
+                break;
+        }
     }
 
     //endregion
