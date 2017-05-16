@@ -52,9 +52,12 @@ public class SplashPresenterImpl implements SplashPresenter, SplashListener {
     public void userLoginSuccess(User user) {
         Preferences.setUserId(user.getId());
         Preferences.setUserFullName(user.getFirstName() + " " + user.getLastName());
-        Preferences.setUserName(user.getUserName());
-        Preferences.setPassword(user.getPassword());
         splashView.navigateToMap();
+    }
+
+    @Override
+    public void userLoginError() {
+        splashView.navigateToLogin();
     }
 
     //endregion

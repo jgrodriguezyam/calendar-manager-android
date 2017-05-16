@@ -13,8 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.binarium.calendarmanager.R;
-import com.binarium.calendarmanager.activity.CheckInActivity;
-import com.binarium.calendarmanager.activity.ProfileActivity;
+import com.binarium.calendarmanager.activity.LoginActivity;
+import com.binarium.calendarmanager.activity.MapActivity;
 import com.binarium.calendarmanager.infrastructure.Constants;
 import com.binarium.calendarmanager.infrastructure.ObjectValidations;
 import com.binarium.calendarmanager.infrastructure.Preferences;
@@ -33,7 +33,7 @@ import butterknife.ButterKnife;
  * Created by jrodriguez on 15/05/2017.
  */
 
-public class SplashFragment  extends Fragment implements SplashView {
+public class SplashFragment extends Fragment implements SplashView {
     @Inject
     SplashPresenterImpl splashPresenter;
 
@@ -110,7 +110,7 @@ public class SplashFragment  extends Fragment implements SplashView {
 
     @Override
     public void navigateToMap() {
-        Util.sendAndFinish(getActivity(), ProfileActivity.class);
+        Util.sendAndFinish(getActivity(), MapActivity.class);
     }
 
     @Override
@@ -118,7 +118,7 @@ public class SplashFragment  extends Fragment implements SplashView {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Util.sendAndFinish(getActivity(), CheckInActivity.class);
+                Util.sendAndFinish(getActivity(), LoginActivity.class);
             }
         }, 3000);
     }

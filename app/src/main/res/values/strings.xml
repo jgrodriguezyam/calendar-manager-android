@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">My Calendario</string>
-    <string name="url_base">http://workermanagerapi.gear.host</string>
-    <!--<string name="url_base">http://192.168.1.217:1986</string>-->
+    <!--<string name="url_base">http://workermanagerapi.gear.host</string>-->
+    <string name="url_base">http://192.168.1.217:1988</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
@@ -28,12 +28,15 @@
     <string name="btn_check_ins">Entradas</string>
     <string name="btn_profile">Perfil</string>
 
-    <!-- Splash Activity -->
-    <string name="title_splash_activity">Worker Manager App</string>
+    <!-- Login Activity -->
+    <string name="title_login_activity">Login</string>
 
-    <!-- Splash Fragment -->
-    <string name="without_device">Sin dispositivo</string>
-    <string name="no_found_device">Error no se encontro el dispositivo</string>
+    <!-- Login Fragment -->
+    <string name="hint_user_name">Usuario</string>
+    <string name="hint_user_password">Contraseña</string>
+    <string name="btn_user_login">Entrar</string>
+    <string name="no_account_yet_create_one">¿No tiene una cuenta? Cree una.</string>
+    <string name="init_user_login">Entrando...</string>
 
     <!-- Check In Activity -->
     <string name="title_check_in_activity">Mapa</string>
@@ -48,23 +51,6 @@
     <string name="check_in_post_success">Registro exitoso bienvenido :)</string>
     <string name="check_in_without_location">No se ha podido obtener la ubicación</string>
     <string name="check_in_before_hour">09:10</string>
-
-    <!-- Worker Activity -->
-    <string name="title_worker_check_ins_activity">Entradas</string>
-    <string name="title_worker_new_activity">Registro</string>
-
-    <!-- Worker Check Ins Fragment -->
-    <string name="init_worker_check_in_find">Iniciando busqueda...</string>
-
-    <!-- Worker New Fragment -->
-    <string name="init_worker_save">Registrando...</string>
-    <string name="btn_worker_save">Registrar</string>
-    <string name="hint_worker_first_name">Nombre</string>
-    <string name="hint_worker_last_name">Apellido</string>
-    <string name="hint_worker_email">Correo electrónico</string>
-    <string name="hint_worker_gender">Género</string>
-    <string name="hint_worker_cell_number">Telefono</string>
-    <string name="hint_worker_location">Ubicación</string>
 
     <!-- Profile Activity -->
     <string name="title_Profile_activity">Perfil</string>

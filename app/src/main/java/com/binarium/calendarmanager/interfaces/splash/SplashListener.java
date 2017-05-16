@@ -9,4 +9,5 @@ import com.binarium.calendarmanager.viewmodels.user.User;
 
 public interface SplashListener extends BaseListener {
     void userLoginSuccess(User user);
+    void userLoginError();
 }
