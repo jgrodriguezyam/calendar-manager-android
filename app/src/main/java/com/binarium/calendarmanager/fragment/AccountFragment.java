@@ -280,44 +280,52 @@ public class AccountFragment extends Fragment implements AccountView, OnClickLis
     private boolean validFields() {
         boolean valid = true;
 
-        if(EditTextExtensions.isFieldEmpty(etUserFirstName.getText())) {
+        if (EditTextExtensions.isFieldEmpty(etUserFirstName.getText())) {
             tlUserFirstName.setError(getResources().getString(R.string.required_field));
             valid = false;
         }
 
-        if(EditTextExtensions.isFieldEmpty(etUserLastName.getText())) {
+        if (EditTextExtensions.isFieldEmpty(etUserLastName.getText())) {
             tlUserLastName.setError(getResources().getString(R.string.required_field));
             valid = false;
         }
 
-        if(gendersSpinner.getAdapter() == null || gendersSpinner.getSelectedItemPosition() == Constants.SPINNER_NOT_SET) {
+        if (gendersSpinner.getAdapter() == null || gendersSpinner.getSelectedItemPosition() == Constants.SPINNER_NOT_SET) {
             gendersSpinner.setError("Error");
             gendersErrorTextView.setVisibility(View.VISIBLE);
             valid = false;
         }
 
-        if(EditTextExtensions.isFieldEmpty(etUserEmail.getText())) {
+        if (EditTextExtensions.isFieldEmpty(etUserEmail.getText())) {
             tlUserEmail.setError(getResources().getString(R.string.required_field));
             valid = false;
         }
 
-        if(EditTextExtensions.isFieldEmpty(etUserCellNumber.getText())) {
+        if (EditTextExtensions.isFieldEmpty(etUserCellNumber.getText())) {
             tlUserCellNumber.setError(getResources().getString(R.string.required_field));
             valid = false;
         }
 
-        if(EditTextExtensions.isFieldEmpty(etUserUsername.getText())) {
+        if (EditTextExtensions.isFieldEmpty(etUserUsername.getText())) {
             tlUserUsername.setError(getResources().getString(R.string.required_field));
             valid = false;
         }
 
-        if(EditTextExtensions.isFieldEmpty(etUserFirstPassword.getText())) {
+        if (EditTextExtensions.isFieldEmpty(etUserFirstPassword.getText())) {
             tlUserFirstPassword.setError(getResources().getString(R.string.required_field));
             valid = false;
         }
 
         if(EditTextExtensions.isFieldEmpty(etUserSecondPassword.getText())) {
             tlUserSecondPassword.setError(getResources().getString(R.string.required_field));
+            valid = false;
+        }
+
+        if (EditTextExtensions.isFieldNotEmpty(etUserFirstPassword.getText()) &&
+            EditTextExtensions.isFieldNotEmpty(etUserSecondPassword.getText()) &&
+            EditTextExtensions.IsFieldsNotEqual(etUserFirstPassword.getText(), etUserSecondPassword.getText())) {
+            tlUserFirstPassword.setError(getResources().getString(R.string.invalid_compare_password_fields));
+            tlUserSecondPassword.setError(getResources().getString(R.string.invalid_compare_password_fields));
             valid = false;
         }
 
@@ -328,6 +336,10 @@ public class AccountFragment extends Fragment implements AccountView, OnClickLis
         this.genders = new ArrayList<>();
         genders.add(new GenderResponse(Gender.MALE.getIdentifier(), Gender.MALE.getValue()));
         genders.add(new GenderResponse(Gender.FEMALE.getIdentifier(), Gender.FEMALE.getValue()));
+    }
+
+    private boolean invalidComparePassword(String firstPassword, String secondPassword) {
+        return firstPassword == secondPassword;
     }
 
     //endregion

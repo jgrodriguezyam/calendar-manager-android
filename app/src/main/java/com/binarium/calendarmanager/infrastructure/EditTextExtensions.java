@@ -15,4 +15,12 @@ public class EditTextExtensions {
     public static boolean isFieldNotEmpty(CharSequence text) {
         return !TextUtils.isEmpty(text);
     }
+
+    public static boolean IsFieldsEqual(CharSequence firstText, CharSequence secondText) {
+        return firstText.toString().equals(secondText.toString());
+    }
+
+    public static boolean IsFieldsNotEqual(CharSequence firstText, CharSequence secondText) {
+        return !IsFieldsEqual(firstText, secondText);
+    }
 }
