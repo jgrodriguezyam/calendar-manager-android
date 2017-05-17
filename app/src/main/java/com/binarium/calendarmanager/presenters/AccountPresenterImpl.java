@@ -32,7 +32,7 @@ public class AccountPresenterImpl implements AccountPresenter, AccountListener {
 
     @Override
     public void createUser(User user) {
-        accountView.showProgress(ResourcesExtensions.toString(R.string.init_user_login));
+        accountView.showProgress(ResourcesExtensions.toString(R.string.init_user_save));
         accountInteractor.createUser(user, this);
     }
 
