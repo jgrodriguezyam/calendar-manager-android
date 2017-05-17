@@ -38,6 +38,26 @@
     <string name="no_account_yet_create_one">¿No tiene una cuenta? Cree una.</string>
     <string name="init_user_login">Entrando...</string>
 
+    <!-- Account Activity -->
+    <string name="title_account_activity">Registro</string>
+
+    <!-- Account Fragment -->
+    <string name="hint_user_first_name">Nombre</string>
+    <string name="hint_user_last_name">Apellido</string>
+    <string name="hint_user_gender">Género</string>
+    <string name="hint_user_email">Correo electrónico</string>
+    <string name="hint_user_cell_number">Telefono</string>
+    <string name="hint_user_username">Usuario</string>
+    <string name="hint_user_first_password">Contraseña</string>
+    <string name="hint_user_second_password">Confirmar Contraseña</string>
+    <string name="btn_user_save">Registrar</string>
+    <string name="init_user_save">Registrando...</string>
+
+
+
+
+
+
     <!-- Check In Activity -->
     <string name="title_check_in_activity">Mapa</string>
 

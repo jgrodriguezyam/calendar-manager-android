@@ -1,7 +1,9 @@
 package com.binarium.calendarmanager.myapp.injector;
 
+import com.binarium.calendarmanager.interactors.AccountInteractorImpl;
 import com.binarium.calendarmanager.interactors.LoginInteractorImpl;
 import com.binarium.calendarmanager.interactors.SplashInteractorImpl;
+import com.binarium.calendarmanager.interfaces.account.AccountInteractor;
 import com.binarium.calendarmanager.interfaces.login.LoginInteractor;
 import com.binarium.calendarmanager.interfaces.splash.SplashInteractor;
 import com.binarium.calendarmanager.service.user.UserApiService;
@@ -30,5 +32,10 @@ public class AppModule {
     @Provides
     public LoginInteractor provideLoginInteractor(UserApiService userApiService) {
         return new LoginInteractorImpl(userApiService);
+    }
+
+    @Provides
+    public AccountInteractor provideAccountInteractor(UserApiService userApiService) {
+        return new AccountInteractorImpl(userApiService);
     }
 }

@@ -1,5 +1,6 @@
 package com.binarium.calendarmanager.myapp.injector;
 
+import com.binarium.calendarmanager.fragment.AccountFragment;
 import com.binarium.calendarmanager.fragment.LoginFragment;
 import com.binarium.calendarmanager.fragment.SplashFragment;
 
@@ -13,4 +14,5 @@ import dagger.Component;
 public interface AppComponent {
     void inject(SplashFragment splashFragment);
     void inject(LoginFragment loginFragment);
+    void inject(AccountFragment accountFragment);
 }
