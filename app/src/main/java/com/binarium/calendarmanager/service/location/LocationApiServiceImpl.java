@@ -3,6 +3,8 @@ package com.binarium.calendarmanager.service.location;
 import com.binarium.calendarmanager.dto.base.CreateResponse;
 import com.binarium.calendarmanager.dto.base.SuccessResponse;
 import com.binarium.calendarmanager.dto.location.DeleteLocationRequest;
+import com.binarium.calendarmanager.dto.location.FindLocationsRequest;
+import com.binarium.calendarmanager.dto.location.FindLocationsResponse;
 import com.binarium.calendarmanager.dto.location.GetLocationRequest;
 import com.binarium.calendarmanager.dto.location.LocationRequest;
 import com.binarium.calendarmanager.dto.location.LocationResponse;
@@ -17,6 +19,27 @@ import retrofit2.Response;
  */
 
 public class LocationApiServiceImpl implements LocationApiService {
+    @Override
+    public FindLocationsResponse find(FindLocationsRequest request, BaseListener baseListener) {
+        try {
+            LocationApiServiceRetrofit locationApiServiceRetrofit = RetrofitBuilder.getRetrofit().create(LocationApiServiceRetrofit.class);
+            Call<FindLocationsResponse> call = locationApiServiceRetrofit.find(request.getName(), request.getType(), request.getUserId(), request.getDate());
+            Response<FindLocationsResponse> response = call.execute();
+
+            if (response.isSuccessful()) {
+                FindLocationsResponse findLocationsResponse = response.body();
+                return findLocationsResponse;
+            } else {
+                String errorMessage = RetrofitBuilder.getErrorMessage(response.errorBody());
+                baseListener.onError(errorMessage);
+                return null;
+            }
+        } catch (Exception e) {
+            baseListener.onError(e.getMessage());
+            return null;
+        }
+    }
+
     @Override
     public CreateResponse create(LocationRequest request, BaseListener baseListener) {
         try {

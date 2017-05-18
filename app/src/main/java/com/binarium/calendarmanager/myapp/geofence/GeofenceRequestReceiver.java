@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 
-import com.binarium.calendarmanager.fragment.CheckInFragment;
+import com.binarium.calendarmanager.fragment.GeoMapFragment;
 import com.binarium.calendarmanager.infrastructure.Constants;
 
 /**
@@ -21,9 +21,9 @@ public class GeofenceRequestReceiver extends BroadcastReceiver {
         Boolean isVisible = intent.getBooleanExtra(Constants.IS_VISIBLE_PARAMETER, false);
 
         if (isVisible){
-            //CheckInFragment.getInstace().setButtonVisibility(View.VISIBLE);
+            GeoMapFragment.getInstace().setButtonVisibility(View.VISIBLE);
         }else{
-            //CheckInFragment.getInstace().setButtonVisibility(View.GONE);
+            GeoMapFragment.getInstace().setButtonVisibility(View.GONE);
         }
     }
 }

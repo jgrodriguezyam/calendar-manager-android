@@ -10,15 +10,12 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.binarium.calendarmanager.R;
-import com.binarium.calendarmanager.activity.CheckInActivity;
+import com.binarium.calendarmanager.activity.GeoMapActivity;
 import com.binarium.calendarmanager.infrastructure.Constants;
-import com.binarium.calendarmanager.infrastructure.DateExtensions;
 import com.binarium.calendarmanager.infrastructure.ResourcesExtensions;
 import com.binarium.calendarmanager.infrastructure.StringValidations;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingEvent;
-
-import java.util.Date;
 
 /**
  * Created by jrodriguez on 25/03/2017.
@@ -63,7 +60,7 @@ public class GeofenceTransitionsIntentService extends IntentService {
             broadcastIntent.putExtra(Constants.IS_VISIBLE_PARAMETER, true);
         }
 
-        if(isOnTime() && StringValidations.IsNotNullOrEmpty(message)) {
+        if(StringValidations.IsNotNullOrEmpty(message)) {
             generateNotification("Plenumsoft", message);
         }
 
@@ -89,7 +86,7 @@ public class GeofenceTransitionsIntentService extends IntentService {
 
     private void generateNotification(String locationId, String address) {
         long when = System.currentTimeMillis();
-        Intent notifyIntent = new Intent(this, CheckInActivity.class);
+        Intent notifyIntent = new Intent(this, GeoMapActivity.class);
         notifyIntent.putExtra("id", locationId);
         notifyIntent.putExtra("address", address);
         notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -108,12 +105,5 @@ public class GeofenceTransitionsIntentService extends IntentService {
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify((int) when, builder.build());
-    }
-
-    private boolean isOnTime() {
-        DateExtensions dateExtensions = new DateExtensions();
-        Date todayHour = dateExtensions.getHourWithMinuteOfToday();
-        Date checkInHour = dateExtensions.parseDate(ResourcesExtensions.toString(R.string.check_in_before_hour));
-        return todayHour.before(checkInHour) || dateExtensions.isSameHour(todayHour, checkInHour);
     }
 }

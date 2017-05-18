@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 
 import com.binarium.calendarmanager.R;
 import com.binarium.calendarmanager.activity.LoginActivity;
-import com.binarium.calendarmanager.activity.MapActivity;
+import com.binarium.calendarmanager.activity.GeoMapActivity;
 import com.binarium.calendarmanager.infrastructure.Constants;
 import com.binarium.calendarmanager.infrastructure.ObjectValidations;
 import com.binarium.calendarmanager.infrastructure.Preferences;
@@ -110,7 +110,7 @@ public class SplashFragment extends Fragment implements SplashView {
 
     @Override
     public void navigateToMap() {
-        Util.sendAndFinish(getActivity(), MapActivity.class);
+        Util.sendAndFinish(getActivity(), GeoMapActivity.class);
     }
 
     @Override

@@ -54,24 +54,19 @@
     <string name="init_user_save">Registrando...</string>
     <string name="invalid_compare_password_fields">La contraseña no es la mismas</string>
 
+    <!-- Map Activity -->
+    <string name="title_geo_map_activity">Mapa</string>
 
-
-
-
-
-    <!-- Check In Activity -->
-    <string name="title_check_in_activity">Mapa</string>
-
-    <!-- Check In Fragment -->
-    <string name="check_in_error">Error no se encontro numero telefonico</string>
-    <string name="btn_check_in">Registrar</string>
-    <string name="check_in">Registro</string>
+    <!-- Map Fragment -->
     <string name="init_check_in">Registrando...</string>
-    <string name="welcome">Bienvenido</string>
-    <string name="btn_check_in_records">Ver entradas</string>
-    <string name="check_in_post_success">Registro exitoso bienvenido :)</string>
+    <string name="check_in_post_success">Registro exitoso :)</string>
     <string name="check_in_without_location">No se ha podido obtener la ubicación</string>
-    <string name="check_in_before_hour">09:10</string>
+
+
+
+
+
+
 
     <!-- Profile Activity -->
     <string name="title_Profile_activity">Perfil</string>

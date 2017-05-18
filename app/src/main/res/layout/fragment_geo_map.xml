@@ -1,0 +1,26 @@
+<RelativeLayout android:id="@+id/myRelativeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <fragment
+        android:id="@+id/store_location_map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:name="com.google.android.gms.maps.MapFragment">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_btn_check_in"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|start"
+            app:backgroundTint="@color/green_custom"
+            android:layout_marginLeft="16dp"
+            android:layout_marginBottom="60dp"
+            android:visibility="invisible"
+            android:src="@drawable/ic_check" />
+
+    </fragment>
+
+</RelativeLayout>

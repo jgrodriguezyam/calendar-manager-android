@@ -17,8 +17,8 @@ public class NavigationExtensions {
 
     public static void setWorkerName(NavigationView navigationView) {
         View headerLayout = navigationView.getHeaderView(0);
-        TextView workerName = (TextView) headerLayout.findViewById(R.id.drawerName);
-        workerName.setText(Preferences.getUserFullName());
+        TextView userFullName = (TextView) headerLayout.findViewById(R.id.drawerName);
+        userFullName.setText(Preferences.getUserFullName());
     }
 
     public static void sendTo(Activity activity, int valueToCompare) {

@@ -17,7 +17,7 @@ import android.view.View.OnClickListener;
 
 import com.binarium.calendarmanager.R;
 import com.binarium.calendarmanager.activity.AccountActivity;
-import com.binarium.calendarmanager.activity.MapActivity;
+import com.binarium.calendarmanager.activity.GeoMapActivity;
 import com.binarium.calendarmanager.infrastructure.EditTextExtensions;
 import com.binarium.calendarmanager.infrastructure.ObjectValidations;
 import com.binarium.calendarmanager.infrastructure.SnackBarExtensions;
@@ -145,12 +145,12 @@ public class LoginFragment extends Fragment implements LoginView, OnClickListene
 
     @Override
     public void navigateToMap() {
-        Util.sendAndFinish(getActivity(), MapActivity.class);
+        Util.sendAndFinish(getActivity(), GeoMapActivity.class);
     }
 
     @Override
     public void navigateToAccount() {
-        Util.sendAndFinish(getActivity(), AccountActivity.class);
+        Util.sendTo(getActivity(), AccountActivity.class);
     }
 
     //endregion
@@ -164,7 +164,7 @@ public class LoginFragment extends Fragment implements LoginView, OnClickListene
                 userLogin();
                 break;
             case R.id.link_create_account:
-                Util.sendTo(getActivity(), AccountActivity.class);
+                navigateToAccount();
                 break;
             default:
                 break;
