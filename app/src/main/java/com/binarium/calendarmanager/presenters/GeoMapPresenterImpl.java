@@ -63,6 +63,7 @@ public class GeoMapPresenterImpl implements GeoMapPresenter, GeoMapListener {
     @Override
     public void createCheckInSuccess(int userId, int locationId) {
         geoMapView.hideProgress();
+        geoMapView.showSuccessMessage(ResourcesExtensions.toString(R.string.create_check_in_success));
         geoMapView.createCheckInSuccess(userId, locationId);
     }
 

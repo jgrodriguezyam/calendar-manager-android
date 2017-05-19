@@ -29,7 +29,6 @@ import com.binarium.calendarmanager.infrastructure.Preferences;
 import com.binarium.calendarmanager.infrastructure.ResourcesExtensions;
 import com.binarium.calendarmanager.infrastructure.SnackBarExtensions;
 import com.binarium.calendarmanager.infrastructure.Util;
-import com.binarium.calendarmanager.infrastructure.enums.LocationType;
 import com.binarium.calendarmanager.interfaces.geomap.GeoMapView;
 import com.binarium.calendarmanager.myapp.geofence.GeofenceRequestReceiver;
 import com.binarium.calendarmanager.myapp.geofence.GeofenceTransitionsIntentService;
@@ -83,6 +82,8 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
 
     @Inject
     GeoMapPresenterImpl geoMapPresenter;
+
+    int locationId;
 
     public GeoMapFragment() {
     }
@@ -364,8 +365,12 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
         }
     }
 
+    public void setLocationToCheckIn(int locationId) {
+        this.locationId = locationId;
+    }
+
     private void createCheckIn() {
-        geoMapPresenter.createCheckIn(22, 23);
+        geoMapPresenter.createCheckIn(Preferences.getUserId(), locationId);
     }
 
     //endregion

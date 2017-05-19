@@ -10,8 +10,10 @@ public interface Constants {
     public static final int PERMISSIONS_MULTIPLE_REQUEST = 12;
 
     public static final String IS_VISIBLE_PARAMETER = "IS_VISIBLE";
+    public static final String SEND_LOCATION_PARAMETER = "LOCATION";
     public static final String GEOFENCE_LOCATION_BINARIUM = "BINARIUM";
 
     public static final int SPINNER_NOT_SET = 0;
     public static final String EMPTY_STRING = "";
+    public static final int ZERO_INT = 0;
 }

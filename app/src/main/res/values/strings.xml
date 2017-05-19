@@ -60,7 +60,7 @@
     <!-- Map Fragment -->
     <string name="init_check_in">Registrando...</string>
     <string name="init_get_all_locations">Obteniendo Ubicaciones...</string>
-    <string name="check_in_post_success">Registro exitoso :)</string>
+    <string name="create_check_in_success">Registro exitoso :)</string>
     <string name="check_in_without_location">No se ha podido obtener la ubicación</string>
 
 

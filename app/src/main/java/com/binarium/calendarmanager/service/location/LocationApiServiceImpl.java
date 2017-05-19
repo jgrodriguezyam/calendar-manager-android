@@ -23,7 +23,7 @@ public class LocationApiServiceImpl implements LocationApiService {
     public FindLocationsResponse find(FindLocationsRequest request, BaseListener baseListener) {
         try {
             LocationApiServiceRetrofit locationApiServiceRetrofit = RetrofitBuilder.getRetrofit().create(LocationApiServiceRetrofit.class);
-            Call<FindLocationsResponse> call = locationApiServiceRetrofit.find(request.getName(), request.getType(), request.getUserId(), request.getDate());
+            Call<FindLocationsResponse> call = locationApiServiceRetrofit.find(request.getName(), request.getType(), request.getUserId(), request.isOnlyToday(), request.getDate());
             Response<FindLocationsResponse> response = call.execute();
 
             if (response.isSuccessful()) {

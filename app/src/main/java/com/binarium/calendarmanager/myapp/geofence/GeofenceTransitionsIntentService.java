@@ -38,6 +38,7 @@ public class GeofenceTransitionsIntentService extends IntentService {
         broadcastIntent.setAction(GeofenceRequestReceiver.PROCESS_RESPONSE);
         broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
         String message = Constants.EMPTY_STRING;
+        int requestId = Constants.ZERO_INT;
 
         if (geofencingEvent.hasError()) {
             String errorMessage = geofencingEvent.getErrorCode()+"";
@@ -47,41 +48,27 @@ public class GeofenceTransitionsIntentService extends IntentService {
 
         if (transitionType == Geofence.GEOFENCE_TRANSITION_ENTER) {
             message = ResourcesExtensions.toString(R.string.notification_geofence_transition_enter);
+            requestId = Integer.valueOf(geofencingEvent.getTriggeringGeofences().get(0).getRequestId());
+            broadcastIntent.putExtra(Constants.SEND_LOCATION_PARAMETER, requestId);
             broadcastIntent.putExtra(Constants.IS_VISIBLE_PARAMETER, true);
         }
 
         if (transitionType == Geofence.GEOFENCE_TRANSITION_EXIT) {
-            //message = ResourcesExtensions.toString(R.string.notification_geofence_transition_exit);
+            broadcastIntent.putExtra(Constants.SEND_LOCATION_PARAMETER, requestId);
             broadcastIntent.putExtra(Constants.IS_VISIBLE_PARAMETER, false);
         }
 
         if (transitionType == Geofence.GEOFENCE_TRANSITION_DWELL) {
-            //message = ResourcesExtensions.toString(R.string.notification_geofence_transition_dwell);
+            requestId = Integer.valueOf(geofencingEvent.getTriggeringGeofences().get(0).getRequestId());
+            broadcastIntent.putExtra(Constants.SEND_LOCATION_PARAMETER, requestId);
             broadcastIntent.putExtra(Constants.IS_VISIBLE_PARAMETER, true);
         }
 
         if(StringValidations.IsNotNullOrEmpty(message)) {
-            generateNotification("Plenumsoft", message);
+            generateNotification(Constants.GEOFENCE_LOCATION_BINARIUM, message);
         }
 
         sendBroadcast(broadcastIntent);
-
-
-        /*GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
-        if (geofencingEvent.hasError()) {
-            Log.e("no", "noooo");
-            return;
-        } else {
-            int transitionType = geofencingEvent.getGeofenceTransition();
-            if (transitionType == Geofence.GEOFENCE_TRANSITION_ENTER ||
-                    transitionType == Geofence.GEOFENCE_TRANSITION_EXIT) {
-                List<Geofence> triggerList = geofencingEvent.getTriggeringGeofences();
-
-                for (Geofence geofence : triggerList) {
-                    generateNotification(geofence.getRequestId(), "address you defined");
-                }
-            }
-        }*/
     }
 
     private void generateNotification(String locationId, String address) {

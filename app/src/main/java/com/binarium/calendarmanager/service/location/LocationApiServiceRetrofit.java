@@ -21,7 +21,7 @@ import retrofit2.http.Query;
 
 public interface LocationApiServiceRetrofit {
     @GET("/locations")
-    Call<FindLocationsResponse> find(@Query("Name") String name, @Query("Type") int type, @Query("UserId") int userId, @Query("Date") String date);
+    Call<FindLocationsResponse> find(@Query("Name") String name, @Query("Type") int type, @Query("UserId") int userId, @Query("OnlyToday") boolean onlyToday, @Query("Date") String date);
     @POST("/locations")
     Call<CreateResponse> create(@Body LocationRequest request);
     @PUT("/locations")

@@ -18,11 +18,14 @@ public class GeofenceRequestReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        int locationId = intent.getIntExtra(Constants.SEND_LOCATION_PARAMETER, 0);
         Boolean isVisible = intent.getBooleanExtra(Constants.IS_VISIBLE_PARAMETER, false);
 
         if (isVisible){
+            GeoMapFragment.getInstace().setLocationToCheckIn(locationId);
             GeoMapFragment.getInstace().setButtonVisibility(View.VISIBLE);
         }else{
+            GeoMapFragment.getInstace().setLocationToCheckIn(locationId);
             GeoMapFragment.getInstace().setButtonVisibility(View.GONE);
         }
     }
