@@ -1,35 +1,25 @@
-package com.binarium.calendarmanager.dto.location;
-
-import com.google.gson.annotations.SerializedName;
+package com.binarium.calendarmanager.viewmodels.location;
 
 /**
- * Created by jrodriguez on 15/05/2017.
+ * Created by jrodriguez on 18/05/2017.
  */
 
-public class LocationRequest {
-    @SerializedName("Id")
+public class Location {
     private int id;
-    @SerializedName("Name")
     private String name;
-    @SerializedName("Latitude")
     private double latitude;
-    @SerializedName("Longitude")
     private double longitude;
-    @SerializedName("Radius")
     private double radius;
-    @SerializedName("Type")
     private int type;
-    @SerializedName("StartDate")
     private String startDate;
-    @SerializedName("EndDate")
     private String endDate;
-    @SerializedName("UserId")
-    private int userId;
+    private String comment;
+    private boolean isOwner;
 
-    public LocationRequest() {
+    public Location() {
     }
 
-    public LocationRequest(int id, String name, double latitude, double longitude, double radius, int type, String startDate, String endDate, int userId) {
+    public Location(int id, String name, double latitude, double longitude, double radius, int type, String startDate, String endDate, String comment, boolean isOwner) {
         this.id = id;
         this.name = name;
         this.latitude = latitude;
@@ -38,7 +28,8 @@ public class LocationRequest {
         this.type = type;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.userId = userId;
+        this.comment = comment;
+        this.isOwner = isOwner;
     }
 
     public int getId() {
@@ -105,11 +96,19 @@ public class LocationRequest {
         this.endDate = endDate;
     }
 
-    public int getUserId() {
-        return userId;
+    public String getComment() {
+        return comment;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public boolean isOwner() {
+        return isOwner;
+    }
+
+    public void setOwner(boolean owner) {
+        isOwner = owner;
     }
 }

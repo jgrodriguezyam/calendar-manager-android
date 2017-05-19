@@ -10,11 +10,11 @@ import com.google.gson.annotations.SerializedName;
 
 public class SharedLocationResponse {
     @SerializedName("Id")
-    public int id;
+    private int id;
     @SerializedName("User")
-    public UserResponse user;
+    private UserResponse user;
     @SerializedName("Location")
-    public LocationResponse location;
+    private LocationResponse location;
 
     public int getId() {
         return id;

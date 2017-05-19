@@ -5,10 +5,23 @@ import android.support.annotation.UiThread;
 
 import com.binarium.calendarmanager.dto.base.CreateResponse;
 import com.binarium.calendarmanager.dto.checkin.CheckInRequest;
+import com.binarium.calendarmanager.dto.location.FindLocationsRequest;
+import com.binarium.calendarmanager.dto.location.FindLocationsResponse;
+import com.binarium.calendarmanager.dto.location.LocationResponse;
+import com.binarium.calendarmanager.dto.sharedlocation.FindSharedLocationsRequest;
+import com.binarium.calendarmanager.dto.sharedlocation.FindSharedLocationsResponse;
+import com.binarium.calendarmanager.dto.sharedlocation.SharedLocationResponse;
+import com.binarium.calendarmanager.infrastructure.CollectionValidations;
 import com.binarium.calendarmanager.infrastructure.ObjectValidations;
 import com.binarium.calendarmanager.interfaces.geomap.GeoMapInteractor;
 import com.binarium.calendarmanager.interfaces.geomap.GeoMapListener;
 import com.binarium.calendarmanager.service.checkin.CheckInApiService;
+import com.binarium.calendarmanager.service.location.LocationApiService;
+import com.binarium.calendarmanager.service.sharedlocation.SharedLocationApiService;
+import com.binarium.calendarmanager.viewmodels.location.Location;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -18,10 +31,14 @@ import javax.inject.Inject;
 
 public class GeoMapInteractorImpl implements GeoMapInteractor {
     private CheckInApiService checkInApiService;
+    private LocationApiService locationApiService;
+    private SharedLocationApiService sharedLocationApiService;
 
     @Inject
-    public GeoMapInteractorImpl(CheckInApiService checkInApiService) {
+    public GeoMapInteractorImpl(CheckInApiService checkInApiService, LocationApiService locationApiService, SharedLocationApiService sharedLocationApiService) {
         this.checkInApiService = checkInApiService;
+        this.locationApiService = locationApiService;
+        this.sharedLocationApiService = sharedLocationApiService;
     }
 
     @Override
@@ -30,6 +47,11 @@ public class GeoMapInteractorImpl implements GeoMapInteractor {
         checkInRequest.setUserId(userId);
         checkInRequest.setLocationId(locationId);
         createCheckInAsync(checkInRequest, geoMapListener);
+    }
+
+    @Override
+    public void getAllLocations(int userId, GeoMapListener geoMapListener) {
+        getAllLocationsAsync(userId, geoMapListener);
     }
 
     @UiThread
@@ -54,5 +76,81 @@ public class GeoMapInteractorImpl implements GeoMapInteractor {
                 }
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, checkInRequest);
+    }
+
+    @UiThread
+    private void getAllLocationsAsync(int userId, final GeoMapListener geoMapListener) {
+        new AsyncTask<Integer, Void, List<Location>>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+            }
+
+            @Override
+            protected List<Location> doInBackground(Integer... params) {
+                List<Location> userLocations = new ArrayList<>();
+
+                List<Location> locations = findLoctations(params[0], geoMapListener);
+                if (CollectionValidations.IsNotEmpty(locations))
+                    userLocations.addAll(locations);
+
+                List<Location> sharedLocations = findSharedLoctations(params[0], geoMapListener);
+                if (CollectionValidations.IsNotEmpty(sharedLocations))
+                    userLocations.addAll(sharedLocations);
+
+                return userLocations;
+            }
+
+            @Override
+            protected void onPostExecute(List<Location> locations) {
+                super.onPostExecute(locations);
+                if (CollectionValidations.IsNotEmpty(locations)) {
+                    geoMapListener.getAllLocationsSuccess(locations);
+                }
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, userId);
+    }
+
+    private List<Location> findLoctations(int userId, GeoMapListener geoMapListener) {
+        FindLocationsRequest findLocationsRequest = new FindLocationsRequest();
+        findLocationsRequest.setUserId(userId);
+        findLocationsRequest.setOnlyToday(true);
+        FindLocationsResponse findLocationsResponse = locationApiService.find(findLocationsRequest, geoMapListener);
+        List<Location> locations = new ArrayList<>();
+        for (LocationResponse locationResponse : findLocationsResponse.getLocations()) {
+            Location location = new Location();
+            location.setId(locationResponse.getId());
+            location.setName(locationResponse.getName());
+            location.setLatitude(locationResponse.getLatitude());
+            location.setLongitude(locationResponse.getLongitude());
+            location.setRadius(locationResponse.getRadius());
+            location.setType(locationResponse.getType());
+            location.setStartDate(locationResponse.getStartDate());
+            location.setEndDate(locationResponse.getEndDate());
+            location.setOwner(true);
+            locations.add(location);
+        }
+        return locations;
+    }
+
+    private List<Location> findSharedLoctations(int userId, GeoMapListener geoMapListener) {
+        FindSharedLocationsRequest findSharedLocationsRequest = new FindSharedLocationsRequest();
+        findSharedLocationsRequest.setUserId(userId);
+        findSharedLocationsRequest.setLocationOnlyToday(true);
+        FindSharedLocationsResponse findSharedLocationsResponse = sharedLocationApiService.find(findSharedLocationsRequest, geoMapListener);
+        List<Location> locations = new ArrayList<>();
+        for (SharedLocationResponse sharedLocationResponse : findSharedLocationsResponse.getSharedLocations()) {
+            Location location = new Location();
+            location.setId(sharedLocationResponse.getLocation().getId());
+            location.setName(sharedLocationResponse.getLocation().getName());
+            location.setLatitude(sharedLocationResponse.getLocation().getLatitude());
+            location.setLongitude(sharedLocationResponse.getLocation().getLongitude());
+            location.setRadius(sharedLocationResponse.getLocation().getRadius());
+            location.setType(sharedLocationResponse.getLocation().getType());
+            location.setStartDate(sharedLocationResponse.getLocation().getStartDate());
+            location.setEndDate(sharedLocationResponse.getLocation().getEndDate());
+            locations.add(location);
+        }
+        return locations;
     }
 }

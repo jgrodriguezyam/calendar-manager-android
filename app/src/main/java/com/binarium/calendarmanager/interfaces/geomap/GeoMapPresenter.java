@@ -7,4 +7,5 @@ package com.binarium.calendarmanager.interfaces.geomap;
 public interface GeoMapPresenter {
     void setGeoMapView(GeoMapView geoMapView);
     void createCheckIn(int userId, int locationId);
+    void getAllLocations(int userId);
 }

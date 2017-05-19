@@ -6,7 +6,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -23,16 +22,20 @@ import android.view.View.OnClickListener;
 import android.widget.Toast;
 
 import com.binarium.calendarmanager.R;
+import com.binarium.calendarmanager.infrastructure.EnumExtensions;
 import com.binarium.calendarmanager.infrastructure.IntegerValidations;
 import com.binarium.calendarmanager.infrastructure.ObjectValidations;
+import com.binarium.calendarmanager.infrastructure.Preferences;
 import com.binarium.calendarmanager.infrastructure.ResourcesExtensions;
 import com.binarium.calendarmanager.infrastructure.SnackBarExtensions;
 import com.binarium.calendarmanager.infrastructure.Util;
+import com.binarium.calendarmanager.infrastructure.enums.LocationType;
 import com.binarium.calendarmanager.interfaces.geomap.GeoMapView;
 import com.binarium.calendarmanager.myapp.geofence.GeofenceRequestReceiver;
 import com.binarium.calendarmanager.myapp.geofence.GeofenceTransitionsIntentService;
 import com.binarium.calendarmanager.myapp.injector.InjectorUtils;
 import com.binarium.calendarmanager.presenters.GeoMapPresenterImpl;
+import com.binarium.calendarmanager.viewmodels.location.Location;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
@@ -50,9 +53,12 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -63,7 +69,7 @@ import butterknife.ButterKnife;
  * Created by jrodriguez on 17/05/2017.
  */
 
-public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListener, ConnectionCallbacks, OnConnectionFailedListener, ResultCallback, OnMapReadyCallback {
+public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListener, ConnectionCallbacks, OnConnectionFailedListener, ResultCallback, OnMapReadyCallback, OnMarkerClickListener {
     @Bind(R.id.fab_btn_check_in)
     FloatingActionButton fab_btn_check_in;
 
@@ -186,6 +192,11 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
 
     }
 
+    @Override
+    public void getAllLocationsSuccess(List<Location> locations) {
+        addLocationsToMap(locations);
+    }
+
     //endregion
 
     //region OnClickListener
@@ -207,10 +218,29 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
+        geoMapPresenter.getAllLocations(Preferences.getUserId());
+    }
+
+    public void addLocationsToMap(List<Location> locations) {
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             showErrorMessage(ResourcesExtensions.toString(R.string.without_permission));
             return;
+        }
+
+        geofenceList = new ArrayList<>();
+        for (Location location : locations) {
+            String requestId = String.valueOf(location.getId());
+            float radius = (float) location.getRadius();
+            geofenceList.add(new Geofence.Builder()
+                    .setRequestId(requestId)
+                    .setCircularRegion(location.getLatitude(), location.getLongitude(), radius)
+                    .setExpirationDuration(Geofence.NEVER_EXPIRE)
+                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT | Geofence.GEOFENCE_TRANSITION_DWELL)
+                    .setLoiteringDelay(Geofence.GEOFENCE_TRANSITION_DWELL)
+                    .build());
+
+            drawMarkerWithCircle(location);
         }
 
         LocationServices.GeofencingApi.addGeofences(
@@ -219,11 +249,12 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
                 getGeofencePendingIntent()
         ).setResultCallback(this);
 
-        Location location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+        android.location.Location location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
         if (ObjectValidations.IsNotNull(location)) {
             LatLng latitudeLongitude = new LatLng(location.getLatitude(), location.getLongitude());
             Integer zoom = ResourcesExtensions.toInt(R.integer.google_maps_zoom);
             CameraUpdate cameraPosition = CameraUpdateFactory.newLatLngZoom(latitudeLongitude, zoom);
+            googleMap.setMyLocationEnabled(true);
             googleMap.moveCamera(cameraPosition);
         } else {
             showErrorMessage(ResourcesExtensions.toString(R.string.check_in_without_location));
@@ -231,23 +262,10 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
     }
 
     private GeofencingRequest getGeofencingRequest() {
-        addLocation();
         GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
         builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_DWELL);
         builder.addGeofences(geofenceList);
         return builder.build();
-    }
-
-    public void addLocation() {
-        geofenceList = new ArrayList<>();
-        float radius = (float) 100;
-        geofenceList.add(new Geofence.Builder()
-                .setRequestId("locationId")
-                .setCircularRegion(21.013143, -89.589417, radius)
-                .setExpirationDuration(Geofence.NEVER_EXPIRE)
-                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT | Geofence.GEOFENCE_TRANSITION_DWELL)
-                .setLoiteringDelay(Geofence.GEOFENCE_TRANSITION_DWELL)
-                .build());
     }
 
     private PendingIntent getGeofencePendingIntent() {
@@ -257,6 +275,29 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
         Intent intent = new Intent(getActivity(), GeofenceTransitionsIntentService.class);
         geofencePendingIntent = PendingIntent.getService(getActivity(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         return geofencePendingIntent;
+    }
+
+    private void drawMarkerWithCircle(Location location){
+        int strokeColor = 0xffff0000;
+        int shadeColor = 0x44ff0000;
+
+        if (location.isOwner()) {
+            strokeColor = 0xff00ff00;
+            shadeColor = 0x4400ff00;
+        } else {
+            strokeColor = 0xff0000ff;
+            shadeColor = 0x440000ff;
+        }
+
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+
+        CircleOptions circleOptions = new CircleOptions().center(latLng).radius(location.getRadius()).fillColor(shadeColor).strokeColor(strokeColor).strokeWidth(8);
+        googleMap.addCircle(circleOptions);
+        String snippet = location.getStartDate().equals(location.getEndDate()) ? location.getStartDate() : location.getStartDate() + " - " + location.getEndDate();
+        MarkerOptions markerOptions = new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.fromResource(EnumExtensions.getImageOfLocationType(location.getType()))).title(location.getName()).snippet(snippet);
+        Marker marker = googleMap.addMarker(markerOptions);
+        marker.showInfoWindow();
+        marker.setTag(location);
     }
 
     @Override
@@ -279,14 +320,11 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
 
     @Override
     public void onResult(@NonNull Result result) {
-        String toastMessage;
         if (result.getStatus().isSuccess()) {
-            toastMessage = "Success";
             Log.i("si", "location_4");
         } else {
-            toastMessage = "Error";
+            Log.i("no", "error");
         }
-        //Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT).show();
     }
 
     //endregion
@@ -295,36 +333,13 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            showErrorMessage(ResourcesExtensions.toString(R.string.without_permission));
-            return;
-        }
-
         this.googleMap = googleMap;
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        googleMap.setMyLocationEnabled(true);
         googleMap.setTrafficEnabled(false);
         googleMap.setIndoorEnabled(true);
         googleMap.setBuildingsEnabled(false);
         googleMap.getUiSettings().setZoomControlsEnabled(true);
-        double latitude = 21.013143;
-        double longitude = -89.589417;
-        double radius = 100;
-        String title = "Plenumsoft";
-        drawMarkerWithCircle(new LatLng(latitude, longitude), radius, title);
-        //drawMarkerWithCircle(new LatLng(21.013143, -89.589417));
-        //drawMarkerWithCircle(new LatLng(21.131046, -89.781007), 30);
-    }
-
-    private void drawMarkerWithCircle(LatLng position, double radius, String title){
-        int strokeColor =0xff00ff00;
-        int shadeColor = 0x4400ff00;
-
-        CircleOptions circleOptions = new CircleOptions().center(position).radius(radius).fillColor(shadeColor).strokeColor(strokeColor).strokeWidth(8);
-        googleMap.addCircle(circleOptions);
-        MarkerOptions markerOptions = new MarkerOptions().position(position).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_clock)).title(title);
-        googleMap.addMarker(markerOptions).showInfoWindow();
+        googleMap.setOnMarkerClickListener(this);
     }
 
     //endregion
@@ -351,6 +366,18 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
 
     private void createCheckIn() {
         geoMapPresenter.createCheckIn(22, 23);
+    }
+
+    //endregion
+
+    //region OnMarkerClickListener
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+
+        Location location = (Location) marker.getTag();
+        //marker.setSnippet(String.valueOf(location.getName()));
+        return false;
     }
 
     //endregion

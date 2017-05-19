@@ -10,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
 public class LocationResponse {
     @SerializedName("Id")
     private int id;
-    @SerializedName("Id")
+    @SerializedName("Name")
     private String name;
     @SerializedName("Latitude")
     private double latitude;

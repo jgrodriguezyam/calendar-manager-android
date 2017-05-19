@@ -6,6 +6,9 @@ import com.binarium.calendarmanager.interfaces.geomap.GeoMapInteractor;
 import com.binarium.calendarmanager.interfaces.geomap.GeoMapListener;
 import com.binarium.calendarmanager.interfaces.geomap.GeoMapPresenter;
 import com.binarium.calendarmanager.interfaces.geomap.GeoMapView;
+import com.binarium.calendarmanager.viewmodels.location.Location;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -35,6 +38,12 @@ public class GeoMapPresenterImpl implements GeoMapPresenter, GeoMapListener {
         geoMapInteractor.createCheckIn(userId, locationId, this);
     }
 
+    @Override
+    public void getAllLocations(int userId) {
+        geoMapView.showProgress(ResourcesExtensions.toString(R.string.init_get_all_locations));
+        geoMapInteractor.getAllLocations(userId, this);
+    }
+
     //endregion
 
     //region GeoMapListener
@@ -55,6 +64,12 @@ public class GeoMapPresenterImpl implements GeoMapPresenter, GeoMapListener {
     public void createCheckInSuccess(int userId, int locationId) {
         geoMapView.hideProgress();
         geoMapView.createCheckInSuccess(userId, locationId);
+    }
+
+    @Override
+    public void getAllLocationsSuccess(List<Location> locations) {
+        geoMapView.hideProgress();
+        geoMapView.getAllLocationsSuccess(locations);
     }
 
     //endregion
