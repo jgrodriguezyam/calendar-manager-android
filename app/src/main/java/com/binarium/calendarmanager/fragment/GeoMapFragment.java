@@ -83,6 +83,7 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
     @Inject
     GeoMapPresenterImpl geoMapPresenter;
 
+    List<Location> locations;
     int locationId;
 
     public GeoMapFragment() {
@@ -190,12 +191,15 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
 
     @Override
     public void createCheckInSuccess(int userId, int locationId) {
-
+        LocationServices.GeofencingApi.removeGeofences(googleApiClient, getGeofencePendingIntent());
+        googleMap.clear();
+        setButtonVisibility(View.GONE);
     }
 
     @Override
     public void getAllLocationsSuccess(List<Location> locations) {
-        addLocationsToMap(locations);
+        this.locations = locations;
+        addLocationsToMap();
     }
 
     //endregion
@@ -222,7 +226,7 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
         geoMapPresenter.getAllLocations(Preferences.getUserId());
     }
 
-    public void addLocationsToMap(List<Location> locations) {
+    public void addLocationsToMap() {
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             showErrorMessage(ResourcesExtensions.toString(R.string.without_permission));

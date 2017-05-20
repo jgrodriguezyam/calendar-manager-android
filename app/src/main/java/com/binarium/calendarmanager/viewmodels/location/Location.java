@@ -15,11 +15,12 @@ public class Location {
     private String endDate;
     private String comment;
     private boolean isOwner;
+    private boolean isChecked;
 
     public Location() {
     }
 
-    public Location(int id, String name, double latitude, double longitude, double radius, int type, String startDate, String endDate, String comment, boolean isOwner) {
+    public Location(int id, String name, double latitude, double longitude, double radius, int type, String startDate, String endDate, String comment, boolean isOwner, boolean isChecked) {
         this.id = id;
         this.name = name;
         this.latitude = latitude;
@@ -30,6 +31,7 @@ public class Location {
         this.endDate = endDate;
         this.comment = comment;
         this.isOwner = isOwner;
+        this.isChecked = isChecked;
     }
 
     public int getId() {
@@ -110,5 +112,13 @@ public class Location {
 
     public void setOwner(boolean owner) {
         isOwner = owner;
+    }
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
     }
 }
