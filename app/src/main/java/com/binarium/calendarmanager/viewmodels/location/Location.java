@@ -1,10 +1,13 @@
 package com.binarium.calendarmanager.viewmodels.location;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by jrodriguez on 18/05/2017.
  */
 
-public class Location {
+public class Location implements Parcelable {
     private int id;
     private String name;
     private double latitude;
@@ -120,5 +123,51 @@ public class Location {
 
     public void setChecked(boolean checked) {
         isChecked = checked;
+    }
+
+    protected Location(Parcel in) {
+        id = in.readInt();
+        name = in.readString();
+        latitude = in.readDouble();
+        longitude = in.readDouble();
+        radius = in.readDouble();
+        type = in.readInt();
+        startDate = in.readString();
+        endDate = in.readString();
+        comment = in.readString();
+        isOwner = in.readByte() != 0;
+        isChecked = in.readByte() != 0;
+    }
+
+    public static final Creator<Location> CREATOR = new Creator<Location>() {
+        @Override
+        public Location createFromParcel(Parcel in) {
+            return new Location(in);
+        }
+
+        @Override
+        public Location[] newArray(int size) {
+            return new Location[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(id);
+        parcel.writeString(name);
+        parcel.writeDouble(latitude);
+        parcel.writeDouble(longitude);
+        parcel.writeDouble(radius);
+        parcel.writeInt(type);
+        parcel.writeString(startDate);
+        parcel.writeString(endDate);
+        parcel.writeString(comment);
+        parcel.writeByte((byte) (isOwner ? 1 : 0));
+        parcel.writeByte((byte) (isChecked ? 1 : 0));
     }
 }

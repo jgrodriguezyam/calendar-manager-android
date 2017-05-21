@@ -22,6 +22,7 @@ import android.view.View.OnClickListener;
 import android.widget.Toast;
 
 import com.binarium.calendarmanager.R;
+import com.binarium.calendarmanager.infrastructure.CollectionValidations;
 import com.binarium.calendarmanager.infrastructure.EnumExtensions;
 import com.binarium.calendarmanager.infrastructure.IntegerValidations;
 import com.binarium.calendarmanager.infrastructure.ObjectValidations;
@@ -86,6 +87,7 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
     @Inject
     GeoMapPresenterImpl geoMapPresenter;
 
+    private static final String LOCATIONS = "Locations";
     List<Location> locations;
     int locationId;
 
@@ -111,6 +113,10 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
         progressDialog = Util.createModalProgressDialog(getActivity());
         instance = this;
 
+        if (ObjectValidations.IsNotNull(savedInstanceState)) {
+            locations = savedInstanceState.getParcelableArrayList(LOCATIONS);
+        }
+
         if (googleApiClient == null) {
             googleApiClient = new GoogleApiClient.Builder(getActivity())
                     .addConnectionCallbacks(this)
@@ -127,6 +133,7 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList(LOCATIONS, (ArrayList<Location>) locations);
         super.onSaveInstanceState(outState);
     }
 
@@ -227,7 +234,12 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        geoMapPresenter.getAllLocations(Preferences.getUserId());
+        if (CollectionValidations.IsEmpty(locations)) {
+            geoMapPresenter.getAllLocations(Preferences.getUserId());
+        } else {
+            addLocationsToMap();
+            addMyLocationToMap();
+        }
     }
 
     public void addLocationsToMap() {
