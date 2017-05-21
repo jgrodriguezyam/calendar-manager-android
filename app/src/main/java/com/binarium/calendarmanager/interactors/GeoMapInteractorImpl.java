@@ -5,6 +5,9 @@ import android.support.annotation.UiThread;
 
 import com.binarium.calendarmanager.dto.base.CreateResponse;
 import com.binarium.calendarmanager.dto.checkin.CheckInRequest;
+import com.binarium.calendarmanager.dto.checkin.CheckInResponse;
+import com.binarium.calendarmanager.dto.checkin.FindCheckInsRequest;
+import com.binarium.calendarmanager.dto.checkin.FindCheckInsResponse;
 import com.binarium.calendarmanager.dto.location.FindLocationsRequest;
 import com.binarium.calendarmanager.dto.location.FindLocationsResponse;
 import com.binarium.calendarmanager.dto.location.LocationResponse;
@@ -19,6 +22,9 @@ import com.binarium.calendarmanager.service.checkin.CheckInApiService;
 import com.binarium.calendarmanager.service.location.LocationApiService;
 import com.binarium.calendarmanager.service.sharedlocation.SharedLocationApiService;
 import com.binarium.calendarmanager.viewmodels.location.Location;
+import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.Iterables;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,6 +104,10 @@ public class GeoMapInteractorImpl implements GeoMapInteractor {
                 if (CollectionValidations.IsNotEmpty(sharedLocations))
                     userLocations.addAll(sharedLocations);
 
+                List<CheckInResponse> checkInsResponse = findCheckInsResponse(params[0], geoMapListener);
+                if (CollectionValidations.IsNotEmpty(checkInsResponse))
+                    compareLocationsWithCheckIns(userLocations, checkInsResponse);
+
                 return userLocations;
             }
 
@@ -152,5 +162,41 @@ public class GeoMapInteractorImpl implements GeoMapInteractor {
             locations.add(location);
         }
         return locations;
+    }
+
+    private List<CheckInResponse> findCheckInsResponse(int userId, GeoMapListener geoMapListener) {
+        FindCheckInsRequest findCheckInsRequest = new FindCheckInsRequest();
+        findCheckInsRequest.setUserId(userId);
+        findCheckInsRequest.setCreatedOnlyToday(true);
+        FindCheckInsResponse findCheckInsResponse = checkInApiService.find(findCheckInsRequest, geoMapListener);
+        return findCheckInsResponse.getCheckIns();
+    }
+
+    private void compareLocationsWithCheckIns(List<Location> locations, List<CheckInResponse> checkInsResponse) {
+        for (final CheckInResponse checkInResponse : checkInsResponse) {
+            List<Location> currentLocations = FluentIterable.from(locations).filter(new Predicate<Location>() {
+                @Override
+                public boolean apply(Location location) {
+                    return location.getId() == checkInResponse.getLocation().getId();
+                }
+            }).toList();
+            Location location = Iterables.getFirst(currentLocations, null);
+
+            if (ObjectValidations.IsNotNull(location)) {
+                location.setChecked(true);
+            } else {
+                Location checkInlocation = new Location();
+                checkInlocation.setId(checkInResponse.getLocation().getId());
+                checkInlocation.setName(checkInResponse.getLocation().getName());
+                checkInlocation.setLatitude(checkInResponse.getLocation().getLatitude());
+                checkInlocation.setLongitude(checkInResponse.getLocation().getLongitude());
+                checkInlocation.setRadius(checkInResponse.getLocation().getRadius());
+                checkInlocation.setType(checkInResponse.getLocation().getType());
+                checkInlocation.setStartDate(checkInResponse.getLocation().getStartDate());
+                checkInlocation.setEndDate(checkInResponse.getLocation().getEndDate());
+                checkInlocation.setChecked(true);
+                locations.add(checkInlocation);
+            }
+        }
     }
 }
