@@ -18,6 +18,7 @@ import com.binarium.calendarmanager.infrastructure.CollectionValidations;
 import com.binarium.calendarmanager.infrastructure.ObjectValidations;
 import com.binarium.calendarmanager.interfaces.geomap.GeoMapInteractor;
 import com.binarium.calendarmanager.interfaces.geomap.GeoMapListener;
+import com.binarium.calendarmanager.mappers.LocationMapper;
 import com.binarium.calendarmanager.service.checkin.CheckInApiService;
 import com.binarium.calendarmanager.service.location.LocationApiService;
 import com.binarium.calendarmanager.service.sharedlocation.SharedLocationApiService;
@@ -128,15 +129,7 @@ public class GeoMapInteractorImpl implements GeoMapInteractor {
         FindLocationsResponse findLocationsResponse = locationApiService.find(findLocationsRequest, geoMapListener);
         List<Location> locations = new ArrayList<>();
         for (LocationResponse locationResponse : findLocationsResponse.getLocations()) {
-            Location location = new Location();
-            location.setId(locationResponse.getId());
-            location.setName(locationResponse.getName());
-            location.setLatitude(locationResponse.getLatitude());
-            location.setLongitude(locationResponse.getLongitude());
-            location.setRadius(locationResponse.getRadius());
-            location.setType(locationResponse.getType());
-            location.setStartDate(locationResponse.getStartDate());
-            location.setEndDate(locationResponse.getEndDate());
+            Location location = LocationMapper.toLocation(locationResponse);
             location.setOwner(true);
             locations.add(location);
         }
@@ -150,15 +143,7 @@ public class GeoMapInteractorImpl implements GeoMapInteractor {
         FindSharedLocationsResponse findSharedLocationsResponse = sharedLocationApiService.find(findSharedLocationsRequest, geoMapListener);
         List<Location> locations = new ArrayList<>();
         for (SharedLocationResponse sharedLocationResponse : findSharedLocationsResponse.getSharedLocations()) {
-            Location location = new Location();
-            location.setId(sharedLocationResponse.getLocation().getId());
-            location.setName(sharedLocationResponse.getLocation().getName());
-            location.setLatitude(sharedLocationResponse.getLocation().getLatitude());
-            location.setLongitude(sharedLocationResponse.getLocation().getLongitude());
-            location.setRadius(sharedLocationResponse.getLocation().getRadius());
-            location.setType(sharedLocationResponse.getLocation().getType());
-            location.setStartDate(sharedLocationResponse.getLocation().getStartDate());
-            location.setEndDate(sharedLocationResponse.getLocation().getEndDate());
+            Location location = LocationMapper.toLocation(sharedLocationResponse.getLocation());
             locations.add(location);
         }
         return locations;
@@ -185,15 +170,7 @@ public class GeoMapInteractorImpl implements GeoMapInteractor {
             if (ObjectValidations.IsNotNull(location)) {
                 location.setChecked(true);
             } else {
-                Location checkInlocation = new Location();
-                checkInlocation.setId(checkInResponse.getLocation().getId());
-                checkInlocation.setName(checkInResponse.getLocation().getName());
-                checkInlocation.setLatitude(checkInResponse.getLocation().getLatitude());
-                checkInlocation.setLongitude(checkInResponse.getLocation().getLongitude());
-                checkInlocation.setRadius(checkInResponse.getLocation().getRadius());
-                checkInlocation.setType(checkInResponse.getLocation().getType());
-                checkInlocation.setStartDate(checkInResponse.getLocation().getStartDate());
-                checkInlocation.setEndDate(checkInResponse.getLocation().getEndDate());
+                Location checkInlocation = LocationMapper.toLocation(checkInResponse.getLocation());
                 checkInlocation.setChecked(true);
                 locations.add(checkInlocation);
             }

@@ -24,6 +24,8 @@ public class LocationResponse {
     private String startDate;
     @SerializedName("EndDate")
     private String endDate;
+    @SerializedName("Comment")
+    private String comment;
     @SerializedName("User")
     private UserResponse user;
 
@@ -57,6 +59,10 @@ public class LocationResponse {
 
     public String getEndDate() {
         return endDate;
+    }
+
+    public String getComment() {
+        return comment;
     }
 
     public UserResponse getUser() {

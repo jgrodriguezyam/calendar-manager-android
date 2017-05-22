@@ -2,6 +2,7 @@ package com.binarium.calendarmanager.myapp.injector;
 
 import com.binarium.calendarmanager.fragment.AccountFragment;
 import com.binarium.calendarmanager.fragment.GeoMapFragment;
+import com.binarium.calendarmanager.fragment.LocationFragment;
 import com.binarium.calendarmanager.fragment.LoginFragment;
 import com.binarium.calendarmanager.fragment.SplashFragment;
 
@@ -17,4 +18,5 @@ public interface AppComponent {
     void inject(LoginFragment loginFragment);
     void inject(AccountFragment accountFragment);
     void inject(GeoMapFragment geoMapFragment);
+    void inject(LocationFragment locationFragment);
 }

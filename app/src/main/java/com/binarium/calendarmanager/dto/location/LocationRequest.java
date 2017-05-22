@@ -23,13 +23,15 @@ public class LocationRequest {
     private String startDate;
     @SerializedName("EndDate")
     private String endDate;
+    @SerializedName("Comment")
+    private String comment;
     @SerializedName("UserId")
     private int userId;
 
     public LocationRequest() {
     }
 
-    public LocationRequest(int id, String name, double latitude, double longitude, double radius, int type, String startDate, String endDate, int userId) {
+    public LocationRequest(int id, String name, double latitude, double longitude, double radius, int type, String startDate, String endDate, int userId, String comment) {
         this.id = id;
         this.name = name;
         this.latitude = latitude;
@@ -39,6 +41,7 @@ public class LocationRequest {
         this.startDate = startDate;
         this.endDate = endDate;
         this.userId = userId;
+        this.comment = comment;
     }
 
     public int getId() {
@@ -103,6 +106,14 @@ public class LocationRequest {
 
     public void setEndDate(String endDate) {
         this.endDate = endDate;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public int getUserId() {

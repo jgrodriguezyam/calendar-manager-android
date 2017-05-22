@@ -1,116 +1,86 @@
 package com.binarium.calendarmanager.fragment;
 
 import android.Manifest;
-import android.app.PendingIntent;
 import android.app.ProgressDialog;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
-import android.view.animation.Interpolator;
-import android.view.View.OnClickListener;
 
 import com.binarium.calendarmanager.R;
 import com.binarium.calendarmanager.infrastructure.CollectionValidations;
 import com.binarium.calendarmanager.infrastructure.EnumExtensions;
-import com.binarium.calendarmanager.infrastructure.IntegerValidations;
 import com.binarium.calendarmanager.infrastructure.ObjectValidations;
 import com.binarium.calendarmanager.infrastructure.Preferences;
 import com.binarium.calendarmanager.infrastructure.ResourcesExtensions;
 import com.binarium.calendarmanager.infrastructure.SnackBarExtensions;
 import com.binarium.calendarmanager.infrastructure.Util;
-import com.binarium.calendarmanager.interfaces.geomap.GeoMapView;
-import com.binarium.calendarmanager.myapp.geofence.GeofenceRequestReceiver;
-import com.binarium.calendarmanager.myapp.geofence.GeofenceTransitionsIntentService;
+import com.binarium.calendarmanager.interfaces.location.LocationView;
 import com.binarium.calendarmanager.myapp.injector.InjectorUtils;
-import com.binarium.calendarmanager.presenters.GeoMapPresenterImpl;
+import com.binarium.calendarmanager.presenters.LocationPresenterImpl;
 import com.binarium.calendarmanager.viewmodels.location.Location;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
-import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-import com.google.android.gms.common.api.Result;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.location.Geofence;
-import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
-import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Iterables;
+import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
- * Created by jrodriguez on 17/05/2017.
+ * Created by jrodriguez on 22/05/2017.
  */
 
-public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListener, ConnectionCallbacks, OnConnectionFailedListener, ResultCallback, OnMapReadyCallback, OnMarkerClickListener {
-    @Bind(R.id.fab_btn_check_in)
-    FloatingActionButton fab_btn_check_in;
-
+public class LocationFragment extends Fragment implements LocationView, ConnectionCallbacks, OnConnectionFailedListener, OnMapReadyCallback, OnMarkerClickListener, OnMapLongClickListener, OnMarkerDragListener {
     private ProgressDialog progressDialog;
-    private static GeoMapFragment instance;
-    private GeofenceRequestReceiver receiver;
     GoogleApiClient googleApiClient;
-    List<Geofence> geofenceList;
-    PendingIntent geofencePendingIntent;
     GoogleMap googleMap;
 
     @Inject
-    GeoMapPresenterImpl geoMapPresenter;
+    LocationPresenterImpl locationPresenter;
 
     private static final String LOCATIONS = "Locations";
     List<Location> locations;
-    int locationId;
 
-    public GeoMapFragment() {
+    public LocationFragment() {
     }
 
-    public static GeoMapFragment newInstance() {
-        GeoMapFragment geoMapFragment = new GeoMapFragment();
+    public static LocationFragment newInstance() {
+        LocationFragment locationFragment = new LocationFragment();
         Bundle args = new Bundle();
-        geoMapFragment.setArguments(args);
-        return geoMapFragment;
-    }
-
-    public static GeoMapFragment getInstace(){
-        return instance;
+        locationFragment.setArguments(args);
+        return locationFragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         InjectorUtils.getInjector(this).inject(this);
-        geoMapPresenter.setGeoMapView(this);
+        locationPresenter.setLocationView(this);
         progressDialog = Util.createModalProgressDialog(getActivity());
-        instance = this;
 
         if (ObjectValidations.IsNotNull(savedInstanceState)) {
             locations = savedInstanceState.getParcelableArrayList(LOCATIONS);
@@ -123,11 +93,6 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
                     .addApi(LocationServices.API)
                     .build();
         }
-
-        IntentFilter filter = new IntentFilter(GeofenceRequestReceiver.PROCESS_RESPONSE);
-        filter.addCategory(Intent.CATEGORY_DEFAULT);
-        receiver = new GeofenceRequestReceiver();
-        getActivity().registerReceiver(receiver, filter);
     }
 
     @Override
@@ -146,16 +111,9 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_geo_map, container, false);
+        View root = inflater.inflate(R.layout.fragment_location, container, false);
         ButterKnife.bind(this, root);
-        fab_btn_check_in.setOnClickListener(this);
         return root;
-    }
-
-    @Override
-    public void onDestroy() {
-        getActivity().unregisterReceiver(receiver);
-        super.onDestroy();
     }
 
     @Override
@@ -175,7 +133,7 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
         super.onStop();
     }
 
-    //region GeoMapView
+    //region LocationView
 
     @Override
     public void showProgress(String message) {
@@ -199,32 +157,15 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
     }
 
     @Override
-    public void createCheckInSuccess(int userId, int locationId) {
-        setCheckedToLocation(locationId);
-        setButtonVisibility(View.GONE);
-        addLocationsToMap();
-    }
-
-    @Override
     public void getAllLocationsSuccess(List<Location> locations) {
         this.locations = locations;
         addLocationsToMap();
         addMyLocationToMap();
     }
 
-    //endregion
-
-    //region OnClickListener
-
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.fab_btn_check_in:
-                createCheckIn();
-                break;
-            default:
-                break;
-        }
+    public void updateLocationSuccess() {
+        addLocationsToMap();
     }
 
     //endregion
@@ -234,7 +175,7 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         if (CollectionValidations.IsEmpty(locations)) {
-            geoMapPresenter.getAllLocations(Preferences.getUserId());
+            locationPresenter.getAllLocations(Preferences.getUserId());
         } else {
             addLocationsToMap();
             addMyLocationToMap();
@@ -249,79 +190,28 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
         }
 
         clearMap();
-        geofenceList = new ArrayList<>();
         for (Location location : locations) {
-            if(location.isChecked() == false) {
-                Geofence geofence = createGeofence(location);
-                geofenceList.add(geofence);
-            }
             addDrawMarkerWithRadius(location);
         }
-
-        LocationServices.GeofencingApi.addGeofences(
-                googleApiClient,
-                getGeofencingRequest(),
-                getGeofencePendingIntent()
-        ).setResultCallback(this);
     }
 
     private void clearMap() {
-        LocationServices.GeofencingApi.removeGeofences(googleApiClient, getGeofencePendingIntent());
         googleMap.clear();
     }
 
-    private GeofencingRequest getGeofencingRequest() {
-        GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
-        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_DWELL);
-        builder.addGeofences(geofenceList);
-        return builder.build();
-    }
-
-    private PendingIntent getGeofencePendingIntent() {
-        if (geofencePendingIntent != null) {
-            return geofencePendingIntent;
-        }
-        Intent intent = new Intent(getActivity(), GeofenceTransitionsIntentService.class);
-        geofencePendingIntent = PendingIntent.getService(getActivity(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        return geofencePendingIntent;
-    }
-
     private void addDrawMarkerWithRadius(Location location){
-        int strokeColor;
-        int shadeColor;
-
-        if (location.isChecked()) {
-            strokeColor = 0xff00ff00;
-            shadeColor = 0x4400ff00;
-        } else if (location.isOwner()) {
-            strokeColor = 0xffff0000;
-            shadeColor = 0x44ff0000;
-        } else {
-            strokeColor = 0xff0000ff;
-            shadeColor = 0x440000ff;
-        }
-
+        int strokeColor = 0xff00000f;
+        int shadeColor = 0x4400000f;
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-
-        CircleOptions circleOptions = new CircleOptions().center(latLng).radius(location.getRadius()).fillColor(shadeColor).strokeColor(strokeColor).strokeWidth(8);
+        CircleOptions circleOptions = new CircleOptions().center(latLng).radius(location.getRadius()).fillColor(shadeColor).strokeColor(strokeColor).strokeWidth(4);
         googleMap.addCircle(circleOptions);
         String snippet = location.getStartDate().equals(location.getEndDate()) ? location.getStartDate() : location.getStartDate() + " - " + location.getEndDate();
         MarkerOptions markerOptions = new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.fromResource(EnumExtensions.getImageOfLocationType(location.getType()))).title(location.getName()).snippet(snippet);
         Marker marker = googleMap.addMarker(markerOptions);
         marker.showInfoWindow();
         marker.setTag(location);
-    }
-
-    private Geofence createGeofence(Location location) {
-        String requestId = String.valueOf(location.getId());
-        float radius = (float) location.getRadius();
-        return new Geofence.Builder()
-                .setRequestId(requestId)
-                .setCircularRegion(location.getLatitude(), location.getLongitude(), radius)
-                .setExpirationDuration(Geofence.NEVER_EXPIRE)
-                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT | Geofence.GEOFENCE_TRANSITION_DWELL)
-                .setLoiteringDelay(Geofence.GEOFENCE_TRANSITION_DWELL)
-                .build();
+        if (location.isOwner())
+            marker.setDraggable(true);
     }
 
     private void addMyLocationToMap() {
@@ -339,7 +229,7 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
             googleMap.setMyLocationEnabled(true);
             googleMap.moveCamera(cameraPosition);
         } else {
-            showErrorMessage(ResourcesExtensions.toString(R.string.check_in_without_location));
+            showErrorMessage(ResourcesExtensions.toString(R.string.location_fragmnet_without_location));
         }
     }
 
@@ -359,19 +249,6 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
 
     //endregion
 
-    //region ResultCallback
-
-    @Override
-    public void onResult(@NonNull Result result) {
-        if (result.getStatus().isSuccess()) {
-            Log.i("si", "location_4");
-        } else {
-            Log.i("no", "error");
-        }
-    }
-
-    //endregion
-
     //region OnMapReadyCallback
 
     @Override
@@ -383,47 +260,8 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
         googleMap.setBuildingsEnabled(false);
         googleMap.getUiSettings().setZoomControlsEnabled(true);
         googleMap.setOnMarkerClickListener(this);
-    }
-
-    //endregion
-
-    //region Custom Methods
-
-    public void setButtonVisibility(int isVisible) {
-        fab_btn_check_in.setScaleX(0);
-        fab_btn_check_in.setScaleY(0);
-        fab_btn_check_in.setVisibility(isVisible);
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP && IntegerValidations.IsZero(isVisible)) {
-            final Interpolator interpolador = AnimationUtils.loadInterpolator(getActivity(), android.R.interpolator.fast_out_slow_in);
-            fab_btn_check_in.animate()
-                    .scaleX(1)
-                    .scaleY(1)
-                    .setInterpolator(interpolador)
-                    .setDuration(600)
-                    .setStartDelay(1000);
-        } else if (IntegerValidations.IsZero(isVisible)) {
-            fab_btn_check_in.setScaleX(1);
-            fab_btn_check_in.setScaleY(1);
-        }
-    }
-
-    public void setLocationToCheckIn(int locationId) {
-        this.locationId = locationId;
-    }
-
-    private void createCheckIn() {
-        geoMapPresenter.createCheckIn(Preferences.getUserId(), locationId);
-    }
-
-    private void setCheckedToLocation(final int locationId) {
-        List<Location> locations = FluentIterable.from(this.locations).filter(new Predicate<Location>() {
-            @Override
-            public boolean apply(Location location) {
-                return location.getId() == locationId;
-            }
-        }).toList();
-        Location location = Iterables.getFirst(locations, null);
-        location.setChecked(true);
+        googleMap.setOnMapLongClickListener(this);
+        googleMap.setOnMarkerDragListener(this);
     }
 
     //endregion
@@ -436,6 +274,37 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
         Location location = (Location) marker.getTag();
         //marker.setSnippet(String.valueOf(location.getName()));
         return false;
+    }
+
+    //endregion
+
+    //region OnMapLongClickListener
+
+    @Override
+    public void onMapLongClick(LatLng latLng) {
+
+    }
+
+    //endregion
+
+    //region OnMarkerDragListener
+
+    @Override
+    public void onMarkerDragStart(Marker marker) {
+    }
+
+    @Override
+    public void onMarkerDrag(Marker marker) {
+    }
+
+    @Override
+    public void onMarkerDragEnd(Marker marker) {
+        Location location = (Location) marker.getTag();
+        if (ObjectValidations.IsNotNull(location)) {
+            location.setLatitude(marker.getPosition().latitude);
+            location.setLongitude(marker.getPosition().longitude);
+            locationPresenter.updateLocation(location);
+        }
     }
 
     //endregion

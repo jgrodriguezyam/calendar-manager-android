@@ -7,6 +7,8 @@ import android.widget.TextView;
 
 import com.binarium.calendarmanager.R;
 import com.binarium.calendarmanager.activity.CheckInActivity;
+import com.binarium.calendarmanager.activity.GeoMapActivity;
+import com.binarium.calendarmanager.activity.LocationActivity;
 import com.binarium.calendarmanager.activity.ProfileActivity;
 
 /**
@@ -24,7 +26,10 @@ public class NavigationExtensions {
     public static void sendTo(Activity activity, int valueToCompare) {
         switch (valueToCompare) {
             case R.id.btn_map:
-                Util.sendAndFinish(activity, CheckInActivity.class);
+                Util.sendAndFinish(activity, GeoMapActivity.class);
+                break;
+            case R.id.btn_location:
+                Util.sendAndFinish(activity, LocationActivity.class);
                 break;
             case R.id.btn_profile:
                 Util.sendAndFinish(activity, ProfileActivity.class);

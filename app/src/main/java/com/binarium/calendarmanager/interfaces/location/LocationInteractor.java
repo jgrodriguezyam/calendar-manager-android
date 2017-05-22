@@ -1,0 +1,12 @@
+package com.binarium.calendarmanager.interfaces.location;
+
+import com.binarium.calendarmanager.viewmodels.location.Location;
+
+/**
+ * Created by jrodriguez on 22/05/2017.
+ */
+
+public interface LocationInteractor {
+    void getAllLocations(int userId, LocationListener locationListener);
+    void updateLocation(Location location, LocationListener locationListener);
+}

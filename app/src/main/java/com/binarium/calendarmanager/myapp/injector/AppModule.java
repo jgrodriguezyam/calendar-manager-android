@@ -1,10 +1,12 @@
 package com.binarium.calendarmanager.myapp.injector;
 
 import com.binarium.calendarmanager.interactors.AccountInteractorImpl;
+import com.binarium.calendarmanager.interactors.LocationInteractorImpl;
 import com.binarium.calendarmanager.interactors.LoginInteractorImpl;
 import com.binarium.calendarmanager.interactors.GeoMapInteractorImpl;
 import com.binarium.calendarmanager.interactors.SplashInteractorImpl;
 import com.binarium.calendarmanager.interfaces.account.AccountInteractor;
+import com.binarium.calendarmanager.interfaces.location.LocationInteractor;
 import com.binarium.calendarmanager.interfaces.login.LoginInteractor;
 import com.binarium.calendarmanager.interfaces.geomap.GeoMapInteractor;
 import com.binarium.calendarmanager.interfaces.splash.SplashInteractor;
@@ -65,5 +67,10 @@ public class AppModule {
     @Provides
     public GeoMapInteractor provideGeoMapInteractor(CheckInApiService checkInApiService, LocationApiService locationApiService, SharedLocationApiService sharedLocationApiService) {
         return new GeoMapInteractorImpl(checkInApiService, locationApiService, sharedLocationApiService);
+    }
+
+    @Provides
+    public LocationInteractor provideLocationInteractor(LocationApiService locationApiService, SharedLocationApiService sharedLocationApiService) {
+        return new LocationInteractorImpl(locationApiService, sharedLocationApiService);
     }
 }
