@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.binarium.calendarmanager.R;
+import com.binarium.calendarmanager.fragment.dialog.CreateLocationDialogFragment;
+import com.binarium.calendarmanager.fragment.listener.CreateLocationDialogListener;
 import com.binarium.calendarmanager.infrastructure.CollectionValidations;
 import com.binarium.calendarmanager.infrastructure.EnumExtensions;
 import com.binarium.calendarmanager.infrastructure.ObjectValidations;
@@ -54,7 +56,7 @@ import butterknife.ButterKnife;
  * Created by jrodriguez on 22/05/2017.
  */
 
-public class LocationFragment extends Fragment implements LocationView, ConnectionCallbacks, OnConnectionFailedListener, OnMapReadyCallback, OnMarkerClickListener, OnMapLongClickListener, OnMarkerDragListener {
+public class LocationFragment extends Fragment implements LocationView, ConnectionCallbacks, OnConnectionFailedListener, OnMapReadyCallback, OnMarkerClickListener, OnMapLongClickListener, OnMarkerDragListener, CreateLocationDialogListener {
     private ProgressDialog progressDialog;
     GoogleApiClient googleApiClient;
     GoogleMap googleMap;
@@ -62,6 +64,7 @@ public class LocationFragment extends Fragment implements LocationView, Connecti
     @Inject
     LocationPresenterImpl locationPresenter;
 
+    public static final String CREATE_LOCATION_TAG = "CREATE_LOCATION_TAG";
     private static final String LOCATIONS = "Locations";
     List<Location> locations;
 
@@ -282,7 +285,12 @@ public class LocationFragment extends Fragment implements LocationView, Connecti
 
     @Override
     public void onMapLongClick(LatLng latLng) {
-
+        Location location = new Location();
+        location.setLatitude(latLng.latitude);
+        location.setLongitude(latLng.longitude);
+        CreateLocationDialogFragment createLocationDialogFragment = CreateLocationDialogFragment.newInstance(location);
+        createLocationDialogFragment.setTargetFragment(this, 0);
+        createLocationDialogFragment.show(getFragmentManager(), CREATE_LOCATION_TAG);
     }
 
     //endregion
@@ -305,6 +313,15 @@ public class LocationFragment extends Fragment implements LocationView, Connecti
             location.setLongitude(marker.getPosition().longitude);
             locationPresenter.updateLocation(location);
         }
+    }
+
+    //endregion
+
+    //region CreateLocationDialogListener
+
+    @Override
+    public void createLocation(Location location) {
+        String hoa = "jajaja";
     }
 
     //endregion

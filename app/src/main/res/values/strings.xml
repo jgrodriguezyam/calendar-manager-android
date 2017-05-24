@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Calendario</string>
+    <string name="app_name">My Calendar</string>
     <!--<string name="url_base">http://workermanagerapi.gear.host</string>-->
     <string name="url_base">http://192.168.1.217:1988</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -26,10 +26,13 @@
     <!-- Drawer body -->
     <string name="menu_title_map">Mapa</string>
     <string name="btn_map">Mapa</string>
-    <string name="btn_location">Mis Ubicaciónes</string>
+    <string name="btn_location">Mis Ubicaciones</string>
     <string name="menu_title_actions">Menu</string>
     <string name="btn_check_ins">Entradas</string>
     <string name="btn_profile">Perfil</string>
+    
+    <!-- Notice Dialog -->
+    <string name="dialog_listener_not_implemented">Falta implementar DialogListener en la actividad</string>
 
     <!-- Login Activity -->
     <string name="title_login_activity">Login</string>
@@ -67,7 +70,7 @@
     <string name="check_in_without_location">No se ha podido obtener la ubicación</string>
 
     <!-- Location Activity -->
-    <string name="title_location_activity">Agregar</string>
+    <string name="title_location_activity">Mis Ubicaciones</string>
 
     <!-- Location Fragment -->
     <string name="init_create_location">Creando...</string>
@@ -75,7 +78,14 @@
     <string name="location_fragmnet_without_location">No se ha podido obtener la ubicación</string>
     <string name="update_location_success">Actualización exitosa :)</string>
 
-
+    <!-- Create Location Dialog -->
+    <string name="hint_location_name">Nombre</string>
+    <string name="hint_location_radius">Radio</string>
+    <string name="hint_location_start_date">Fecha inicial</string>
+    <string name="hint_location_end_date">Fecha final</string>
+    <string name="hint_location_comment">Comentario</string>
+    <string name="btn_location_save">Agregar</string>
+    <string name="init_location_save">Agregando...</string>
 
     <!-- Profile Activity -->
     <string name="title_Profile_activity">Perfil</string>
