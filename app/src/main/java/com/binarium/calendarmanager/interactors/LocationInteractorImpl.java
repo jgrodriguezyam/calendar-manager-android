@@ -3,6 +3,7 @@ package com.binarium.calendarmanager.interactors;
 import android.os.AsyncTask;
 import android.support.annotation.UiThread;
 
+import com.binarium.calendarmanager.dto.base.CreateResponse;
 import com.binarium.calendarmanager.dto.base.SuccessResponse;
 import com.binarium.calendarmanager.dto.checkin.CheckInResponse;
 import com.binarium.calendarmanager.dto.checkin.FindCheckInsRequest;
@@ -17,6 +18,7 @@ import com.binarium.calendarmanager.dto.sharedlocation.SharedLocationResponse;
 import com.binarium.calendarmanager.dto.user.UserRequest;
 import com.binarium.calendarmanager.infrastructure.CollectionValidations;
 import com.binarium.calendarmanager.infrastructure.ObjectValidations;
+import com.binarium.calendarmanager.infrastructure.Preferences;
 import com.binarium.calendarmanager.interfaces.geomap.GeoMapListener;
 import com.binarium.calendarmanager.interfaces.location.LocationInteractor;
 import com.binarium.calendarmanager.interfaces.location.LocationListener;
@@ -114,13 +116,47 @@ public class LocationInteractorImpl implements LocationInteractor {
     }
 
     @Override
+    public void createLocation(Location location, LocationListener locationListener) {
+        LocationRequest locationRequest = LocationMapper.ToLocationRequest(location);
+        locationRequest.setUserId(Preferences.getUserId());
+        createLocationAsync(locationRequest, locationListener);
+    }
+
+    @UiThread
+    private void createLocationAsync(final LocationRequest locationRequest, final LocationListener locationListener) {
+        new AsyncTask<LocationRequest, Void, CreateResponse>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+            }
+
+            @Override
+            protected CreateResponse doInBackground(LocationRequest... params) {
+                CreateResponse createResponse = locationApiService.create(params[0], locationListener);
+                return createResponse;
+            }
+
+            @Override
+            protected void onPostExecute(CreateResponse createResponse) {
+                super.onPostExecute(createResponse);
+                if (ObjectValidations.IsNotNull(createResponse)) {
+                    locationRequest.setId(createResponse.getId());
+                    Location location = LocationMapper.ToLocation(locationRequest);
+                    location.setOwner(true);
+                    locationListener.createLocationSuccess(location);
+                }
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, locationRequest);
+    }
+
+    @Override
     public void updateLocation(Location location, LocationListener locationListener) {
         LocationRequest locationRequest = LocationMapper.ToLocationRequest(location);
         updateLocationAsync(locationRequest, locationListener);
     }
 
     @UiThread
-    private void updateLocationAsync(LocationRequest locationRequest, final LocationListener locationListener) {
+    private void updateLocationAsync(final LocationRequest locationRequest, final LocationListener locationListener) {
         new AsyncTask<LocationRequest, Void, SuccessResponse>() {
             @Override
             protected void onPreExecute() {
@@ -137,7 +173,8 @@ public class LocationInteractorImpl implements LocationInteractor {
             protected void onPostExecute(SuccessResponse successResponse) {
                 super.onPostExecute(successResponse);
                 if (ObjectValidations.IsNotNull(successResponse)) {
-                    locationListener.updateLocationSuccess();
+                    Location location = LocationMapper.ToLocation(locationRequest);
+                    locationListener.updateLocationSuccess(location);
                 }
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, locationRequest);

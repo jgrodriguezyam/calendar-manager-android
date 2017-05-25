@@ -20,21 +20,20 @@ import android.widget.TextView;
 
 import com.binarium.calendarmanager.R;
 import com.binarium.calendarmanager.dto.location.RadiusResponse;
+import com.binarium.calendarmanager.dto.location.TypeResponse;
 import com.binarium.calendarmanager.fragment.listener.FormLocationDialogListener;
 import com.binarium.calendarmanager.fragment.listener.DatePickerDialogListener;
 import com.binarium.calendarmanager.infrastructure.CollectionValidations;
 import com.binarium.calendarmanager.infrastructure.Constants;
 import com.binarium.calendarmanager.infrastructure.DateExtensions;
 import com.binarium.calendarmanager.infrastructure.EditTextExtensions;
+import com.binarium.calendarmanager.infrastructure.IntegerValidations;
 import com.binarium.calendarmanager.infrastructure.ResourcesExtensions;
+import com.binarium.calendarmanager.infrastructure.enums.LocationType;
 import com.binarium.calendarmanager.viewmodels.location.Location;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
@@ -59,6 +58,12 @@ public class FormLocationDialogFragment extends DialogFragment implements OnClic
     private List<RadiusResponse> radius;
     @Bind(R.id.sp_location_radius)
     MaterialSpinner radiusSpinner;
+
+    @Bind(R.id.tv_error_location_type)
+    TextView typesErrorTextView;
+    private List<TypeResponse> types;
+    @Bind(R.id.sp_location_type)
+    MaterialSpinner typesSpinner;
 
     @Bind(R.id.tl_location_start_date)
     TextInputLayout tlLocationStartDate;
@@ -106,14 +111,14 @@ public class FormLocationDialogFragment extends DialogFragment implements OnClic
         btnLocationCancel.setOnClickListener(this);
         etLocationName.addTextChangedListener(this);
         radiusSpinner.setOnItemSelectedListener(this);
+        typesSpinner.setOnItemSelectedListener(this);
         findRadius();
+        findTypes();
         setSpinnersData();
         setDatesData();
         builder.setView(view);
         return builder.create();
     }
-
-
 
     @Override
     public void onAttach(Context context) {
@@ -164,6 +169,11 @@ public class FormLocationDialogFragment extends DialogFragment implements OnClic
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if(typesSpinner.getSelectedItemPosition()!=0){
+            ((TextView)typesSpinner.getSelectedView()).setError(null);
+            typesErrorTextView.setVisibility(View.GONE);
+        }
+
         if(radiusSpinner.getSelectedItemPosition()!=0){
             ((TextView)radiusSpinner.getSelectedView()).setError(null);
             radiusErrorTextView.setVisibility(View.GONE);
@@ -179,6 +189,13 @@ public class FormLocationDialogFragment extends DialogFragment implements OnClic
 
     //region Custom Methods
 
+    private void findTypes() {
+        types = new ArrayList<>();
+        types.add(new TypeResponse(LocationType.EVENT.getIdentifier(), LocationType.EVENT.getValue()));
+        types.add(new TypeResponse(LocationType.ACTIVITY.getIdentifier(), LocationType.ACTIVITY.getValue()));
+        types.add(new TypeResponse(LocationType.TASK.getIdentifier(), LocationType.TASK.getValue()));
+    }
+
     private void findRadius() {
         radius = new ArrayList<>();
         for(int x = ResourcesExtensions.toInt(R.integer.geofence_minimum_radius); x <= ResourcesExtensions.toInt(R.integer.geofence_maximum_radius); x++) {
@@ -192,6 +209,12 @@ public class FormLocationDialogFragment extends DialogFragment implements OnClic
             radiusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             radiusSpinner.setAdapter(radiusAdapter);
         }
+
+        if(CollectionValidations.IsNotEmpty(types)) {
+            ArrayAdapter<TypeResponse> typesAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, types);
+            typesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            typesSpinner.setAdapter(typesAdapter);
+        }
     }
 
     private void setDatesData() {
@@ -200,10 +223,25 @@ public class FormLocationDialogFragment extends DialogFragment implements OnClic
     }
 
     public void saveLocation() {
-        if(validFields()) {
+        if(!validFields())
+            return;
 
+        RadiusResponse radiusResponse = (RadiusResponse) radiusSpinner.getSelectedItem();
+        TypeResponse typeResponse = (TypeResponse) typesSpinner.getSelectedItem();
+        location.setName(etLocationName.getText().toString());
+        location.setRadius(radiusResponse.getId());
+        location.setType(typeResponse.getId());
+        location.setStartDate(etLocationStartDate.getText().toString());
+        location.setEndDate(etLocationEndDate.getText().toString());
+        location.setComment(etLocationComment.getText().toString());
+
+        if (IntegerValidations.IsZero(location.getId()))
             formLocationDialogListener.createLocation(location);
-        }
+
+        if (IntegerValidations.IsNotZero(location.getId()))
+            formLocationDialogListener.updateLocation(location);
+
+        getDialog().dismiss();
     }
 
     private boolean validFields() {
@@ -217,6 +255,12 @@ public class FormLocationDialogFragment extends DialogFragment implements OnClic
         if (radiusSpinner.getAdapter() == null || radiusSpinner.getSelectedItemPosition() == Constants.SPINNER_NOT_SET) {
             radiusSpinner.setError("Error");
             radiusErrorTextView.setVisibility(View.VISIBLE);
+            valid = false;
+        }
+
+        if (typesSpinner.getAdapter() == null || typesSpinner.getSelectedItemPosition() == Constants.SPINNER_NOT_SET) {
+            typesSpinner.setError("Error");
+            typesErrorTextView.setVisibility(View.VISIBLE);
             valid = false;
         }
 

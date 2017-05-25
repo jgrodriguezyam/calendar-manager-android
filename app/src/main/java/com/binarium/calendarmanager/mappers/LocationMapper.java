@@ -36,4 +36,18 @@ public class LocationMapper {
         locationRequest.setComment(location.getComment());
         return locationRequest;
     }
+
+    public static Location ToLocation(LocationRequest locationRequest) {
+        Location location = new Location();
+        location.setId(locationRequest.getId());
+        location.setName(locationRequest.getName());
+        location.setLatitude(locationRequest.getLatitude());
+        location.setLongitude(locationRequest.getLongitude());
+        location.setRadius(locationRequest.getRadius());
+        location.setType(locationRequest.getType());
+        location.setStartDate(locationRequest.getStartDate());
+        location.setEndDate(locationRequest.getEndDate());
+        location.setComment(locationRequest.getComment());
+        return location;
+    }
 }

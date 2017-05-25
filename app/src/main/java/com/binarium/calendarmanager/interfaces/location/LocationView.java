@@ -16,5 +16,6 @@ public interface LocationView {
     void showSuccessMessage(String message);
 
     void getAllLocationsSuccess(List<Location> locations);
-    void updateLocationSuccess();
+    void createLocationSuccess(Location location);
+    void updateLocationSuccess(Location location);
 }

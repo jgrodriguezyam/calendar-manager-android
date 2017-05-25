@@ -167,7 +167,13 @@ public class LocationFragment extends Fragment implements LocationView, Connecti
     }
 
     @Override
-    public void updateLocationSuccess() {
+    public void createLocationSuccess(Location location) {
+        locations.add(location);
+        addLocationsToMap();
+    }
+
+    @Override
+    public void updateLocationSuccess(Location location) {
         addLocationsToMap();
     }
 
@@ -321,12 +327,12 @@ public class LocationFragment extends Fragment implements LocationView, Connecti
 
     @Override
     public void createLocation(Location location) {
-        String hoa = "jajaja";
+        locationPresenter.createLocation(location);
     }
 
     @Override
     public void updateLocation(Location location) {
-        String hoa = "jejejjejeje";
+        locationPresenter.updateLocation(location);
     }
 
     //endregion

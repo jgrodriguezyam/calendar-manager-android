@@ -39,6 +39,12 @@ public class LocationPresenterImpl implements LocationPresenter, LocationListene
     }
 
     @Override
+    public void createLocation(Location location) {
+        locationView.showProgress(ResourcesExtensions.toString(R.string.init_create_location));
+        locationInteractor.createLocation(location, this);
+    }
+
+    @Override
     public void updateLocation(Location location) {
         locationView.showProgress(ResourcesExtensions.toString(R.string.init_update_location));
         locationInteractor.updateLocation(location, this);
@@ -67,10 +73,17 @@ public class LocationPresenterImpl implements LocationPresenter, LocationListene
     }
 
     @Override
-    public void updateLocationSuccess() {
+    public void createLocationSuccess(Location location) {
+        locationView.hideProgress();
+        locationView.showSuccessMessage(ResourcesExtensions.toString(R.string.create_location_success));
+        locationView.createLocationSuccess(location);
+    }
+
+    @Override
+    public void updateLocationSuccess(Location location) {
         locationView.hideProgress();
         locationView.showSuccessMessage(ResourcesExtensions.toString(R.string.update_location_success));
-        locationView.updateLocationSuccess();
+        locationView.updateLocationSuccess(location);
     }
 
     //endregion

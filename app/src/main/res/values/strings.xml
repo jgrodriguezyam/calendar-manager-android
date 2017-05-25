@@ -77,10 +77,12 @@
     <string name="init_update_location">Actualizando...</string>
     <string name="location_fragmnet_without_location">No se ha podido obtener la ubicación</string>
     <string name="update_location_success">Actualización exitosa :)</string>
+    <string name="create_location_success">Se agrego de manera exitosa :)</string>
 
     <!-- Create Location Dialog -->
     <string name="hint_location_name">Nombre</string>
     <string name="hint_location_radius">Radio</string>
+    <string name="hint_location_type">Tipo</string>
     <string name="hint_location_start_date">Fecha inicial</string>
     <string name="hint_location_end_date">Fecha final</string>
     <string name="hint_location_comment">Comentario</string>
