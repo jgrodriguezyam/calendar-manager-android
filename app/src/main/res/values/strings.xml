@@ -84,8 +84,10 @@
     <string name="hint_location_start_date">Fecha inicial</string>
     <string name="hint_location_end_date">Fecha final</string>
     <string name="hint_location_comment">Comentario</string>
-    <string name="btn_location_save">Agregar</string>
+    <string name="btn_location_save">Guardar</string>
+    <string name="btn_location_cancel">Cancelar</string>
     <string name="init_location_save">Agregando...</string>
+    <string name="required_location_start_date_field">Se requiere la fecha inicial</string>
 
     <!-- Profile Activity -->
     <string name="title_Profile_activity">Perfil</string>
