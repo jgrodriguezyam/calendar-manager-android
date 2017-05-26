@@ -1,6 +1,6 @@
 <resources>
     <!-- Google maps -->
     <integer name="google_maps_zoom">16</integer>
-    <integer name="geofence_minimum_radius">1</integer>
+    <integer name="geofence_minimum_radius">50</integer>
     <integer name="geofence_maximum_radius">200</integer>
 </resources>

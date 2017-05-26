@@ -19,11 +19,14 @@ import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
 import android.view.View.OnClickListener;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.binarium.calendarmanager.R;
 import com.binarium.calendarmanager.infrastructure.CollectionValidations;
 import com.binarium.calendarmanager.infrastructure.EnumExtensions;
 import com.binarium.calendarmanager.infrastructure.IntegerValidations;
+import com.binarium.calendarmanager.infrastructure.MapExtensions;
 import com.binarium.calendarmanager.infrastructure.ObjectValidations;
 import com.binarium.calendarmanager.infrastructure.Preferences;
 import com.binarium.calendarmanager.infrastructure.ResourcesExtensions;
@@ -55,6 +58,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
+import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Iterables;
@@ -71,7 +75,7 @@ import butterknife.ButterKnife;
  * Created by jrodriguez on 17/05/2017.
  */
 
-public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListener, ConnectionCallbacks, OnConnectionFailedListener, ResultCallback, OnMapReadyCallback, OnMarkerClickListener {
+public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListener, ConnectionCallbacks, OnConnectionFailedListener, ResultCallback, OnMapReadyCallback, OnMarkerClickListener, InfoWindowAdapter {
     @Bind(R.id.fab_btn_check_in)
     FloatingActionButton fab_btn_check_in;
 
@@ -288,25 +292,25 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
 
     private void addDrawMarkerWithRadius(Location location){
         int strokeColor;
-        int shadeColor;
+        int fillColor;
+        int image = EnumExtensions.getImageOfLocationType(location.getType());
 
         if (location.isChecked()) {
-            strokeColor = 0xff00ff00;
-            shadeColor = 0x4400ff00;
+            strokeColor = ResourcesExtensions.toInt(R.color.stroke_color_green);
+            fillColor = ResourcesExtensions.toInt(R.color.fill_color_green);
+            image = R.drawable.ic_marker_gree;
         } else if (location.isOwner()) {
-            strokeColor = 0xffff0000;
-            shadeColor = 0x44ff0000;
+            strokeColor = ResourcesExtensions.toInt(R.color.stroke_color_red);
+            fillColor = ResourcesExtensions.toInt(R.color.fill_color_red);
         } else {
-            strokeColor = 0xff0000ff;
-            shadeColor = 0x440000ff;
+            strokeColor = ResourcesExtensions.toInt(R.color.stroke_color_yellow);
+            fillColor = ResourcesExtensions.toInt(R.color.fill_color_yellow);
         }
 
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-
-        CircleOptions circleOptions = new CircleOptions().center(latLng).radius(location.getRadius()).fillColor(shadeColor).strokeColor(strokeColor).strokeWidth(8);
+        CircleOptions circleOptions = new CircleOptions().center(latLng).radius(location.getRadius()).fillColor(fillColor).strokeColor(strokeColor).strokeWidth(4);
         googleMap.addCircle(circleOptions);
-        String snippet = location.getStartDate().equals(location.getEndDate()) ? location.getStartDate() : location.getStartDate() + " - " + location.getEndDate();
-        MarkerOptions markerOptions = new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.fromResource(EnumExtensions.getImageOfLocationType(location.getType()))).title(location.getName()).snippet(snippet);
+        MarkerOptions markerOptions = new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.fromResource(image));
         Marker marker = googleMap.addMarker(markerOptions);
         marker.showInfoWindow();
         marker.setTag(location);
@@ -383,6 +387,7 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
         googleMap.setBuildingsEnabled(false);
         googleMap.getUiSettings().setZoomControlsEnabled(true);
         googleMap.setOnMarkerClickListener(this);
+        googleMap.setInfoWindowAdapter(this);
     }
 
     //endregion
@@ -436,6 +441,32 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
         Location location = (Location) marker.getTag();
         //marker.setSnippet(String.valueOf(location.getName()));
         return false;
+    }
+
+    //endregion
+
+    //region InfoWindowAdapter
+
+    @Override
+    public View getInfoWindow(Marker marker) {
+        return null;
+    }
+
+    @Override
+    public View getInfoContents(Marker marker) {
+        Location location = (Location) marker.getTag();
+        if (ObjectValidations.IsNull(location))
+            return null;
+
+        String snippetOfLocation = MapExtensions.getSnippetOfLocation(location);
+        View customInfoContents = getLayoutInflater(null).inflate(R.layout.custom_info_contents, null);
+        ImageView image = (ImageView) customInfoContents.findViewById(R.id.image);
+        image.setBackgroundResource(EnumExtensions.getImageOfLocationType(location.getType()));
+        TextView title = (TextView) customInfoContents.findViewById(R.id.title);
+        title.setText(location.getName());
+        TextView snippet = (TextView) customInfoContents.findViewById(R.id.snippet);
+        snippet.setText(snippetOfLocation);
+        return customInfoContents;
     }
 
     //endregion

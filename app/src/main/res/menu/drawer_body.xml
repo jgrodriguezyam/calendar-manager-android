@@ -10,7 +10,7 @@
                 android:title="@string/btn_map" />
             <item
                 android:id="@+id/btn_location"
-                android:icon="@drawable/ic_map_marker_radius"
+                android:icon="@drawable/ic_map_marker_plus"
                 android:title="@string/btn_location" />
         </menu>
     </item>

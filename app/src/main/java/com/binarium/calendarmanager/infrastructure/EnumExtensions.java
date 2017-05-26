@@ -15,4 +15,10 @@ public class EnumExtensions {
         LocationType locationType = (LocationType) index.get(key - 1);
         return locationType.getImage();
     }
+
+    public static String getNameOfLocationType(int key) {
+        List index = Arrays.asList(LocationType.values());
+        LocationType locationType = (LocationType) index.get(key - 1);
+        return locationType.getValue();
+    }
 }

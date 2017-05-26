@@ -22,11 +22,17 @@
     <string name="notification_geofence_transition_dwell">Ya puedes checar</string>
     <string name="google_api_client_connection_suspended">GoogleApiClient Conección suspendida</string>
     <string name="google_api_client_connection_failed">GoogleApiClient fallo la conecciónn</string>
+    <string name="snippet_date_title">Fecha:</string>
+    <string name="snippet_type_title">Tipo:</string>
+    <string name="snippet_radius_title">Radio:</string>
+    <string name="snippet_radius_measure">mts</string>
+    <string name="snippet_latitude_title">Latitud:</string>
+    <string name="snippet_longitude_title">Longitud:</string>
 
     <!-- Drawer body -->
     <string name="menu_title_map">Mapa</string>
     <string name="btn_map">Mapa</string>
-    <string name="btn_location">Mis Ubicaciones</string>
+    <string name="btn_location">Agregar</string>
     <string name="menu_title_actions">Menu</string>
     <string name="btn_check_ins">Entradas</string>
     <string name="btn_profile">Perfil</string>
@@ -70,7 +76,7 @@
     <string name="check_in_without_location">No se ha podido obtener la ubicación</string>
 
     <!-- Location Activity -->
-    <string name="title_location_activity">Mis Ubicaciones</string>
+    <string name="title_location_activity">Agregar</string>
 
     <!-- Location Fragment -->
     <string name="init_create_location">Creando...</string>

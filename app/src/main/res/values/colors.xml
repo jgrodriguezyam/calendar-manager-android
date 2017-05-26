@@ -19,9 +19,19 @@
     <color name="solid_grey">#898486</color>
 
     <!-- SnackBarExtensions -->
-    <color name="red_custom">#d66565</color>
+    <color name="red_custom">#D66565</color>
     <color name="green_custom">#009688</color>
 
     <!-- Transparent -->
     <color name="transparent">#55000000</color>
+
+    <!-- Map -->
+    <color name="stroke_color_green">#009688</color>
+    <color name="fill_color_green">#44009688</color>
+    <color name="stroke_color_red">#FFD66565</color>
+    <color name="fill_color_red">#44D66565</color>
+    <color name="stroke_color_yellow">#FFFFFF00</color>
+    <color name="fill_color_yellow">#44FFFF00</color>
+    <color name="stroke_color_black">#FF00000F</color>
+    <color name="fill_color_black">#4400000F</color>
 </resources>

@@ -11,12 +11,15 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.binarium.calendarmanager.R;
 import com.binarium.calendarmanager.fragment.dialog.FormLocationDialogFragment;
 import com.binarium.calendarmanager.fragment.listener.FormLocationDialogListener;
 import com.binarium.calendarmanager.infrastructure.CollectionValidations;
 import com.binarium.calendarmanager.infrastructure.EnumExtensions;
+import com.binarium.calendarmanager.infrastructure.MapExtensions;
 import com.binarium.calendarmanager.infrastructure.ObjectValidations;
 import com.binarium.calendarmanager.infrastructure.Preferences;
 import com.binarium.calendarmanager.infrastructure.ResourcesExtensions;
@@ -44,6 +47,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
+import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +60,7 @@ import butterknife.ButterKnife;
  * Created by jrodriguez on 22/05/2017.
  */
 
-public class LocationFragment extends Fragment implements LocationView, ConnectionCallbacks, OnConnectionFailedListener, OnMapReadyCallback, OnMarkerClickListener, OnMapLongClickListener, OnMarkerDragListener, FormLocationDialogListener {
+public class LocationFragment extends Fragment implements LocationView, ConnectionCallbacks, OnConnectionFailedListener, OnMapReadyCallback, OnMarkerClickListener, OnMapLongClickListener, OnMarkerDragListener, FormLocationDialogListener, InfoWindowAdapter {
     private ProgressDialog progressDialog;
     GoogleApiClient googleApiClient;
     GoogleMap googleMap;
@@ -209,18 +213,22 @@ public class LocationFragment extends Fragment implements LocationView, Connecti
     }
 
     private void addDrawMarkerWithRadius(Location location){
-        int strokeColor = 0xff00000f;
-        int shadeColor = 0x4400000f;
+        int strokeColor = ResourcesExtensions.toInt(R.color.stroke_color_black);
+        int fillColor = ResourcesExtensions.toInt(R.color.fill_color_black);
+        int image = R.drawable.ic_map_marker_yellow;
+        boolean isDraggable = false;
+        if (location.isOwner()) {
+            image = R.drawable.ic_map_marker_red;
+            isDraggable = true;
+        }
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        CircleOptions circleOptions = new CircleOptions().center(latLng).radius(location.getRadius()).fillColor(shadeColor).strokeColor(strokeColor).strokeWidth(4);
+        CircleOptions circleOptions = new CircleOptions().center(latLng).radius(location.getRadius()).fillColor(fillColor).strokeColor(strokeColor).strokeWidth(4);
         googleMap.addCircle(circleOptions);
-        String snippet = location.getStartDate().equals(location.getEndDate()) ? location.getStartDate() : location.getStartDate() + " - " + location.getEndDate();
-        MarkerOptions markerOptions = new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.fromResource(EnumExtensions.getImageOfLocationType(location.getType()))).title(location.getName()).snippet(snippet);
+        MarkerOptions markerOptions = new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.fromResource(image));
         Marker marker = googleMap.addMarker(markerOptions);
         marker.showInfoWindow();
         marker.setTag(location);
-        if (location.isOwner())
-            marker.setDraggable(true);
+        marker.setDraggable(isDraggable);
     }
 
     private void addMyLocationToMap() {
@@ -271,6 +279,7 @@ public class LocationFragment extends Fragment implements LocationView, Connecti
         googleMap.setOnMarkerClickListener(this);
         googleMap.setOnMapLongClickListener(this);
         googleMap.setOnMarkerDragListener(this);
+        googleMap.setInfoWindowAdapter(this);
     }
 
     //endregion
@@ -333,6 +342,32 @@ public class LocationFragment extends Fragment implements LocationView, Connecti
     @Override
     public void updateLocation(Location location) {
         locationPresenter.updateLocation(location);
+    }
+
+    //endregion
+
+    //region InfoWindowAdapter
+
+    @Override
+    public View getInfoWindow(Marker marker) {
+        return null;
+    }
+
+    @Override
+    public View getInfoContents(Marker marker) {
+        Location location = (Location) marker.getTag();
+        if (ObjectValidations.IsNull(location))
+            return null;
+
+        String snippetOfLocation = MapExtensions.getSnippetOfLocation(location);
+        View customInfoContents = getLayoutInflater(null).inflate(R.layout.custom_info_contents, null);
+        ImageView image = (ImageView) customInfoContents.findViewById(R.id.image);
+        image.setBackgroundResource(EnumExtensions.getImageOfLocationType(location.getType()));
+        TextView title = (TextView) customInfoContents.findViewById(R.id.title);
+        title.setText(location.getName());
+        TextView snippet = (TextView) customInfoContents.findViewById(R.id.snippet);
+        snippet.setText(snippetOfLocation);
+        return customInfoContents;
     }
 
     //endregion
