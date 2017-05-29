@@ -19,6 +19,7 @@ import com.binarium.calendarmanager.R;
 import com.binarium.calendarmanager.fragment.LocationFragment;
 import com.binarium.calendarmanager.infrastructure.NavigationExtensions;
 import com.binarium.calendarmanager.infrastructure.ObjectValidations;
+import com.binarium.calendarmanager.infrastructure.Util;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -81,5 +82,10 @@ public class LocationActivity extends AppCompatActivity implements OnNavigationI
         drawerLayout.closeDrawer(GravityCompat.START);
         NavigationExtensions.sendTo(this, item.getItemId());
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        Util.sendAndFinish(this, GeoMapActivity.class);
     }
 }

@@ -9,6 +9,7 @@ import com.binarium.calendarmanager.R;
 import com.binarium.calendarmanager.activity.CheckInActivity;
 import com.binarium.calendarmanager.activity.GeoMapActivity;
 import com.binarium.calendarmanager.activity.LocationActivity;
+import com.binarium.calendarmanager.activity.LoginActivity;
 import com.binarium.calendarmanager.activity.ProfileActivity;
 
 /**
@@ -33,6 +34,10 @@ public class NavigationExtensions {
 //                break;
             case R.id.btn_profile:
                 Util.sendAndFinish(activity, ProfileActivity.class);
+                break;
+            case R.id.btn_close_session:
+                Preferences.clear();
+                Util.sendAndFinish(activity, LoginActivity.class);
                 break;
             default:
                 break;

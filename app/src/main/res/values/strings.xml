@@ -36,6 +36,7 @@
     <string name="menu_title_actions">Menu</string>
     <string name="btn_check_ins">Entradas</string>
     <string name="btn_profile">Perfil</string>
+    <string name="btn_close_session">Cerrar sesión</string>
     
     <!-- Notice Dialog -->
     <string name="dialog_listener_not_implemented">Falta implementar DialogListener en la actividad</string>
