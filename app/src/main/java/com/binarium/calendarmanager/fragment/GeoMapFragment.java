@@ -14,6 +14,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
@@ -23,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.binarium.calendarmanager.R;
+import com.binarium.calendarmanager.activity.LocationActivity;
 import com.binarium.calendarmanager.infrastructure.CollectionValidations;
 import com.binarium.calendarmanager.infrastructure.EnumExtensions;
 import com.binarium.calendarmanager.infrastructure.IntegerValidations;
@@ -115,6 +119,7 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
         geoMapPresenter.setGeoMapView(this);
         progressDialog = Util.createModalProgressDialog(getActivity());
         instance = this;
+        setHasOptionsMenu(true);
 
         if (ObjectValidations.IsNotNull(savedInstanceState)) {
             locations = savedInstanceState.getParcelableArrayList(LOCATIONS);
@@ -298,7 +303,7 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
         if (location.isChecked()) {
             strokeColor = ResourcesExtensions.toInt(R.color.stroke_color_green);
             fillColor = ResourcesExtensions.toInt(R.color.fill_color_green);
-            image = R.drawable.ic_marker_gree;
+            image = R.drawable.ic_checkbox_circle_green;
         } else if (location.isOwner()) {
             strokeColor = ResourcesExtensions.toInt(R.color.stroke_color_red);
             fillColor = ResourcesExtensions.toInt(R.color.fill_color_red);
@@ -467,6 +472,50 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
         TextView snippet = (TextView) customInfoContents.findViewById(R.id.snippet);
         snippet.setText(snippetOfLocation);
         return customInfoContents;
+    }
+
+    //endregion
+
+    //region Menu
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.geo_map_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.btn_refresh_map:
+                geoMapPresenter.getAllLocations(Preferences.getUserId());
+                return true;
+            case R.id.btn_add_location:
+                Util.sendAndFinish(getActivity(), LocationActivity.class);
+                return true;
+            case R.id.btn_road_map:
+                setTraffic();
+                return true;
+            case R.id.btn_map_type_satellite:
+                googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                return true;
+            case R.id.btn_map_type_terrain:
+                googleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+                return true;
+            case R.id.btn_map_type_normal:
+                googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                return true;
+        }
+        return false;
+    }
+
+    private void setTraffic() {
+        if (googleMap.isTrafficEnabled()) {
+            googleMap.setTrafficEnabled(false);
+        } else {
+            googleMap.setTrafficEnabled(true);
+        }
     }
 
     //endregion

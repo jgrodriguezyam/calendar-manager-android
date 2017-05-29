@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/btn_refresh_map"
+        android:icon="@drawable/ic_refresh_light"
+        android:title="@string/btn_refresh_map"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/btn_dots"
+        android:icon="@drawable/ic_dots_vertical_light"
+        android:orderInCategory="100"
+        android:title="@string/btn_dots"
+        app:showAsAction="always">
+
+        <menu>
+            <item android:id="@+id/btn_add_location"
+                android:icon="@drawable/ic_map_marker_plus_light"
+                android:title="@string/btn_add_location"
+                app:showAsAction="ifRoom|withText" />
+
+            <item android:id="@+id/btn_road_map"
+                android:icon="@drawable/ic_road_variant_light"
+                android:title="@string/btn_road_map"
+                app:showAsAction="ifRoom|withText" />
+
+            <item android:id="@+id/btn_map_type_satellite"
+                android:icon="@drawable/ic_satellite_light"
+                android:title="@string/btn_map_type_satellite"
+                app:showAsAction="ifRoom|withText" />
+
+            <item android:id="@+id/btn_map_type_terrain"
+                android:icon="@drawable/ic_terrain_light"
+                android:title="@string/btn_map_type_terrain"
+                app:showAsAction="ifRoom|withText" />
+
+            <item android:id="@+id/btn_map_type_normal"
+                android:icon="@drawable/ic_earth_box_light"
+                android:title="@string/btn_map_type_normal"
+                app:showAsAction="ifRoom|withText" />
+        </menu>
+    </item>
+
+</menu>

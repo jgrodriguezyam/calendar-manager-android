@@ -28,9 +28,9 @@ public class NavigationExtensions {
             case R.id.btn_map:
                 Util.sendAndFinish(activity, GeoMapActivity.class);
                 break;
-            case R.id.btn_location:
-                Util.sendAndFinish(activity, LocationActivity.class);
-                break;
+//            case R.id.btn_location:
+//                Util.sendAndFinish(activity, LocationActivity.class);
+//                break;
             case R.id.btn_profile:
                 Util.sendAndFinish(activity, ProfileActivity.class);
                 break;

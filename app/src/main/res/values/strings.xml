@@ -66,14 +66,23 @@
     <string name="init_user_save">Registrando...</string>
     <string name="invalid_compare_password_fields">La contraseña no es la mismas</string>
 
-    <!-- Map Activity -->
+    <!-- Geo Map Activity -->
     <string name="title_geo_map_activity">Mapa</string>
 
-    <!-- Map Fragment -->
+    <!-- Geo Map Fragment -->
     <string name="init_check_in">Registrando...</string>
     <string name="init_get_all_locations">Obteniendo Ubicaciones...</string>
     <string name="create_check_in_success">Registro exitoso :)</string>
     <string name="check_in_without_location">No se ha podido obtener la ubicación</string>
+
+    <!-- Geo Map Menu -->
+    <string name="btn_dots">...</string>
+    <string name="btn_refresh_map">Actualizar</string>
+    <string name="btn_add_location">Agregar</string>
+    <string name="btn_road_map">Tráfico</string>
+    <string name="btn_map_type_normal">Normal</string>
+    <string name="btn_map_type_satellite">Satelite</string>
+    <string name="btn_map_type_terrain">Terreno</string>
 
     <!-- Location Activity -->
     <string name="title_location_activity">Agregar</string>
