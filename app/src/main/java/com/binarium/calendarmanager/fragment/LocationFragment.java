@@ -390,7 +390,7 @@ public class LocationFragment extends Fragment implements LocationView, Connecti
     private void addFilterToMenu() {
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         toolbar.setTitle(Constants.EMPTY_STRING);
-        View filterMenu = getLayoutInflater(null).inflate(R.layout.geo_map_filter_menu, null);
+        View filterMenu = getLayoutInflater(null).inflate(R.layout.map_filter_menu, null);
         this.etLocationDate = (EditText) filterMenu.findViewById(R.id.et_location_date);
         etLocationDate.setText(Preferences.getTodayDate());
         etLocationDate.setOnTouchListener(this);
