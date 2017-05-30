@@ -495,26 +495,31 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
                 Util.sendAndFinish(getActivity(), LocationActivity.class);
                 return true;
             case R.id.btn_road_map:
-                setTraffic();
+                setTraffic(item);
                 return true;
             case R.id.btn_map_type_satellite:
                 googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                item.setChecked(true);
                 return true;
             case R.id.btn_map_type_terrain:
                 googleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+                item.setChecked(true);
                 return true;
             case R.id.btn_map_type_normal:
                 googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                item.setChecked(true);
                 return true;
         }
         return false;
     }
 
-    private void setTraffic() {
+    private void setTraffic(MenuItem item) {
         if (googleMap.isTrafficEnabled()) {
             googleMap.setTrafficEnabled(false);
+            item.setChecked(false);
         } else {
             googleMap.setTrafficEnabled(true);
+            item.setChecked(true);
         }
     }
 

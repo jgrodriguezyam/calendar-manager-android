@@ -24,23 +24,28 @@
 
             <item android:id="@+id/btn_road_map"
                 android:icon="@drawable/ic_road_variant_light"
+                android:checkable="true"
                 android:title="@string/btn_road_map"
                 app:showAsAction="ifRoom|withText" />
 
-            <item android:id="@+id/btn_map_type_satellite"
-                android:icon="@drawable/ic_satellite_light"
-                android:title="@string/btn_map_type_satellite"
-                app:showAsAction="ifRoom|withText" />
+            <group
+                android:id="@+id/group"
+                android:checkableBehavior="single">
+                <item android:id="@+id/btn_map_type_satellite"
+                    android:icon="@drawable/ic_satellite_light"
+                    android:title="@string/btn_map_type_satellite"
+                    app:showAsAction="ifRoom|withText" />
 
-            <item android:id="@+id/btn_map_type_terrain"
-                android:icon="@drawable/ic_terrain_light"
-                android:title="@string/btn_map_type_terrain"
-                app:showAsAction="ifRoom|withText" />
+                <item android:id="@+id/btn_map_type_terrain"
+                    android:icon="@drawable/ic_terrain_light"
+                    android:title="@string/btn_map_type_terrain"
+                    app:showAsAction="ifRoom|withText" />
 
-            <item android:id="@+id/btn_map_type_normal"
-                android:icon="@drawable/ic_earth_box_light"
-                android:title="@string/btn_map_type_normal"
-                app:showAsAction="ifRoom|withText" />
+                <item android:id="@+id/btn_map_type_normal"
+                    android:icon="@drawable/ic_earth_box_light"
+                    android:title="@string/btn_map_type_normal"
+                    app:showAsAction="ifRoom|withText" />
+            </group>
         </menu>
     </item>
 
