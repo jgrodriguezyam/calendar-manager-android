@@ -280,7 +280,7 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
             addDrawMarkerWithRadius(location);
         }
 
-        if (CollectionValidations.IsNotEmpty(locations))
+        if (CollectionValidations.IsNotEmpty(locations) && Preferences.getTodayDate().equals(etLocationDate.getText().toString()))
             LocationServices.GeofencingApi.addGeofences(
                 googleApiClient,
                 getGeofencingRequest(),
