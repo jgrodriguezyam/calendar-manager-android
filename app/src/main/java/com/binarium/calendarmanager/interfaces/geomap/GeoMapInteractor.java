@@ -6,5 +6,5 @@ package com.binarium.calendarmanager.interfaces.geomap;
 
 public interface GeoMapInteractor {
     void createCheckIn(int userId, int locationId, GeoMapListener geoMapListener);
-    void getAllLocations(int userId, GeoMapListener geoMapListener);
+    void getAllLocations(int userId, String date, GeoMapListener geoMapListener);
 }

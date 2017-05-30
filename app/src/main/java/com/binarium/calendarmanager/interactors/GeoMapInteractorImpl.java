@@ -57,8 +57,11 @@ public class GeoMapInteractorImpl implements GeoMapInteractor {
     }
 
     @Override
-    public void getAllLocations(int userId, GeoMapListener geoMapListener) {
-        getAllLocationsAsync(userId, geoMapListener);
+    public void getAllLocations(int userId, String date, GeoMapListener geoMapListener) {
+        FindLocationsRequest findLocationsRequest = new FindLocationsRequest();
+        findLocationsRequest.setUserId(userId);
+        findLocationsRequest.setDate(date);
+        getAllLocationsAsync(findLocationsRequest, geoMapListener);
     }
 
     @UiThread
@@ -86,26 +89,26 @@ public class GeoMapInteractorImpl implements GeoMapInteractor {
     }
 
     @UiThread
-    private void getAllLocationsAsync(int userId, final GeoMapListener geoMapListener) {
-        new AsyncTask<Integer, Void, List<Location>>() {
+    private void getAllLocationsAsync(FindLocationsRequest findLocationsRequest, final GeoMapListener geoMapListener) {
+        new AsyncTask<FindLocationsRequest, Void, List<Location>>() {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
             }
 
             @Override
-            protected List<Location> doInBackground(Integer... params) {
+            protected List<Location> doInBackground(FindLocationsRequest... params) {
                 List<Location> userLocations = new ArrayList<>();
 
-                List<Location> locations = findLoctations(params[0], geoMapListener);
+                List<Location> locations = findLoctations(params[0].getUserId(), params[0].getDate(), geoMapListener);
                 if (CollectionValidations.IsNotEmpty(locations))
                     userLocations.addAll(locations);
 
-                List<Location> sharedLocations = findSharedLoctations(params[0], geoMapListener);
+                List<Location> sharedLocations = findSharedLoctations(params[0].getUserId(), params[0].getDate(), geoMapListener);
                 if (CollectionValidations.IsNotEmpty(sharedLocations))
                     userLocations.addAll(sharedLocations);
 
-                List<CheckInResponse> checkInsResponse = findCheckInsResponse(params[0], geoMapListener);
+                List<CheckInResponse> checkInsResponse = findCheckInsResponse(params[0].getUserId(), params[0].getDate(), geoMapListener);
                 if (CollectionValidations.IsNotEmpty(checkInsResponse))
                     compareLocationsWithCheckIns(userLocations, checkInsResponse);
 
@@ -115,17 +118,16 @@ public class GeoMapInteractorImpl implements GeoMapInteractor {
             @Override
             protected void onPostExecute(List<Location> locations) {
                 super.onPostExecute(locations);
-                if (CollectionValidations.IsNotEmpty(locations)) {
-                    geoMapListener.getAllLocationsSuccess(locations);
-                }
+                geoMapListener.getAllLocationsSuccess(locations);
+
             }
-        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, userId);
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, findLocationsRequest);
     }
 
-    private List<Location> findLoctations(int userId, GeoMapListener geoMapListener) {
+    private List<Location> findLoctations(int userId, String date, GeoMapListener geoMapListener) {
         FindLocationsRequest findLocationsRequest = new FindLocationsRequest();
         findLocationsRequest.setUserId(userId);
-        findLocationsRequest.setOnlyToday(true);
+        findLocationsRequest.setDate(date);
         FindLocationsResponse findLocationsResponse = locationApiService.find(findLocationsRequest, geoMapListener);
         List<Location> locations = new ArrayList<>();
         for (LocationResponse locationResponse : findLocationsResponse.getLocations()) {
@@ -136,10 +138,10 @@ public class GeoMapInteractorImpl implements GeoMapInteractor {
         return locations;
     }
 
-    private List<Location> findSharedLoctations(int userId, GeoMapListener geoMapListener) {
+    private List<Location> findSharedLoctations(int userId, String date, GeoMapListener geoMapListener) {
         FindSharedLocationsRequest findSharedLocationsRequest = new FindSharedLocationsRequest();
         findSharedLocationsRequest.setUserId(userId);
-        findSharedLocationsRequest.setLocationOnlyToday(true);
+        findSharedLocationsRequest.setLocationDate(date);
         FindSharedLocationsResponse findSharedLocationsResponse = sharedLocationApiService.find(findSharedLocationsRequest, geoMapListener);
         List<Location> locations = new ArrayList<>();
         for (SharedLocationResponse sharedLocationResponse : findSharedLocationsResponse.getSharedLocations()) {
@@ -149,10 +151,10 @@ public class GeoMapInteractorImpl implements GeoMapInteractor {
         return locations;
     }
 
-    private List<CheckInResponse> findCheckInsResponse(int userId, GeoMapListener geoMapListener) {
+    private List<CheckInResponse> findCheckInsResponse(int userId, String date, GeoMapListener geoMapListener) {
         FindCheckInsRequest findCheckInsRequest = new FindCheckInsRequest();
         findCheckInsRequest.setUserId(userId);
-        findCheckInsRequest.setCreatedOnlyToday(true);
+        findCheckInsRequest.setCreatedDate(date);
         FindCheckInsResponse findCheckInsResponse = checkInApiService.find(findCheckInsRequest, geoMapListener);
         return findCheckInsResponse.getCheckIns();
     }

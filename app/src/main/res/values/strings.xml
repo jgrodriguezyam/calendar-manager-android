@@ -84,6 +84,7 @@
     <string name="btn_map_type_normal">Normal</string>
     <string name="btn_map_type_satellite">Satelite</string>
     <string name="btn_map_type_terrain">Terreno</string>
+    <string name="hint_location_date">Fecha</string>
 
     <!-- Location Activity -->
     <string name="title_location_activity">Agregar</string>

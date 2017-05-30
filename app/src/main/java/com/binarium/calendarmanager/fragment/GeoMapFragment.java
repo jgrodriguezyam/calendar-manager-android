@@ -12,22 +12,31 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
 import android.view.View.OnClickListener;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.view.View.OnTouchListener;
 
 import com.binarium.calendarmanager.R;
 import com.binarium.calendarmanager.activity.LocationActivity;
+import com.binarium.calendarmanager.fragment.dialog.DatePickerDialogFragment;
+import com.binarium.calendarmanager.fragment.listener.DatePickerDialogListener;
 import com.binarium.calendarmanager.infrastructure.CollectionValidations;
+import com.binarium.calendarmanager.infrastructure.Constants;
+import com.binarium.calendarmanager.infrastructure.DateExtensions;
 import com.binarium.calendarmanager.infrastructure.EnumExtensions;
 import com.binarium.calendarmanager.infrastructure.IntegerValidations;
 import com.binarium.calendarmanager.infrastructure.MapExtensions;
@@ -69,6 +78,7 @@ import com.google.common.collect.Iterables;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Calendar;
 
 import javax.inject.Inject;
 
@@ -79,7 +89,7 @@ import butterknife.ButterKnife;
  * Created by jrodriguez on 17/05/2017.
  */
 
-public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListener, ConnectionCallbacks, OnConnectionFailedListener, ResultCallback, OnMapReadyCallback, OnMarkerClickListener, InfoWindowAdapter {
+public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListener, ConnectionCallbacks, OnConnectionFailedListener, ResultCallback, OnMapReadyCallback, OnMarkerClickListener, InfoWindowAdapter, OnTouchListener, DatePickerDialogListener {
     @Bind(R.id.fab_btn_check_in)
     FloatingActionButton fab_btn_check_in;
 
@@ -97,6 +107,10 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
     private static final String LOCATIONS = "Locations";
     List<Location> locations;
     int locationId;
+
+    private static final String DATE = "DATE";
+    private static final String TAG_DATE = "TAG_DATE";
+    EditText etLocationDate;
 
     public GeoMapFragment() {
     }
@@ -121,17 +135,15 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
         instance = this;
         setHasOptionsMenu(true);
 
-        if (ObjectValidations.IsNotNull(savedInstanceState)) {
+        if (ObjectValidations.IsNotNull(savedInstanceState))
             locations = savedInstanceState.getParcelableArrayList(LOCATIONS);
-        }
 
-        if (googleApiClient == null) {
+        if (ObjectValidations.IsNull(googleApiClient))
             googleApiClient = new GoogleApiClient.Builder(getActivity())
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
                     .addApi(LocationServices.API)
                     .build();
-        }
 
         IntentFilter filter = new IntentFilter(GeofenceRequestReceiver.PROCESS_RESPONSE);
         filter.addCategory(Intent.CATEGORY_DEFAULT);
@@ -142,15 +154,8 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putParcelableArrayList(LOCATIONS, (ArrayList<Location>) locations);
+        outState.putString(DATE, etLocationDate.getText().toString());
         super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        if (ObjectValidations.IsNotNull(savedInstanceState)) {
-
-        }
     }
 
     @Override
@@ -158,7 +163,15 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
         View root = inflater.inflate(R.layout.fragment_geo_map, container, false);
         ButterKnife.bind(this, root);
         fab_btn_check_in.setOnClickListener(this);
+        addFilterToMenu();
         return root;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (ObjectValidations.IsNotNull(savedInstanceState))
+            etLocationDate.setText(savedInstanceState.getString(DATE));
     }
 
     @Override
@@ -243,7 +256,7 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         if (CollectionValidations.IsEmpty(locations)) {
-            geoMapPresenter.getAllLocations(Preferences.getUserId());
+            geoMapPresenter.getAllLocations(Preferences.getUserId(), etLocationDate.getText().toString());
         } else {
             addLocationsToMap();
             addMyLocationToMap();
@@ -267,16 +280,18 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
             addDrawMarkerWithRadius(location);
         }
 
-        LocationServices.GeofencingApi.addGeofences(
+        if (CollectionValidations.IsNotEmpty(locations))
+            LocationServices.GeofencingApi.addGeofences(
                 googleApiClient,
                 getGeofencingRequest(),
                 getGeofencePendingIntent()
-        ).setResultCallback(this);
+            ).setResultCallback(this);
     }
 
     private void clearMap() {
         LocationServices.GeofencingApi.removeGeofences(googleApiClient, getGeofencePendingIntent());
         googleMap.clear();
+        setButtonVisibility(View.GONE);
     }
 
     private GeofencingRequest getGeofencingRequest() {
@@ -489,7 +504,8 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
         int id = item.getItemId();
         switch (id) {
             case R.id.btn_refresh_map:
-                geoMapPresenter.getAllLocations(Preferences.getUserId());
+                String date = etLocationDate.getText().toString();
+                geoMapPresenter.getAllLocations(Preferences.getUserId(), date);
                 return true;
             case R.id.btn_add_location:
                 Util.sendAndFinish(getActivity(), LocationActivity.class);
@@ -521,6 +537,52 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
             googleMap.setTrafficEnabled(true);
             item.setChecked(true);
         }
+    }
+
+    private void addFilterToMenu() {
+        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        toolbar.setTitle(Constants.EMPTY_STRING);
+        View filterMenu = getLayoutInflater(null).inflate(R.layout.geo_map_filter_menu, null);
+        this.etLocationDate = (EditText) filterMenu.findViewById(R.id.et_location_date);
+        etLocationDate.setText(Preferences.getTodayDate());
+        etLocationDate.setOnTouchListener(this);
+        toolbar.addView(filterMenu);
+    }
+
+    //endregion
+
+    //region OnTouchListener
+
+    @Override
+    public boolean onTouch(View view, MotionEvent event) {
+        if (event.getAction() != MotionEvent.ACTION_UP)
+            return false;
+
+        if (view.getId() == etLocationDate.getId())
+            showDate();
+
+        return false;
+    }
+
+    public void showDate() {
+        Calendar currentDate = new DateExtensions().convertToCalendar(etLocationDate.getText().toString());
+        int day = currentDate.get(Calendar.DAY_OF_MONTH);
+        int month = currentDate.get(Calendar.MONTH);
+        int year = currentDate.get(Calendar.YEAR);
+        DatePickerDialogFragment datePickerDialogFragment = DatePickerDialogFragment.newInstance(null, null, year, month, day);
+        datePickerDialogFragment.setDatePickerDialogListener(this);
+        datePickerDialogFragment.show(getChildFragmentManager(), TAG_DATE);
+    }
+
+    //endregion
+
+    //region DatePickerDialogListener
+
+    @Override
+    public void setDate(DatePicker view, int year, int month, int day, String tag) {
+        String date = new DateExtensions().convertToStringDate(year, month, day);
+        etLocationDate.setText(date);
+        geoMapPresenter.getAllLocations(Preferences.getUserId(), date);
     }
 
     //endregion

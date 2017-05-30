@@ -39,9 +39,9 @@ public class GeoMapPresenterImpl implements GeoMapPresenter, GeoMapListener {
     }
 
     @Override
-    public void getAllLocations(int userId) {
+    public void getAllLocations(int userId, String date) {
         geoMapView.showProgress(ResourcesExtensions.toString(R.string.init_get_all_locations));
-        geoMapInteractor.getAllLocations(userId, this);
+        geoMapInteractor.getAllLocations(userId, date, this);
     }
 
     //endregion
