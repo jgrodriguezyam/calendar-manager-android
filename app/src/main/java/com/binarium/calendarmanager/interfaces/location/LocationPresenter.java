@@ -8,7 +8,7 @@ import com.binarium.calendarmanager.viewmodels.location.Location;
 
 public interface LocationPresenter {
     void setLocationView(LocationView locationView);
-    void getAllLocations(int userId);
+    void getAllLocations(int userId, String date);
     void createLocation(Location location);
     void updateLocation(Location location);
 }

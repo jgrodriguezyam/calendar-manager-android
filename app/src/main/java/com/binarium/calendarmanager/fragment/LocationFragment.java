@@ -8,16 +8,25 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.view.View.OnTouchListener;
 
 import com.binarium.calendarmanager.R;
+import com.binarium.calendarmanager.fragment.dialog.DatePickerDialogFragment;
 import com.binarium.calendarmanager.fragment.dialog.FormLocationDialogFragment;
+import com.binarium.calendarmanager.fragment.listener.DatePickerDialogListener;
 import com.binarium.calendarmanager.fragment.listener.FormLocationDialogListener;
 import com.binarium.calendarmanager.infrastructure.CollectionValidations;
+import com.binarium.calendarmanager.infrastructure.Constants;
+import com.binarium.calendarmanager.infrastructure.DateExtensions;
 import com.binarium.calendarmanager.infrastructure.EnumExtensions;
 import com.binarium.calendarmanager.infrastructure.MapExtensions;
 import com.binarium.calendarmanager.infrastructure.ObjectValidations;
@@ -50,6 +59,7 @@ import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -60,7 +70,7 @@ import butterknife.ButterKnife;
  * Created by jrodriguez on 22/05/2017.
  */
 
-public class LocationFragment extends Fragment implements LocationView, ConnectionCallbacks, OnConnectionFailedListener, OnMapReadyCallback, OnMarkerClickListener, OnMapLongClickListener, OnMarkerDragListener, FormLocationDialogListener, InfoWindowAdapter {
+public class LocationFragment extends Fragment implements LocationView, ConnectionCallbacks, OnConnectionFailedListener, OnMapReadyCallback, OnMarkerClickListener, OnMapLongClickListener, OnMarkerDragListener, FormLocationDialogListener, InfoWindowAdapter, OnTouchListener, DatePickerDialogListener {
     private ProgressDialog progressDialog;
     GoogleApiClient googleApiClient;
     GoogleMap googleMap;
@@ -71,6 +81,10 @@ public class LocationFragment extends Fragment implements LocationView, Connecti
     public static final String FORM_LOCATION_TAG = "FORM_LOCATION_TAG";
     private static final String LOCATIONS = "Locations";
     List<Location> locations;
+
+    private static final String DATE = "DATE";
+    private static final String TAG_DATE = "TAG_DATE";
+    EditText etLocationDate;
 
     public LocationFragment() {
     }
@@ -89,38 +103,37 @@ public class LocationFragment extends Fragment implements LocationView, Connecti
         locationPresenter.setLocationView(this);
         progressDialog = Util.createModalProgressDialog(getActivity());
 
-        if (ObjectValidations.IsNotNull(savedInstanceState)) {
+        if (ObjectValidations.IsNotNull(savedInstanceState))
             locations = savedInstanceState.getParcelableArrayList(LOCATIONS);
-        }
 
-        if (googleApiClient == null) {
+        if (googleApiClient == null)
             googleApiClient = new GoogleApiClient.Builder(getActivity())
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
                     .addApi(LocationServices.API)
                     .build();
-        }
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putParcelableArrayList(LOCATIONS, (ArrayList<Location>) locations);
+        outState.putString(DATE, etLocationDate.getText().toString());
         super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        if (ObjectValidations.IsNotNull(savedInstanceState)) {
-
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_location, container, false);
         ButterKnife.bind(this, root);
+        addFilterToMenu();
         return root;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (ObjectValidations.IsNotNull(savedInstanceState))
+            etLocationDate.setText(savedInstanceState.getString(DATE));
     }
 
     @Override
@@ -188,7 +201,7 @@ public class LocationFragment extends Fragment implements LocationView, Connecti
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         if (CollectionValidations.IsEmpty(locations)) {
-            locationPresenter.getAllLocations(Preferences.getUserId());
+            locationPresenter.getAllLocations(Preferences.getUserId(), etLocationDate.getText().toString());
         } else {
             addLocationsToMap();
             addMyLocationToMap();
@@ -368,6 +381,56 @@ public class LocationFragment extends Fragment implements LocationView, Connecti
         TextView snippet = (TextView) customInfoContents.findViewById(R.id.snippet);
         snippet.setText(snippetOfLocation);
         return customInfoContents;
+    }
+
+    //endregion
+
+    //region Menu
+
+    private void addFilterToMenu() {
+        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        toolbar.setTitle(Constants.EMPTY_STRING);
+        View filterMenu = getLayoutInflater(null).inflate(R.layout.geo_map_filter_menu, null);
+        this.etLocationDate = (EditText) filterMenu.findViewById(R.id.et_location_date);
+        etLocationDate.setText(Preferences.getTodayDate());
+        etLocationDate.setOnTouchListener(this);
+        toolbar.addView(filterMenu);
+    }
+
+    //endregion
+
+    //region OnTouchListener
+
+    @Override
+    public boolean onTouch(View view, MotionEvent event) {
+        if (event.getAction() != MotionEvent.ACTION_UP)
+            return false;
+
+        if (view.getId() == etLocationDate.getId())
+            showDate();
+
+        return false;
+    }
+
+    public void showDate() {
+        Calendar currentDate = new DateExtensions().convertToCalendar(etLocationDate.getText().toString());
+        int day = currentDate.get(Calendar.DAY_OF_MONTH);
+        int month = currentDate.get(Calendar.MONTH);
+        int year = currentDate.get(Calendar.YEAR);
+        DatePickerDialogFragment datePickerDialogFragment = DatePickerDialogFragment.newInstance(null, null, year, month, day);
+        datePickerDialogFragment.setDatePickerDialogListener(this);
+        datePickerDialogFragment.show(getChildFragmentManager(), TAG_DATE);
+    }
+
+    //endregion
+
+    //region DatePickerDialogListener
+
+    @Override
+    public void setDate(DatePicker view, int year, int month, int day, String tag) {
+        String date = new DateExtensions().convertToStringDate(year, month, day);
+        etLocationDate.setText(date);
+        locationPresenter.getAllLocations(Preferences.getUserId(), date);
     }
 
     //endregion

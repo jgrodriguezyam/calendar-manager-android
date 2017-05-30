@@ -51,27 +51,30 @@ public class LocationInteractorImpl implements LocationInteractor {
     }
 
     @Override
-    public void getAllLocations(int userId, LocationListener locationListener) {
-        getAllLocationsAsync(userId, locationListener);
+    public void getAllLocations(int userId, String date, LocationListener locationListener) {
+        FindLocationsRequest findLocationsRequest = new FindLocationsRequest();
+        findLocationsRequest.setUserId(userId);
+        findLocationsRequest.setDate(date);
+        getAllLocationsAsync(findLocationsRequest, locationListener);
     }
 
     @UiThread
-    private void getAllLocationsAsync(int userId, final LocationListener locationListener) {
-        new AsyncTask<Integer, Void, List<Location>>() {
+    private void getAllLocationsAsync(FindLocationsRequest findLocationsRequest, final LocationListener locationListener) {
+        new AsyncTask<FindLocationsRequest, Void, List<Location>>() {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
             }
 
             @Override
-            protected List<Location> doInBackground(Integer... params) {
+            protected List<Location> doInBackground(FindLocationsRequest... params) {
                 List<Location> userLocations = new ArrayList<>();
 
-                List<Location> locations = findLoctations(params[0], locationListener);
+                List<Location> locations = findLoctations(params[0].getUserId(), params[0].getDate(), locationListener);
                 if (CollectionValidations.IsNotEmpty(locations))
                     userLocations.addAll(locations);
 
-                List<Location> sharedLocations = findSharedLoctations(params[0], locationListener);
+                List<Location> sharedLocations = findSharedLoctations(params[0].getUserId(), params[0].getDate(), locationListener);
                 if (CollectionValidations.IsNotEmpty(sharedLocations))
                     userLocations.addAll(sharedLocations);
 
@@ -81,17 +84,15 @@ public class LocationInteractorImpl implements LocationInteractor {
             @Override
             protected void onPostExecute(List<Location> locations) {
                 super.onPostExecute(locations);
-                if (CollectionValidations.IsNotEmpty(locations)) {
-                    locationListener.getAllLocationsSuccess(locations);
-                }
+                locationListener.getAllLocationsSuccess(locations);
             }
-        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, userId);
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, findLocationsRequest);
     }
 
-    private List<Location> findLoctations(int userId, LocationListener locationListener) {
+    private List<Location> findLoctations(int userId, String date, LocationListener locationListener) {
         FindLocationsRequest findLocationsRequest = new FindLocationsRequest();
         findLocationsRequest.setUserId(userId);
-        findLocationsRequest.setOnlyToday(true);
+        findLocationsRequest.setDate(date);
         FindLocationsResponse findLocationsResponse = locationApiService.find(findLocationsRequest, locationListener);
         List<Location> locations = new ArrayList<>();
         for (LocationResponse locationResponse : findLocationsResponse.getLocations()) {
@@ -102,10 +103,10 @@ public class LocationInteractorImpl implements LocationInteractor {
         return locations;
     }
 
-    private List<Location> findSharedLoctations(int userId, LocationListener locationListener) {
+    private List<Location> findSharedLoctations(int userId, String date, LocationListener locationListener) {
         FindSharedLocationsRequest findSharedLocationsRequest = new FindSharedLocationsRequest();
         findSharedLocationsRequest.setUserId(userId);
-        findSharedLocationsRequest.setLocationOnlyToday(true);
+        findSharedLocationsRequest.setLocationDate(date);
         FindSharedLocationsResponse findSharedLocationsResponse = sharedLocationApiService.find(findSharedLocationsRequest, locationListener);
         List<Location> locations = new ArrayList<>();
         for (SharedLocationResponse sharedLocationResponse : findSharedLocationsResponse.getSharedLocations()) {

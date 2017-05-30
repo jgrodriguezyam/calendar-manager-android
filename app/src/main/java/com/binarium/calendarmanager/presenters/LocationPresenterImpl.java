@@ -33,9 +33,9 @@ public class LocationPresenterImpl implements LocationPresenter, LocationListene
     }
 
     @Override
-    public void getAllLocations(int userId) {
+    public void getAllLocations(int userId, String date) {
         locationView.showProgress(ResourcesExtensions.toString(R.string.init_get_all_locations));
-        locationInteractor.getAllLocations(userId, this);
+        locationInteractor.getAllLocations(userId, date, this);
     }
 
     @Override
