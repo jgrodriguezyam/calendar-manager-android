@@ -92,11 +92,13 @@
     <!-- Location Fragment -->
     <string name="init_create_location">Creando...</string>
     <string name="init_update_location">Actualizando...</string>
+    <string name="init_delete_location">Eliminando...</string>
     <string name="location_fragmnet_without_location">No se ha podido obtener la ubicación</string>
     <string name="update_location_success">Actualización exitosa :)</string>
-    <string name="create_location_success">Se agrego de manera exitosa :)</string>
+    <string name="create_location_success">Creación exitosa :)</string>
+    <string name="delete_location_success">Eliminación exitosa :)</string>
 
-    <!-- Create Location Dialog -->
+    <!-- Location Form Dialog -->
     <string name="hint_location_name">Nombre</string>
     <string name="hint_location_radius">Radio</string>
     <string name="hint_location_type">Tipo</string>
@@ -107,6 +109,12 @@
     <string name="btn_location_cancel">Cancelar</string>
     <string name="init_location_save">Agregando...</string>
     <string name="required_location_start_date_field">Se requiere la fecha inicial</string>
+
+    <!-- Location Delete Dialog -->
+    <string name="title_delete_location">Eliminar ubicación</string>
+    <string name="message_delete_location">¿Estas seguro de querer eliminar</string>
+    <string name="btn_ok_delete_location">SI</string>
+    <string name="btn_cancel_delete_location">CANCELAR</string>
 
     <!-- Profile Activity -->
     <string name="title_Profile_activity">Perfil</string>

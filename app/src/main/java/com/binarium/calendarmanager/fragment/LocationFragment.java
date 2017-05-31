@@ -2,6 +2,7 @@ package com.binarium.calendarmanager.fragment;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -59,6 +61,8 @@ import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
+import com.google.common.collect.Iterables;
+import com.google.common.base.Predicate;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -209,6 +213,12 @@ public class LocationFragment extends Fragment implements LocationView, Connecti
         addLocationsToMap();
     }
 
+    @Override
+    public void deleteLocationSuccess(Location location) {
+        removeLocationOfList(location);
+        addLocationsToMap();
+    }
+
     //endregion
 
     //region ConnectionCallbacks
@@ -238,6 +248,7 @@ public class LocationFragment extends Fragment implements LocationView, Connecti
 
     private void clearMap() {
         googleMap.clear();
+        hideAllFabButtons();
     }
 
     private void addDrawMarkerWithRadius(Location location){
@@ -471,11 +482,12 @@ public class LocationFragment extends Fragment implements LocationView, Connecti
                 setOptionsBtnPlus();
                 break;
             case R.id.fab_btn_delete:
-
+                Location locationToDelete = (Location) fabBtnDelete.getTag();
+                showDeleteAlertDialog(locationToDelete);
                 break;
             case R.id.fab_btn_edit:
-                Location location = (Location) fabBtnDelete.getTag();
-                showFormLocation(location);
+                Location locationToUpdate = (Location) fabBtnEdit.getTag();
+                showFormLocation(locationToUpdate);
                 break;
             default:
                 break;
@@ -497,6 +509,25 @@ public class LocationFragment extends Fragment implements LocationView, Connecti
         }
     }
 
+    private void showDeleteAlertDialog(final Location location) {
+        AlertDialog.Builder builder;
+        builder = new AlertDialog.Builder(getContext());
+        builder.setTitle(ResourcesExtensions.toString(R.string.title_delete_location))
+            .setMessage(ResourcesExtensions.toString(R.string.message_delete_location)+ " " + location.getName() + "?")
+            .setPositiveButton(R.string.btn_ok_delete_location, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    locationPresenter.deleteLocation(location);
+                }
+            })
+            .setNegativeButton(R.string.btn_cancel_delete_location, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    // do nothing
+                }
+            })
+            .setIcon(R.drawable.ic_delete_red)
+            .show();
+    }
+
     //endregion
 
     //region Custom Methods
@@ -505,6 +536,15 @@ public class LocationFragment extends Fragment implements LocationView, Connecti
         FormLocationDialogFragment formLocationDialogFragment = FormLocationDialogFragment.newInstance(location);
         formLocationDialogFragment.setTargetFragment(this, 0);
         formLocationDialogFragment.show(getFragmentManager(), FORM_LOCATION_TAG);
+    }
+
+    private void removeLocationOfList(final Location locationToRemove) {
+        Iterables.removeIf(this.locations, new Predicate<Location>() {
+            @Override
+            public boolean apply(Location location) {
+                return location.getId() == locationToRemove.getId();
+            }
+        });
     }
 
     //endregion

@@ -13,4 +13,5 @@ public interface LocationListener extends BaseListener {
     void getAllLocationsSuccess(List<Location> locations);
     void createLocationSuccess(Location location);
     void updateLocationSuccess(Location location);
+    void deleteLocationSuccess(Location location);
 }

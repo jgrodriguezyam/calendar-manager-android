@@ -8,6 +8,7 @@ import com.binarium.calendarmanager.dto.base.SuccessResponse;
 import com.binarium.calendarmanager.dto.checkin.CheckInResponse;
 import com.binarium.calendarmanager.dto.checkin.FindCheckInsRequest;
 import com.binarium.calendarmanager.dto.checkin.FindCheckInsResponse;
+import com.binarium.calendarmanager.dto.location.DeleteLocationRequest;
 import com.binarium.calendarmanager.dto.location.FindLocationsRequest;
 import com.binarium.calendarmanager.dto.location.FindLocationsResponse;
 import com.binarium.calendarmanager.dto.location.LocationRequest;
@@ -176,6 +177,38 @@ public class LocationInteractorImpl implements LocationInteractor {
                 if (ObjectValidations.IsNotNull(successResponse)) {
                     Location location = LocationMapper.ToLocation(locationRequest);
                     locationListener.updateLocationSuccess(location);
+                }
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, locationRequest);
+    }
+
+    @Override
+    public void deleteLocation(Location location, LocationListener locationListener) {
+        LocationRequest locationRequest = LocationMapper.ToLocationRequest(location);
+        deleteLocationAsync(locationRequest, locationListener);
+    }
+
+    @UiThread
+    private void deleteLocationAsync(final LocationRequest locationRequest, final LocationListener locationListener) {
+        new AsyncTask<LocationRequest, Void, SuccessResponse>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+            }
+
+            @Override
+            protected SuccessResponse doInBackground(LocationRequest... params) {
+                DeleteLocationRequest deleteLocationRequest = new DeleteLocationRequest(params[0].getId());
+                SuccessResponse successResponse = locationApiService.delete(deleteLocationRequest, locationListener);
+                return successResponse;
+            }
+
+            @Override
+            protected void onPostExecute(SuccessResponse successResponse) {
+                super.onPostExecute(successResponse);
+                if (ObjectValidations.IsNotNull(successResponse)) {
+                    Location location = LocationMapper.ToLocation(locationRequest);
+                    locationListener.deleteLocationSuccess(location);
                 }
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, locationRequest);

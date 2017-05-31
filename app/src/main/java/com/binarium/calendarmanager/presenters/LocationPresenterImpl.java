@@ -50,6 +50,12 @@ public class LocationPresenterImpl implements LocationPresenter, LocationListene
         locationInteractor.updateLocation(location, this);
     }
 
+    @Override
+    public void deleteLocation(Location location) {
+        locationView.showProgress(ResourcesExtensions.toString(R.string.init_delete_location));
+        locationInteractor.deleteLocation(location, this);
+    }
+
     //endregion
 
     //region LocationListener
@@ -84,6 +90,13 @@ public class LocationPresenterImpl implements LocationPresenter, LocationListene
         locationView.hideProgress();
         locationView.showSuccessMessage(ResourcesExtensions.toString(R.string.update_location_success));
         locationView.updateLocationSuccess(location);
+    }
+
+    @Override
+    public void deleteLocationSuccess(Location location) {
+        locationView.hideProgress();
+        locationView.showSuccessMessage(ResourcesExtensions.toString(R.string.delete_location_success));
+        locationView.deleteLocationSuccess(location);
     }
 
     //endregion
