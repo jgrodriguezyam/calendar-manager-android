@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
@@ -18,6 +19,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.view.View.OnTouchListener;
+import android.view.View.OnClickListener;
 
 import com.binarium.calendarmanager.R;
 import com.binarium.calendarmanager.fragment.dialog.DatePickerDialogFragment;
@@ -64,13 +66,23 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
  * Created by jrodriguez on 22/05/2017.
  */
 
-public class LocationFragment extends Fragment implements LocationView, ConnectionCallbacks, OnConnectionFailedListener, OnMapReadyCallback, OnMarkerClickListener, OnMapLongClickListener, OnMarkerDragListener, FormLocationDialogListener, InfoWindowAdapter, OnTouchListener, DatePickerDialogListener {
+public class LocationFragment extends Fragment implements LocationView, ConnectionCallbacks, OnConnectionFailedListener, OnMapReadyCallback, OnMarkerClickListener, OnMapLongClickListener, OnMarkerDragListener, FormLocationDialogListener, InfoWindowAdapter, OnTouchListener, DatePickerDialogListener, OnClickListener {
+    @Bind(R.id.fab_btn_plus)
+    FloatingActionButton fabBtnPlus;
+
+    @Bind(R.id.fab_btn_delete)
+    FloatingActionButton fabBtnDelete;
+
+    @Bind(R.id.fab_btn_edit)
+    FloatingActionButton fabBtnEdit;
+
     private ProgressDialog progressDialog;
     GoogleApiClient googleApiClient;
     GoogleMap googleMap;
@@ -125,6 +137,7 @@ public class LocationFragment extends Fragment implements LocationView, Connecti
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_location, container, false);
         ButterKnife.bind(this, root);
+        fabBtnPlus.setOnClickListener(this);
         addFilterToMenu();
         return root;
     }
@@ -301,10 +314,22 @@ public class LocationFragment extends Fragment implements LocationView, Connecti
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-
         Location location = (Location) marker.getTag();
-        //marker.setSnippet(String.valueOf(location.getName()));
+        hideAllFabButtons();
+        if (location.isOwner()) {
+            fabBtnPlus.setImageResource(R.drawable.ic_plus);
+            fabBtnPlus.setVisibility(View.VISIBLE);
+            fabBtnPlus.setTag(true);
+        }else {
+
+        }
         return false;
+    }
+
+    private void hideAllFabButtons() {
+        fabBtnPlus.setVisibility(View.GONE);
+        fabBtnDelete.setVisibility(View.GONE);
+        fabBtnEdit.setVisibility(View.GONE);
     }
 
     //endregion
@@ -431,6 +456,36 @@ public class LocationFragment extends Fragment implements LocationView, Connecti
         String date = new DateExtensions().convertToStringDate(year, month, day);
         etLocationDate.setText(date);
         locationPresenter.getAllLocations(Preferences.getUserId(), date);
+    }
+
+    //endregion
+
+    //region OnClickListener
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.fab_btn_plus:
+                setOptionsBtnPlus();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void setOptionsBtnPlus() {
+        Boolean isShow = (Boolean) fabBtnPlus.getTag();
+        if (isShow) {
+            fabBtnPlus.setImageResource(R.drawable.ic_minus);
+            fabBtnDelete.setVisibility(View.VISIBLE);
+            fabBtnEdit.setVisibility(View.VISIBLE);
+            fabBtnPlus.setTag(false);
+        } else {
+            fabBtnPlus.setImageResource(R.drawable.ic_plus);
+            fabBtnDelete.setVisibility(View.GONE);
+            fabBtnEdit.setVisibility(View.GONE);
+            fabBtnPlus.setTag(true);
+        }
     }
 
     //endregion
