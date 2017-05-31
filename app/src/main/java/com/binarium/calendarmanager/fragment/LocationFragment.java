@@ -138,6 +138,8 @@ public class LocationFragment extends Fragment implements LocationView, Connecti
         View root = inflater.inflate(R.layout.fragment_location, container, false);
         ButterKnife.bind(this, root);
         fabBtnPlus.setOnClickListener(this);
+        fabBtnDelete.setOnClickListener(this);
+        fabBtnEdit.setOnClickListener(this);
         addFilterToMenu();
         return root;
     }
@@ -320,6 +322,8 @@ public class LocationFragment extends Fragment implements LocationView, Connecti
             fabBtnPlus.setImageResource(R.drawable.ic_plus);
             fabBtnPlus.setVisibility(View.VISIBLE);
             fabBtnPlus.setTag(true);
+            fabBtnDelete.setTag(location);
+            fabBtnEdit.setTag(location);
         }else {
 
         }
@@ -341,9 +345,7 @@ public class LocationFragment extends Fragment implements LocationView, Connecti
         Location location = new Location();
         location.setLatitude(latLng.latitude);
         location.setLongitude(latLng.longitude);
-        FormLocationDialogFragment formLocationDialogFragment = FormLocationDialogFragment.newInstance(location);
-        formLocationDialogFragment.setTargetFragment(this, 0);
-        formLocationDialogFragment.show(getFragmentManager(), FORM_LOCATION_TAG);
+        showFormLocation(location);
     }
 
     //endregion
@@ -468,6 +470,13 @@ public class LocationFragment extends Fragment implements LocationView, Connecti
             case R.id.fab_btn_plus:
                 setOptionsBtnPlus();
                 break;
+            case R.id.fab_btn_delete:
+
+                break;
+            case R.id.fab_btn_edit:
+                Location location = (Location) fabBtnDelete.getTag();
+                showFormLocation(location);
+                break;
             default:
                 break;
         }
@@ -486,6 +495,16 @@ public class LocationFragment extends Fragment implements LocationView, Connecti
             fabBtnEdit.setVisibility(View.GONE);
             fabBtnPlus.setTag(true);
         }
+    }
+
+    //endregion
+
+    //region Custom Methods
+
+    private void showFormLocation(Location location) {
+        FormLocationDialogFragment formLocationDialogFragment = FormLocationDialogFragment.newInstance(location);
+        formLocationDialogFragment.setTargetFragment(this, 0);
+        formLocationDialogFragment.show(getFragmentManager(), FORM_LOCATION_TAG);
     }
 
     //endregion

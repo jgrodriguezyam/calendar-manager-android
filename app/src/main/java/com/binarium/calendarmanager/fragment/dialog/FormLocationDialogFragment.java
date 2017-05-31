@@ -29,8 +29,12 @@ import com.binarium.calendarmanager.infrastructure.DateExtensions;
 import com.binarium.calendarmanager.infrastructure.EditTextExtensions;
 import com.binarium.calendarmanager.infrastructure.IntegerValidations;
 import com.binarium.calendarmanager.infrastructure.ResourcesExtensions;
+import com.binarium.calendarmanager.infrastructure.SpinnerExtensions;
 import com.binarium.calendarmanager.infrastructure.enums.LocationType;
 import com.binarium.calendarmanager.viewmodels.location.Location;
+import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.Iterables;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -116,9 +120,12 @@ public class FormLocationDialogFragment extends DialogFragment implements OnClic
         findTypes();
         setSpinnersData();
         setDatesData();
+        setLocationToForm();
         builder.setView(view);
         return builder.create();
     }
+
+
 
     @Override
     public void onAttach(Context context) {
@@ -275,6 +282,39 @@ public class FormLocationDialogFragment extends DialogFragment implements OnClic
         }
 
         return valid;
+    }
+
+    private void setLocationToForm() {
+        if (IntegerValidations.IsNotZero(location.getId())) {
+            etLocationName.setText(location.getName());
+            RadiusResponse radiusResponse = getRadiusResponseById((int) location.getRadius());
+            SpinnerExtensions.setSelection(radiusSpinner, radiusResponse);
+            TypeResponse typeResponse = getTypeById(location.getType());
+            SpinnerExtensions.setSelection(typesSpinner, typeResponse);
+            etLocationStartDate.setText(location.getStartDate());
+            etLocationEndDate.setText(location.getEndDate());
+            etLocationComment.setText(location.getComment());
+        }
+    }
+
+    private RadiusResponse getRadiusResponseById(final int id) {
+        List<RadiusResponse> radius = FluentIterable.from(this.radius).filter(new Predicate<RadiusResponse>() {
+            @Override
+            public boolean apply(RadiusResponse radiusResponse) {
+                return radiusResponse.getId() == id;
+            }
+        }).toList();
+        return Iterables.getFirst(radius, null);
+    }
+
+    private TypeResponse getTypeById(final int id) {
+        List<TypeResponse> types = FluentIterable.from(this.types).filter(new Predicate<TypeResponse>() {
+            @Override
+            public boolean apply(TypeResponse typeResponse) {
+                return typeResponse.getId() == id;
+            }
+        }).toList();
+        return Iterables.getFirst(types, null);
     }
 
     //endregion
