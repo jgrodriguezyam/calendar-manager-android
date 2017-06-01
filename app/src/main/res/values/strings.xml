@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">My Calendar</string>
-    <!--<string name="url_base">http://workermanagerapi.gear.host</string>-->
-    <string name="url_base">http://192.168.1.217:1988</string>
+    <string name="url_base">http://calendarmanagerapi.gear.host</string>
+    <!--<string name="url_base">http://192.168.1.217:1988</string>-->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 

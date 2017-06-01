@@ -10,6 +10,8 @@ import com.binarium.calendarmanager.interfaces.location.LocationInteractor;
 import com.binarium.calendarmanager.interfaces.login.LoginInteractor;
 import com.binarium.calendarmanager.interfaces.geomap.GeoMapInteractor;
 import com.binarium.calendarmanager.interfaces.splash.SplashInteractor;
+import com.binarium.calendarmanager.service.application.ApplicationApiService;
+import com.binarium.calendarmanager.service.application.ApplicationApiServiceImpl;
 import com.binarium.calendarmanager.service.checkin.CheckInApiService;
 import com.binarium.calendarmanager.service.checkin.CheckInApiServiceImpl;
 import com.binarium.calendarmanager.service.location.LocationApiService;
@@ -45,6 +47,11 @@ public class AppModule {
     }
 
     @Provides
+    public ApplicationApiService provideApplicationApiService() {
+        return new ApplicationApiServiceImpl();
+    }
+
+    @Provides
     public SharedLocationApiService provideSharedLocationApiService() {
         return new SharedLocationApiServiceImpl();
     }
@@ -55,8 +62,8 @@ public class AppModule {
     }
 
     @Provides
-    public LoginInteractor provideLoginInteractor(UserApiService userApiService) {
-        return new LoginInteractorImpl(userApiService);
+    public LoginInteractor provideLoginInteractor(UserApiService userApiService, ApplicationApiService applicationApiService) {
+        return new LoginInteractorImpl(userApiService, applicationApiService);
     }
 
     @Provides
@@ -65,8 +72,8 @@ public class AppModule {
     }
 
     @Provides
-    public GeoMapInteractor provideGeoMapInteractor(CheckInApiService checkInApiService, LocationApiService locationApiService, SharedLocationApiService sharedLocationApiService) {
-        return new GeoMapInteractorImpl(checkInApiService, locationApiService, sharedLocationApiService);
+    public GeoMapInteractor provideGeoMapInteractor(CheckInApiService checkInApiService, LocationApiService locationApiService, SharedLocationApiService sharedLocationApiService, ApplicationApiService applicationApiService) {
+        return new GeoMapInteractorImpl(checkInApiService, locationApiService, sharedLocationApiService, applicationApiService);
     }
 
     @Provides

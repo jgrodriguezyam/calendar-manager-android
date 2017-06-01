@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.support.annotation.UiThread;
 
 import com.binarium.calendarmanager.dto.base.CreateResponse;
+import com.binarium.calendarmanager.dto.base.DateResponse;
 import com.binarium.calendarmanager.dto.checkin.CheckInRequest;
 import com.binarium.calendarmanager.dto.checkin.CheckInResponse;
 import com.binarium.calendarmanager.dto.checkin.FindCheckInsRequest;
@@ -16,9 +17,11 @@ import com.binarium.calendarmanager.dto.sharedlocation.FindSharedLocationsRespon
 import com.binarium.calendarmanager.dto.sharedlocation.SharedLocationResponse;
 import com.binarium.calendarmanager.infrastructure.CollectionValidations;
 import com.binarium.calendarmanager.infrastructure.ObjectValidations;
+import com.binarium.calendarmanager.infrastructure.Preferences;
 import com.binarium.calendarmanager.interfaces.geomap.GeoMapInteractor;
 import com.binarium.calendarmanager.interfaces.geomap.GeoMapListener;
 import com.binarium.calendarmanager.mappers.LocationMapper;
+import com.binarium.calendarmanager.service.application.ApplicationApiService;
 import com.binarium.calendarmanager.service.checkin.CheckInApiService;
 import com.binarium.calendarmanager.service.location.LocationApiService;
 import com.binarium.calendarmanager.service.sharedlocation.SharedLocationApiService;
@@ -40,12 +43,14 @@ public class GeoMapInteractorImpl implements GeoMapInteractor {
     private CheckInApiService checkInApiService;
     private LocationApiService locationApiService;
     private SharedLocationApiService sharedLocationApiService;
+    private ApplicationApiService applicationApiService;
 
     @Inject
-    public GeoMapInteractorImpl(CheckInApiService checkInApiService, LocationApiService locationApiService, SharedLocationApiService sharedLocationApiService) {
+    public GeoMapInteractorImpl(CheckInApiService checkInApiService, LocationApiService locationApiService, SharedLocationApiService sharedLocationApiService, ApplicationApiService applicationApiService) {
         this.checkInApiService = checkInApiService;
         this.locationApiService = locationApiService;
         this.sharedLocationApiService = sharedLocationApiService;
+        this.applicationApiService = applicationApiService;
     }
 
     @Override
@@ -99,6 +104,11 @@ public class GeoMapInteractorImpl implements GeoMapInteractor {
             @Override
             protected List<Location> doInBackground(FindLocationsRequest... params) {
                 List<Location> userLocations = new ArrayList<>();
+
+                DateResponse dateResponse = applicationApiService.getDate(geoMapListener);
+                if (ObjectValidations.IsNull(dateResponse))
+                    return null;
+                Preferences.setTodayDate(dateResponse.getDate());
 
                 List<Location> locations = findLoctations(params[0].getUserId(), params[0].getDate(), geoMapListener);
                 if (CollectionValidations.IsNotEmpty(locations))
