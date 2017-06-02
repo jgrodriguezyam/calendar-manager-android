@@ -4,6 +4,7 @@ import com.binarium.calendarmanager.fragment.AccountFragment;
 import com.binarium.calendarmanager.fragment.GeoMapFragment;
 import com.binarium.calendarmanager.fragment.LocationFragment;
 import com.binarium.calendarmanager.fragment.LoginFragment;
+import com.binarium.calendarmanager.fragment.ProfileFragment;
 import com.binarium.calendarmanager.fragment.SplashFragment;
 
 import dagger.Component;
@@ -19,4 +20,5 @@ public interface AppComponent {
     void inject(AccountFragment accountFragment);
     void inject(GeoMapFragment geoMapFragment);
     void inject(LocationFragment locationFragment);
+    void inject(ProfileFragment profileFragment);
 }

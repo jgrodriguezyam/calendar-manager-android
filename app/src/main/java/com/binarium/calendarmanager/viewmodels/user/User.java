@@ -1,10 +1,13 @@
 package com.binarium.calendarmanager.viewmodels.user;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by jrodriguez on 15/05/2017.
  */
 
-public class User {
+public class User implements Parcelable {
     private int id;
     private String firstName;
     private String lastName;
@@ -120,5 +123,51 @@ public class User {
 
     public void setDeviceId(String deviceId) {
         this.deviceId = deviceId;
+    }
+
+    protected User(Parcel in) {
+        id = in.readInt();
+        firstName = in.readString();
+        lastName = in.readString();
+        genderType = in.readInt();
+        email = in.readString();
+        cellNumber = in.readLong();
+        userName = in.readString();
+        password = in.readString();
+        publicKey = in.readString();
+        badge = in.readString();
+        deviceId = in.readString();
+    }
+
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(firstName);
+        dest.writeString(lastName);
+        dest.writeInt(genderType);
+        dest.writeString(email);
+        dest.writeLong(cellNumber);
+        dest.writeString(userName);
+        dest.writeString(password);
+        dest.writeString(publicKey);
+        dest.writeString(badge);
+        dest.writeString(deviceId);
     }
 }

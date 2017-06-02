@@ -10,17 +10,6 @@
         android:layout_height="match_parent"
         android:name="com.google.android.gms.maps.MapFragment">
 
-        <!--<android.support.design.widget.FloatingActionButton-->
-            <!--android:id="@+id/fab_btn_delete"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="right|center"-->
-            <!--app:backgroundTint="@color/wallet_holo_blue_light"-->
-            <!--android:layout_marginRight="16dp"-->
-            <!--android:clickable="true"-->
-            <!--android:visibility="invisible"-->
-            <!--android:src="@drawable/ic_check" />-->
-
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_btn_edit"
             android:layout_width="wrap_content"
