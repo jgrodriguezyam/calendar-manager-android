@@ -82,4 +82,9 @@ public class GeoMapActivity extends AppCompatActivity implements OnNavigationIte
         NavigationExtensions.sendTo(this, item.getItemId());
         return true;
     }
+
+    @Override
+    public void onBackPressed() {
+
+    }
 }

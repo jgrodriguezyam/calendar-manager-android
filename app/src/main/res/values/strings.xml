@@ -128,4 +128,7 @@
     <string name="tv_user_username">Usuario</string>
     <string name="profile_in_error">Error no se encontro al usuario</string>
     <string name="init_get_user">Cargando...</string>
+
+    <!-- Profile Menu -->
+    <string name="btn_add_image">Imagen</string>
 </resources>

@@ -4,7 +4,11 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -133,6 +137,30 @@ public class ProfileFragment extends Fragment implements ProfileView {
     public void getUserSuccess(User user) {
         this.user = user;
         showFormLocation();
+    }
+
+    //endregion
+
+    //region Menu
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.profile_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.btn_refresh_map:
+
+                return true;
+            case R.id.btn_add_location:
+
+                return true;
+        }
+        return false;
     }
 
     //endregion

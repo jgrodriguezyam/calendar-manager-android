@@ -37,7 +37,6 @@
                 android:layout_marginStart="12dp"
                 android:layout_toEndOf="@id/iv_user_gender"
                 android:layout_toRightOf="@id/iv_user_gender"
-                android:text="(321) 654-0987"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="#212121" />
 
@@ -82,7 +81,6 @@
                 android:layout_toRightOf="@id/iv_user_email"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="chintan@letsnurture_jajaj_jeje_jojo.com"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="#212121" />
 
@@ -129,7 +127,6 @@
                 android:layout_toRightOf="@id/iv_user_cell_number"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="pratik@letsnurture.com"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="#212121" />
 
@@ -174,7 +171,6 @@
                 android:layout_toRightOf="@id/iv_user_username"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="pratik@letsnurture.com"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="#212121" />
 
