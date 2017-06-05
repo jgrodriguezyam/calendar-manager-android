@@ -1,10 +1,11 @@
 package com.binarium.calendarmanager.fragment;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,10 +14,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.view.View.OnClickListener;
 
 import com.binarium.calendarmanager.R;
 import com.binarium.calendarmanager.infrastructure.ObjectValidations;
 import com.binarium.calendarmanager.infrastructure.Preferences;
+import com.binarium.calendarmanager.infrastructure.ResourcesExtensions;
 import com.binarium.calendarmanager.infrastructure.SnackBarExtensions;
 import com.binarium.calendarmanager.infrastructure.Util;
 import com.binarium.calendarmanager.infrastructure.enums.Gender;
@@ -34,7 +37,7 @@ import butterknife.ButterKnife;
  * Created by jrodriguez on 01/06/2017.
  */
 
-public class ProfileFragment extends Fragment implements ProfileView {
+public class ProfileFragment extends Fragment implements ProfileView, OnClickListener {
     @Bind(R.id.iv_user_gender)
     ImageView ivUserGender;
 
@@ -57,6 +60,9 @@ public class ProfileFragment extends Fragment implements ProfileView {
 
     private static final String USER = "User";
     User user;
+
+    TextView tvTakePhoto;
+    TextView tvPhotoFile;
 
     public ProfileFragment() {
     }
@@ -153,14 +159,29 @@ public class ProfileFragment extends Fragment implements ProfileView {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
-            case R.id.btn_refresh_map:
-
-                return true;
-            case R.id.btn_add_location:
-
+            case R.id.btn_add_image:
+                showChangeImageDialog();
                 return true;
         }
         return false;
+    }
+
+    //endregion
+
+    //region OnClickListener
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.tv_take_photo:
+                String hola = "";
+                break;
+            case R.id.tv_photo_file:
+                String mundo = "";
+                break;
+            default:
+                break;
+        }
     }
 
     //endregion
@@ -181,6 +202,20 @@ public class ProfileFragment extends Fragment implements ProfileView {
         tvUserUsername.setText(user.getUserName());
         CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) getActivity().findViewById(R.id.collapsing_toolbar_layout);
         collapsingToolbarLayout.setTitle(user.getFirstName() + " " + user.getLastName());
+    }
+
+    private void showChangeImageDialog() {
+        View changeProfileImage = getLayoutInflater(null).inflate(R.layout.change_profile_image, null);
+        this.tvTakePhoto = (TextView) changeProfileImage.findViewById(R.id.tv_take_photo);
+        this.tvPhotoFile = (TextView) changeProfileImage.findViewById(R.id.tv_photo_file);
+        tvTakePhoto.setOnClickListener(this);
+        tvPhotoFile.setOnClickListener(this);
+
+        AlertDialog.Builder builder;
+        builder = new AlertDialog.Builder(getContext());
+        builder.setView(changeProfileImage);
+        builder.setTitle(ResourcesExtensions.toString(R.string.title_change_image));
+        builder.show();
     }
 
     //endregion

@@ -131,4 +131,10 @@
 
     <!-- Profile Menu -->
     <string name="btn_add_image">Imagen</string>
+
+    <!-- Profile Image Dialog -->
+    <string name="title_change_image">Escoge tu foto de perfil</string>
+    <string name="tv_take_photo">Tomar foto</string>
+    <string name="tv_photo_file">Tus fotos</string>
+    <string name="btn_cancel_change_image">CANCELAR</string>
 </resources>
