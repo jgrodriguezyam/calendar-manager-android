@@ -1,56 +1,13 @@
 <RelativeLayout android:id="@+id/myRelativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <fragment
-        android:id="@+id/store_location_map"
+    <android.support.v7.widget.RecyclerView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/recycler_view_location"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:name="com.google.android.gms.maps.MapFragment">
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_btn_edit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="210dp"
-            android:layout_gravity="bottom|start"
-            android:visibility="invisible"
-            app:backgroundTint="@color/wallet_holo_blue_light"
-            android:clickable="true"
-            android:layout_marginLeft="24dp"
-            app:fabSize="mini"
-            app:elevation="6dp"
-            android:src="@drawable/ic_pencil" />
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_btn_delete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="140dp"
-            android:layout_gravity="bottom|start"
-            android:visibility="invisible"
-            app:elevation="6dp"
-            app:backgroundTint="@color/red_custom"
-            android:clickable="true"
-            android:layout_marginLeft="24dp"
-            app:fabSize="mini"
-            android:src="@drawable/ic_delete" />
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_btn_plus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|start"
-            android:visibility="invisible"
-            app:elevation="6dp"
-            app:backgroundTint="@color/colorAccent"
-            android:clickable="true"
-            android:layout_marginLeft="16dp"
-            android:layout_marginBottom="60dp"
-            android:src="@drawable/ic_plus" />
-
-    </fragment>
+        android:padding="16dp" />
 
 </RelativeLayout>

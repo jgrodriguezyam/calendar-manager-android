@@ -44,6 +44,24 @@ public class GeoMapPresenterImpl implements GeoMapPresenter, GeoMapListener {
         geoMapInteractor.getAllLocations(userId, date, this);
     }
 
+    @Override
+    public void createLocation(Location location) {
+        geoMapView.showProgress(ResourcesExtensions.toString(R.string.init_create_location));
+        geoMapInteractor.createLocation(location, this);
+    }
+
+    @Override
+    public void updateLocation(Location location) {
+        geoMapView.showProgress(ResourcesExtensions.toString(R.string.init_update_location));
+        geoMapInteractor.updateLocation(location, this);
+    }
+
+    @Override
+    public void deleteLocation(Location location) {
+        geoMapView.showProgress(ResourcesExtensions.toString(R.string.init_delete_location));
+        geoMapInteractor.deleteLocation(location, this);
+    }
+
     //endregion
 
     //region GeoMapListener
@@ -71,6 +89,27 @@ public class GeoMapPresenterImpl implements GeoMapPresenter, GeoMapListener {
     public void getAllLocationsSuccess(List<Location> locations) {
         geoMapView.hideProgress();
         geoMapView.getAllLocationsSuccess(locations);
+    }
+
+    @Override
+    public void createLocationSuccess(Location location) {
+        geoMapView.hideProgress();
+        geoMapView.showSuccessMessage(ResourcesExtensions.toString(R.string.create_location_success));
+        geoMapView.createLocationSuccess(location);
+    }
+
+    @Override
+    public void updateLocationSuccess(Location location) {
+        geoMapView.hideProgress();
+        geoMapView.showSuccessMessage(ResourcesExtensions.toString(R.string.update_location_success));
+        geoMapView.updateLocationSuccess(location);
+    }
+
+    @Override
+    public void deleteLocationSuccess(Location location) {
+        geoMapView.hideProgress();
+        geoMapView.showSuccessMessage(ResourcesExtensions.toString(R.string.delete_location_success));
+        geoMapView.deleteLocationSuccess(location);
     }
 
     //endregion

@@ -13,5 +13,4 @@ public class GetUserRequest extends IdentifierBaseRequest {
     public GetUserRequest(int id) {
         super(id);
     }
-
 }

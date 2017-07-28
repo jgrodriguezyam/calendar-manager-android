@@ -25,9 +25,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class ProfileActivity extends AppCompatActivity implements OnNavigationItemSelectedListener {
-    @Bind(R.id.fab_btn_edit_image)
-    FloatingActionButton fabBtnEditImage;
-
     @Bind(R.id.toolbar)
     Toolbar toolbar;
 

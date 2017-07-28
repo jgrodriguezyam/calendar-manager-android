@@ -17,6 +17,8 @@ public class CheckInResponse {
     private UserResponse user;
     @SerializedName("Location")
     private LocationResponse location;
+    @SerializedName("CreatedOn")
+    private String createdOn;
 
     public int getId() {
         return id;
@@ -32,5 +34,13 @@ public class CheckInResponse {
 
     public LocationResponse getLocation() {
         return location;
+    }
+
+    public String getCreatedOn() {
+        return createdOn;
+    }
+
+    public void setCreatedOn(String createdOn) {
+        this.createdOn = createdOn;
     }
 }

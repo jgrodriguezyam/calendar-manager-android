@@ -45,9 +45,8 @@ public class LocationActivity extends AppCompatActivity implements OnNavigationI
         configureActionBar();
         configureNavigationDrawer();
 
-        if (ObjectValidations.IsNull(savedInstanceState)) {
+        if (ObjectValidations.IsNull(savedInstanceState))
             initFragment();
-        }
     }
 
     private void initFragment() {

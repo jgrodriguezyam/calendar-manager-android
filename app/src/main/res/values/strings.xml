@@ -31,10 +31,10 @@
 
     <!-- Drawer body -->
     <string name="menu_title_map">Mapa</string>
-    <string name="btn_map">Mapa</string>
-    <string name="btn_location">Agregar</string>
+    <string name="btn_map">Ubicaciones</string>
+    <string name="btn_location">Realizadas</string>
     <string name="menu_title_actions">Menu</string>
-    <string name="btn_check_ins">Entradas</string>
+    <string name="btn_friend">Amigos</string>
     <string name="btn_profile">Perfil</string>
     <string name="btn_close_session">Cerrar sesión</string>
     
@@ -75,25 +75,9 @@
     <string name="init_get_all_locations">Obteniendo Ubicaciones...</string>
     <string name="create_check_in_success">Registro exitoso :)</string>
     <string name="check_in_without_location">No se ha podido obtener la ubicación</string>
-
-    <!-- Geo Map Menu -->
-    <string name="btn_dots">...</string>
-    <string name="btn_refresh_map">Actualizar</string>
-    <string name="btn_add_location">Agregar</string>
-    <string name="btn_road_map">Tráfico</string>
-    <string name="btn_map_type_normal">Normal</string>
-    <string name="btn_map_type_satellite">Satelite</string>
-    <string name="btn_map_type_terrain">Terreno</string>
-    <string name="hint_location_date">Fecha</string>
-
-    <!-- Location Activity -->
-    <string name="title_location_activity">Agregar</string>
-
-    <!-- Location Fragment -->
     <string name="init_create_location">Creando...</string>
     <string name="init_update_location">Actualizando...</string>
     <string name="init_delete_location">Eliminando...</string>
-    <string name="location_fragmnet_without_location">No se ha podido obtener la ubicación</string>
     <string name="update_location_success">Actualización exitosa :)</string>
     <string name="create_location_success">Creación exitosa :)</string>
     <string name="delete_location_success">Eliminación exitosa :)</string>
@@ -115,6 +99,33 @@
     <string name="message_delete_location">¿Estas seguro de querer eliminar</string>
     <string name="btn_ok_delete_location">SI</string>
     <string name="btn_cancel_delete_location">CANCELAR</string>
+
+    <!-- Geo Map Menu -->
+    <string name="btn_dots">...</string>
+    <string name="btn_refresh_map">Actualizar</string>
+    <string name="btn_location_list">Realizadas</string>
+    <string name="btn_road_map">Tráfico</string>
+    <string name="btn_map_type_normal">Normal</string>
+    <string name="btn_map_type_satellite">Satelite</string>
+    <string name="btn_map_type_terrain">Terreno</string>
+    <string name="hint_location_date">Fecha</string>
+
+    <!-- Location Activity -->
+    <string name="title_location_activity">Ubicaciones</string>
+
+    <!-- Location Fragment -->
+    <string name="location_without_my_location">No se ha podido obtener la ubicación</string>
+    <string name="location_init_get_all_locations">Obteniendo Ubicaciones...</string>
+    <string name="location_init_delete_location">Eliminando...</string>
+    <string name="location_delete_location_success">Eliminación exitosa :)</string>
+
+    <!-- Location Recycler View -->
+    <string name="recycler_location_date">Fecha:</string>
+    <string name="recycler_location_type">Tipo:</string>
+    <string name="recycler_location_radius">Radio:</string>
+    <string name="recycler_location_radius_measure">mts</string>
+    <string name="recycler_location_latitude">Latitud:</string>
+    <string name="recycler_location_longitude">Longitud:</string>
 
     <!-- Profile Activity -->
     <string name="title_profile_activity">Perfil</string>

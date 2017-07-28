@@ -79,8 +79,8 @@ public class AppModule {
     }
 
     @Provides
-    public LocationInteractor provideLocationInteractor(LocationApiService locationApiService, SharedLocationApiService sharedLocationApiService) {
-        return new LocationInteractorImpl(locationApiService, sharedLocationApiService);
+    public LocationInteractor provideLocationInteractor(LocationApiService locationApiService, SharedLocationApiService sharedLocationApiService, CheckInApiService checkInApiService) {
+        return new LocationInteractorImpl(locationApiService, sharedLocationApiService, checkInApiService);
     }
 
     @Provides

@@ -1,9 +1,12 @@
 package com.binarium.calendarmanager.fragment;
 
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -61,8 +64,10 @@ public class ProfileFragment extends Fragment implements ProfileView, OnClickLis
     private static final String USER = "User";
     User user;
 
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
     TextView tvTakePhoto;
     TextView tvPhotoFile;
+    FloatingActionButton fabBtnEditProfile;
 
     public ProfileFragment() {
     }
@@ -94,9 +99,6 @@ public class ProfileFragment extends Fragment implements ProfileView, OnClickLis
         View root = inflater.inflate(R.layout.fragment_profile, container, false);
         ButterKnife.bind(this, root);
 //        btnUserLogin.setOnClickListener(this);
-//        etUserName.addTextChangedListener(this);
-//        etUserPassword.addTextChangedListener(this);
-//        linkCreateAccount.setOnClickListener(this);
         return root;
     }
 
@@ -114,6 +116,17 @@ public class ProfileFragment extends Fragment implements ProfileView, OnClickLis
     @Override
     public void onResume() {
         super.onResume();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == -1) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            String hola = "jeje";
+        }
     }
 
     //region ProfileView
@@ -174,10 +187,13 @@ public class ProfileFragment extends Fragment implements ProfileView, OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_take_photo:
-                String hola = "";
+                dispatchTakePictureIntent();
                 break;
             case R.id.tv_photo_file:
                 String mundo = "";
+                break;
+            case R.id.fab_btn_edit_profile:
+                String jeje = "";
                 break;
             default:
                 break;
@@ -202,6 +218,8 @@ public class ProfileFragment extends Fragment implements ProfileView, OnClickLis
         tvUserUsername.setText(user.getUserName());
         CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) getActivity().findViewById(R.id.collapsing_toolbar_layout);
         collapsingToolbarLayout.setTitle(user.getFirstName() + " " + user.getLastName());
+        fabBtnEditProfile = (FloatingActionButton) getActivity().findViewById(R.id.fab_btn_edit_profile);
+        fabBtnEditProfile.setOnClickListener(this);
     }
 
     private void showChangeImageDialog() {
@@ -216,6 +234,12 @@ public class ProfileFragment extends Fragment implements ProfileView, OnClickLis
         builder.setView(changeProfileImage);
         builder.setTitle(ResourcesExtensions.toString(R.string.title_change_image));
         builder.show();
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (ObjectValidations.IsNotNull(takePictureIntent.resolveActivity(getActivity().getPackageManager())))
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
     }
 
     //endregion

@@ -5,20 +5,20 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/btn_map"
-            android:icon="@drawable/ic_google_maps"
+            android:icon="@drawable/ic_map_marker_radius"
             android:title="@string/btn_map" />
-        <!--<item-->
-            <!--android:id="@+id/btn_location"-->
-            <!--android:icon="@drawable/ic_map_marker_plus"-->
-            <!--android:title="@string/btn_location" />-->
+        <item
+            android:id="@+id/btn_location"
+            android:icon="@drawable/ic_playlist_check"
+            android:title="@string/btn_location" />
     </group>
 
     <item android:title="@string/menu_title_actions">
         <menu>
             <item
-                android:id="@+id/btn_check_ins"
-                android:icon="@drawable/ic_playlist_check"
-                android:title="@string/btn_check_ins" />
+                android:id="@+id/btn_friend"
+                android:icon="@drawable/ic_account_multiple"
+                android:title="@string/btn_friend" />
             <item
                 android:id="@+id/btn_profile"
                 android:icon="@drawable/ic_account_box_outline"

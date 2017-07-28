@@ -1,7 +1,11 @@
 package com.binarium.calendarmanager.service.user;
 
+import android.graphics.Bitmap;
+
 import com.binarium.calendarmanager.dto.base.CreateResponse;
 import com.binarium.calendarmanager.dto.base.SuccessResponse;
+import com.binarium.calendarmanager.dto.user.AddImageUserRequest;
+import com.binarium.calendarmanager.dto.user.AddImageUserResponse;
 import com.binarium.calendarmanager.dto.user.ChangeUserPasswordRequest;
 import com.binarium.calendarmanager.dto.user.DeleteUserRequest;
 import com.binarium.calendarmanager.dto.user.GetUserRequest;
@@ -24,4 +28,5 @@ public interface UserApiService {
     LoginUserResponse login(LoginUserRequest request, BaseListener baseListener);
     SuccessResponse logout(LogoutUserRequest request, BaseListener baseListener);
     SuccessResponse changePassword(ChangeUserPasswordRequest request, BaseListener baseListener);
+    AddImageUserResponse addImage(AddImageUserRequest request, Bitmap bitmapFile, BaseListener baseListener);
 }

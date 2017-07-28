@@ -34,25 +34,13 @@ public class LocationPresenterImpl implements LocationPresenter, LocationListene
 
     @Override
     public void getAllLocations(int userId, String date) {
-        locationView.showProgress(ResourcesExtensions.toString(R.string.init_get_all_locations));
+        locationView.showProgress(ResourcesExtensions.toString(R.string.location_init_get_all_locations));
         locationInteractor.getAllLocations(userId, date, this);
     }
 
     @Override
-    public void createLocation(Location location) {
-        locationView.showProgress(ResourcesExtensions.toString(R.string.init_create_location));
-        locationInteractor.createLocation(location, this);
-    }
-
-    @Override
-    public void updateLocation(Location location) {
-        locationView.showProgress(ResourcesExtensions.toString(R.string.init_update_location));
-        locationInteractor.updateLocation(location, this);
-    }
-
-    @Override
     public void deleteLocation(Location location) {
-        locationView.showProgress(ResourcesExtensions.toString(R.string.init_delete_location));
+        locationView.showProgress(ResourcesExtensions.toString(R.string.location_init_delete_location));
         locationInteractor.deleteLocation(location, this);
     }
 
@@ -79,23 +67,9 @@ public class LocationPresenterImpl implements LocationPresenter, LocationListene
     }
 
     @Override
-    public void createLocationSuccess(Location location) {
-        locationView.hideProgress();
-        locationView.showSuccessMessage(ResourcesExtensions.toString(R.string.create_location_success));
-        locationView.createLocationSuccess(location);
-    }
-
-    @Override
-    public void updateLocationSuccess(Location location) {
-        locationView.hideProgress();
-        locationView.showSuccessMessage(ResourcesExtensions.toString(R.string.update_location_success));
-        locationView.updateLocationSuccess(location);
-    }
-
-    @Override
     public void deleteLocationSuccess(Location location) {
         locationView.hideProgress();
-        locationView.showSuccessMessage(ResourcesExtensions.toString(R.string.delete_location_success));
+        locationView.showSuccessMessage(ResourcesExtensions.toString(R.string.location_delete_location_success));
         locationView.deleteLocationSuccess(location);
     }
 

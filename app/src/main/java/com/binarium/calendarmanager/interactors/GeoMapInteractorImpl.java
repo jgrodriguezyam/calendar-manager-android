@@ -5,12 +5,15 @@ import android.support.annotation.UiThread;
 
 import com.binarium.calendarmanager.dto.base.CreateResponse;
 import com.binarium.calendarmanager.dto.base.DateResponse;
+import com.binarium.calendarmanager.dto.base.SuccessResponse;
 import com.binarium.calendarmanager.dto.checkin.CheckInRequest;
 import com.binarium.calendarmanager.dto.checkin.CheckInResponse;
 import com.binarium.calendarmanager.dto.checkin.FindCheckInsRequest;
 import com.binarium.calendarmanager.dto.checkin.FindCheckInsResponse;
+import com.binarium.calendarmanager.dto.location.DeleteLocationRequest;
 import com.binarium.calendarmanager.dto.location.FindLocationsRequest;
 import com.binarium.calendarmanager.dto.location.FindLocationsResponse;
+import com.binarium.calendarmanager.dto.location.LocationRequest;
 import com.binarium.calendarmanager.dto.location.LocationResponse;
 import com.binarium.calendarmanager.dto.sharedlocation.FindSharedLocationsRequest;
 import com.binarium.calendarmanager.dto.sharedlocation.FindSharedLocationsResponse;
@@ -61,14 +64,6 @@ public class GeoMapInteractorImpl implements GeoMapInteractor {
         createCheckInAsync(checkInRequest, geoMapListener);
     }
 
-    @Override
-    public void getAllLocations(int userId, String date, GeoMapListener geoMapListener) {
-        FindLocationsRequest findLocationsRequest = new FindLocationsRequest();
-        findLocationsRequest.setUserId(userId);
-        findLocationsRequest.setDate(date);
-        getAllLocationsAsync(findLocationsRequest, geoMapListener);
-    }
-
     @UiThread
     private void createCheckInAsync(final CheckInRequest checkInRequest, final GeoMapListener geoMapListener) {
         new AsyncTask<CheckInRequest, Void, CreateResponse>() {
@@ -91,6 +86,14 @@ public class GeoMapInteractorImpl implements GeoMapInteractor {
                 }
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, checkInRequest);
+    }
+
+    @Override
+    public void getAllLocations(int userId, String date, GeoMapListener geoMapListener) {
+        FindLocationsRequest findLocationsRequest = new FindLocationsRequest();
+        findLocationsRequest.setUserId(userId);
+        findLocationsRequest.setDate(date);
+        getAllLocationsAsync(findLocationsRequest, geoMapListener);
     }
 
     @UiThread
@@ -187,5 +190,102 @@ public class GeoMapInteractorImpl implements GeoMapInteractor {
                 locations.add(checkInlocation);
             }
         }
+    }
+
+    @Override
+    public void createLocation(Location location, GeoMapListener geoMapListener) {
+        LocationRequest locationRequest = LocationMapper.ToLocationRequest(location);
+        locationRequest.setUserId(Preferences.getUserId());
+        createLocationAsync(locationRequest, geoMapListener);
+    }
+
+    @UiThread
+    private void createLocationAsync(final LocationRequest locationRequest, final GeoMapListener geoMapListener) {
+        new AsyncTask<LocationRequest, Void, CreateResponse>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+            }
+
+            @Override
+            protected CreateResponse doInBackground(LocationRequest... params) {
+                CreateResponse createResponse = locationApiService.create(params[0], geoMapListener);
+                return createResponse;
+            }
+
+            @Override
+            protected void onPostExecute(CreateResponse createResponse) {
+                super.onPostExecute(createResponse);
+                if (ObjectValidations.IsNotNull(createResponse)) {
+                    locationRequest.setId(createResponse.getId());
+                    Location location = LocationMapper.ToLocation(locationRequest);
+                    location.setOwner(true);
+                    geoMapListener.createLocationSuccess(location);
+                }
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, locationRequest);
+    }
+
+    @Override
+    public void updateLocation(Location location, GeoMapListener geoMapListener) {
+        LocationRequest locationRequest = LocationMapper.ToLocationRequest(location);
+        updateLocationAsync(locationRequest, geoMapListener);
+    }
+
+    @UiThread
+    private void updateLocationAsync(final LocationRequest locationRequest, final GeoMapListener geoMapListener) {
+        new AsyncTask<LocationRequest, Void, SuccessResponse>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+            }
+
+            @Override
+            protected SuccessResponse doInBackground(LocationRequest... params) {
+                SuccessResponse successResponse = locationApiService.update(params[0], geoMapListener);
+                return successResponse;
+            }
+
+            @Override
+            protected void onPostExecute(SuccessResponse successResponse) {
+                super.onPostExecute(successResponse);
+                if (ObjectValidations.IsNotNull(successResponse)) {
+                    Location location = LocationMapper.ToLocation(locationRequest);
+                    geoMapListener.updateLocationSuccess(location);
+                }
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, locationRequest);
+    }
+
+    @Override
+    public void deleteLocation(Location location, GeoMapListener geoMapListener) {
+        LocationRequest locationRequest = LocationMapper.ToLocationRequest(location);
+        deleteLocationAsync(locationRequest, geoMapListener);
+    }
+
+    @UiThread
+    private void deleteLocationAsync(final LocationRequest locationRequest, final GeoMapListener geoMapListener) {
+        new AsyncTask<LocationRequest, Void, SuccessResponse>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+            }
+
+            @Override
+            protected SuccessResponse doInBackground(LocationRequest... params) {
+                DeleteLocationRequest deleteLocationRequest = new DeleteLocationRequest(params[0].getId());
+                SuccessResponse successResponse = locationApiService.delete(deleteLocationRequest, geoMapListener);
+                return successResponse;
+            }
+
+            @Override
+            protected void onPostExecute(SuccessResponse successResponse) {
+                super.onPostExecute(successResponse);
+                if (ObjectValidations.IsNotNull(successResponse)) {
+                    Location location = LocationMapper.ToLocation(locationRequest);
+                    geoMapListener.deleteLocationSuccess(location);
+                }
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, locationRequest);
     }
 }

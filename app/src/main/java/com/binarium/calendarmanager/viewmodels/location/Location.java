@@ -19,11 +19,12 @@ public class Location implements Parcelable {
     private String comment;
     private boolean isOwner;
     private boolean isChecked;
+    private String checkInDate;
 
     public Location() {
     }
 
-    public Location(int id, String name, double latitude, double longitude, double radius, int type, String startDate, String endDate, String comment, boolean isOwner, boolean isChecked) {
+    public Location(int id, String name, double latitude, double longitude, double radius, int type, String startDate, String endDate, String comment, boolean isOwner, boolean isChecked, String checkInDate) {
         this.id = id;
         this.name = name;
         this.latitude = latitude;
@@ -35,6 +36,7 @@ public class Location implements Parcelable {
         this.comment = comment;
         this.isOwner = isOwner;
         this.isChecked = isChecked;
+        this.checkInDate = checkInDate;
     }
 
     public int getId() {
@@ -125,6 +127,14 @@ public class Location implements Parcelable {
         isChecked = checked;
     }
 
+    public String getCheckInDate() {
+        return checkInDate;
+    }
+
+    public void setCheckInDate(String checkInDate) {
+        this.checkInDate = checkInDate;
+    }
+
     protected Location(Parcel in) {
         id = in.readInt();
         name = in.readString();
@@ -137,6 +147,7 @@ public class Location implements Parcelable {
         comment = in.readString();
         isOwner = in.readByte() != 0;
         isChecked = in.readByte() != 0;
+        checkInDate = in.readString();
     }
 
     public static final Creator<Location> CREATOR = new Creator<Location>() {
@@ -169,5 +180,6 @@ public class Location implements Parcelable {
         parcel.writeString(comment);
         parcel.writeByte((byte) (isOwner ? 1 : 0));
         parcel.writeByte((byte) (isChecked ? 1 : 0));
+        parcel.writeString(checkInDate);
     }
 }

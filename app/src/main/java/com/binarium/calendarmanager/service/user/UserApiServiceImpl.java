@@ -1,7 +1,11 @@
 package com.binarium.calendarmanager.service.user;
 
+import android.graphics.Bitmap;
+
 import com.binarium.calendarmanager.dto.base.CreateResponse;
 import com.binarium.calendarmanager.dto.base.SuccessResponse;
+import com.binarium.calendarmanager.dto.user.AddImageUserRequest;
+import com.binarium.calendarmanager.dto.user.AddImageUserResponse;
 import com.binarium.calendarmanager.dto.user.ChangeUserPasswordRequest;
 import com.binarium.calendarmanager.dto.user.DeleteUserRequest;
 import com.binarium.calendarmanager.dto.user.GetUserRequest;
@@ -13,6 +17,13 @@ import com.binarium.calendarmanager.dto.user.UserResponse;
 import com.binarium.calendarmanager.interfaces.base.BaseListener;
 import com.binarium.calendarmanager.service.retrofitconfig.RetrofitBuilder;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -166,5 +177,48 @@ public class UserApiServiceImpl implements UserApiService {
             baseListener.onError(e.getMessage());
             return null;
         }
+    }
+
+    @Override
+    public AddImageUserResponse addImage(AddImageUserRequest request, Bitmap bitmapFile, BaseListener baseListener) {
+        try {
+            File file = new File("");
+
+                    MultipartBody.Part filePart = MultipartBody.Part.createFormData("file", file.getName(), RequestBody.create(MediaType.parse("image/*"), file));
+
+            UserApiServiceRetrofit userApiServiceRetrofit = RetrofitBuilder.getRetrofit().create(UserApiServiceRetrofit.class);
+//            Call<SuccessResponse> call = userApiServiceRetrofit.changePassword(request);
+//            Response<SuccessResponse> response = call.execute();
+//
+//            if (response.isSuccessful()) {
+//                SuccessResponse successResponse = response.body();
+//                return successResponse;
+//            } else {
+//                String errorMessage = RetrofitBuilder.getErrorMessage(response.errorBody());
+//                baseListener.onError(errorMessage);
+//                return null;
+//            }
+            return null;
+        } catch (Exception e) {
+            baseListener.onError(e.getMessage());
+            return null;
+        }
+    }
+
+    private File convertBitmapToFile(Bitmap bitmap) {
+//        File f = new File(context.getCacheDir(), "prieba");
+//        f.createNewFile();
+//
+//        Bitmap bitmap = your bitmap;
+//        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+//        bitmap.compress(Bitmap.CompressFormat.PNG, 0 /*ignored for PNG*/, bos);
+//        byte[] bitmapdata = bos.toByteArray();
+//
+////write the bytes in file
+//        FileOutputStream fos = new FileOutputStream(f);
+//        fos.write(bitmapdata);
+//        fos.flush();
+//        fos.close();
+        return null;
     }
 }

@@ -12,4 +12,7 @@ import java.util.List;
 public interface GeoMapListener extends BaseListener {
     void createCheckInSuccess(int userId, int locationId);
     void getAllLocationsSuccess(List<Location> locations);
+    void createLocationSuccess(Location location);
+    void updateLocationSuccess(Location location);
+    void deleteLocationSuccess(Location location);
 }

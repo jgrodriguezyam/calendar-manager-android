@@ -17,9 +17,9 @@
         app:showAsAction="always">
 
         <menu>
-            <item android:id="@+id/btn_add_location"
-                android:icon="@drawable/ic_map_marker_plus_light"
-                android:title="@string/btn_add_location"
+            <item android:id="@+id/btn_location_list"
+                android:icon="@drawable/ic_playlist_check_light"
+                android:title="@string/btn_location_list"
                 app:showAsAction="ifRoom|withText" />
 
             <item android:id="@+id/btn_road_map"

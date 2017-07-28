@@ -3,6 +3,7 @@ package com.binarium.calendarmanager.fragment;
 import android.Manifest;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -12,6 +13,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,7 +35,9 @@ import android.view.View.OnTouchListener;
 import com.binarium.calendarmanager.R;
 import com.binarium.calendarmanager.activity.LocationActivity;
 import com.binarium.calendarmanager.fragment.dialog.DatePickerDialogFragment;
+import com.binarium.calendarmanager.fragment.dialog.FormLocationDialogFragment;
 import com.binarium.calendarmanager.fragment.listener.DatePickerDialogListener;
+import com.binarium.calendarmanager.fragment.listener.FormLocationDialogListener;
 import com.binarium.calendarmanager.infrastructure.CollectionValidations;
 import com.binarium.calendarmanager.infrastructure.Constants;
 import com.binarium.calendarmanager.infrastructure.DateExtensions;
@@ -71,6 +75,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
@@ -89,9 +95,21 @@ import butterknife.ButterKnife;
  * Created by jrodriguez on 17/05/2017.
  */
 
-public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListener, ConnectionCallbacks, OnConnectionFailedListener, ResultCallback, OnMapReadyCallback, OnMarkerClickListener, InfoWindowAdapter, OnTouchListener, DatePickerDialogListener {
+public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListener, ConnectionCallbacks, OnConnectionFailedListener, ResultCallback, OnMapReadyCallback, OnMarkerClickListener, OnMapLongClickListener, OnMarkerDragListener, FormLocationDialogListener, InfoWindowAdapter, OnTouchListener, DatePickerDialogListener {
     @Bind(R.id.fab_btn_check_in)
-    FloatingActionButton fab_btn_check_in;
+    FloatingActionButton fabBtnCheckIn;
+
+    @Bind(R.id.fab_btn_plus)
+    FloatingActionButton fabBtnPlus;
+
+    @Bind(R.id.fab_btn_delete)
+    FloatingActionButton fabBtnDelete;
+
+    @Bind(R.id.fab_btn_edit)
+    FloatingActionButton fabBtnEdit;
+
+    @Bind(R.id.fab_btn_share)
+    FloatingActionButton fabBtnShare;
 
     private ProgressDialog progressDialog;
     private static GeoMapFragment instance;
@@ -104,6 +122,7 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
     @Inject
     GeoMapPresenterImpl geoMapPresenter;
 
+    public static final String FORM_LOCATION_TAG = "FORM_LOCATION_TAG";
     private static final String LOCATIONS = "Locations";
     List<Location> locations;
     int locationId;
@@ -162,7 +181,11 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_geo_map, container, false);
         ButterKnife.bind(this, root);
-        fab_btn_check_in.setOnClickListener(this);
+        fabBtnCheckIn.setOnClickListener(this);
+        fabBtnPlus.setOnClickListener(this);
+        fabBtnDelete.setOnClickListener(this);
+        fabBtnEdit.setOnClickListener(this);
+        fabBtnShare.setOnClickListener(this);
         addFilterToMenu();
         return root;
     }
@@ -234,6 +257,23 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
         addMyLocationToMap();
     }
 
+    @Override
+    public void createLocationSuccess(Location location) {
+        locations.add(location);
+        addLocationsToMap();
+    }
+
+    @Override
+    public void updateLocationSuccess(Location location) {
+        addLocationsToMap();
+    }
+
+    @Override
+    public void deleteLocationSuccess(Location location) {
+        removeLocationOfList(location);
+        addLocationsToMap();
+    }
+
     //endregion
 
     //region OnClickListener
@@ -244,8 +284,36 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
             case R.id.fab_btn_check_in:
                 createCheckIn();
                 break;
+            case R.id.fab_btn_plus:
+                setOptionsBtnPlus();
+                break;
+            case R.id.fab_btn_delete:
+                Location locationToDelete = (Location) fabBtnDelete.getTag();
+                showDeleteAlertDialog(locationToDelete);
+                break;
+            case R.id.fab_btn_edit:
+                Location locationToUpdate = (Location) fabBtnEdit.getTag();
+                showFormLocation(locationToUpdate);
+                break;
             default:
                 break;
+        }
+    }
+
+    private void setOptionsBtnPlus() {
+        Boolean isShow = (Boolean) fabBtnPlus.getTag();
+        if (isShow) {
+            fabBtnPlus.setImageResource(R.drawable.ic_minus);
+            fabBtnDelete.setVisibility(View.VISIBLE);
+            fabBtnEdit.setVisibility(View.VISIBLE);
+            fabBtnShare.setVisibility(View.VISIBLE);
+            fabBtnPlus.setTag(false);
+        } else {
+            fabBtnPlus.setImageResource(R.drawable.ic_plus);
+            fabBtnDelete.setVisibility(View.GONE);
+            fabBtnEdit.setVisibility(View.GONE);
+            fabBtnShare.setVisibility(View.GONE);
+            fabBtnPlus.setTag(true);
         }
     }
 
@@ -280,7 +348,7 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
             addDrawMarkerWithRadius(location);
         }
 
-        if (CollectionValidations.IsNotEmpty(locations) && Preferences.getTodayDate().equals(etLocationDate.getText().toString()))
+        if (CollectionValidations.IsNotEmpty(geofenceList) && Preferences.getTodayDate().equals(etLocationDate.getText().toString()))
             LocationServices.GeofencingApi.addGeofences(
                 googleApiClient,
                 getGeofencingRequest(),
@@ -292,6 +360,7 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
         LocationServices.GeofencingApi.removeGeofences(googleApiClient, getGeofencePendingIntent());
         googleMap.clear();
         setButtonVisibility(View.GONE);
+        hideAllFabButtons();
     }
 
     private GeofencingRequest getGeofencingRequest() {
@@ -334,6 +403,8 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
         Marker marker = googleMap.addMarker(markerOptions);
         marker.showInfoWindow();
         marker.setTag(location);
+        if (location.isOwner())
+            marker.setDraggable(true);
     }
 
     private Geofence createGeofence(Location location) {
@@ -407,6 +478,8 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
         googleMap.setBuildingsEnabled(false);
         googleMap.getUiSettings().setZoomControlsEnabled(true);
         googleMap.setOnMarkerClickListener(this);
+        googleMap.setOnMapLongClickListener(this);
+        googleMap.setOnMarkerDragListener(this);
         googleMap.setInfoWindowAdapter(this);
     }
 
@@ -415,20 +488,20 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
     //region Custom Methods
 
     public void setButtonVisibility(int isVisible) {
-        fab_btn_check_in.setScaleX(0);
-        fab_btn_check_in.setScaleY(0);
-        fab_btn_check_in.setVisibility(isVisible);
+        fabBtnCheckIn.setScaleX(0);
+        fabBtnCheckIn.setScaleY(0);
+        fabBtnCheckIn.setVisibility(isVisible);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP && IntegerValidations.IsZero(isVisible)) {
             final Interpolator interpolador = AnimationUtils.loadInterpolator(getActivity(), android.R.interpolator.fast_out_slow_in);
-            fab_btn_check_in.animate()
+            fabBtnCheckIn.animate()
                     .scaleX(1)
                     .scaleY(1)
                     .setInterpolator(interpolador)
                     .setDuration(600)
                     .setStartDelay(1000);
         } else if (IntegerValidations.IsZero(isVisible)) {
-            fab_btn_check_in.setScaleX(1);
-            fab_btn_check_in.setScaleY(1);
+            fabBtnCheckIn.setScaleX(1);
+            fabBtnCheckIn.setScaleY(1);
         }
     }
 
@@ -451,16 +524,114 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
         location.setChecked(true);
     }
 
+    private void showFormLocation(Location location) {
+        FormLocationDialogFragment formLocationDialogFragment = FormLocationDialogFragment.newInstance(location);
+        formLocationDialogFragment.setTargetFragment(this, 0);
+        formLocationDialogFragment.show(getFragmentManager(), FORM_LOCATION_TAG);
+    }
+
+    private void showDeleteAlertDialog(final Location location) {
+        AlertDialog.Builder builder;
+        builder = new AlertDialog.Builder(getContext());
+        builder.setTitle(ResourcesExtensions.toString(R.string.title_delete_location))
+            .setMessage(ResourcesExtensions.toString(R.string.message_delete_location)+ " " + location.getName() + "?")
+            .setPositiveButton(R.string.btn_ok_delete_location, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    geoMapPresenter.deleteLocation(location);
+                }
+            })
+            .setNegativeButton(R.string.btn_cancel_delete_location, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    // do nothing
+                }
+            })
+            .setIcon(R.drawable.ic_delete_red)
+            .show();
+    }
+
+    private void removeLocationOfList(final Location locationToRemove) {
+        Iterables.removeIf(this.locations, new Predicate<Location>() {
+            @Override
+            public boolean apply(Location location) {
+                return location.getId() == locationToRemove.getId();
+            }
+        });
+    }
+
     //endregion
 
     //region OnMarkerClickListener
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-
         Location location = (Location) marker.getTag();
-        //marker.setSnippet(String.valueOf(location.getName()));
+        hideAllFabButtons();
+        if (location.isOwner()) {
+            fabBtnPlus.setImageResource(R.drawable.ic_plus);
+            fabBtnPlus.setVisibility(View.VISIBLE);
+            fabBtnPlus.setTag(true);
+            fabBtnDelete.setTag(location);
+            fabBtnEdit.setTag(location);
+            fabBtnShare.setTag(location);
+        }else {
+
+        }
         return false;
+    }
+
+    private void hideAllFabButtons() {
+        fabBtnPlus.setVisibility(View.GONE);
+        fabBtnDelete.setVisibility(View.GONE);
+        fabBtnEdit.setVisibility(View.GONE);
+        fabBtnShare.setVisibility(View.GONE);
+    }
+
+    //endregion
+
+    //region OnMapLongClickListener
+
+    @Override
+    public void onMapLongClick(LatLng latLng) {
+        Location location = new Location();
+        location.setLatitude(latLng.latitude);
+        location.setLongitude(latLng.longitude);
+        showFormLocation(location);
+    }
+
+    //endregion
+
+    //region OnMarkerDragListener
+
+    @Override
+    public void onMarkerDragStart(Marker marker) {
+    }
+
+    @Override
+    public void onMarkerDrag(Marker marker) {
+    }
+
+    @Override
+    public void onMarkerDragEnd(Marker marker) {
+        Location location = (Location) marker.getTag();
+        if (ObjectValidations.IsNotNull(location)) {
+            location.setLatitude(marker.getPosition().latitude);
+            location.setLongitude(marker.getPosition().longitude);
+            geoMapPresenter.updateLocation(location);
+        }
+    }
+
+    //endregion
+
+    //region FormLocationDialogListener
+
+    @Override
+    public void createLocation(Location location) {
+        geoMapPresenter.createLocation(location);
+    }
+
+    @Override
+    public void updateLocation(Location location) {
+        geoMapPresenter.updateLocation(location);
     }
 
     //endregion
@@ -507,7 +678,7 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
                 String date = etLocationDate.getText().toString();
                 geoMapPresenter.getAllLocations(Preferences.getUserId(), date);
                 return true;
-            case R.id.btn_add_location:
+            case R.id.btn_location_list:
                 Util.sendAndFinish(getActivity(), LocationActivity.class);
                 return true;
             case R.id.btn_road_map:
