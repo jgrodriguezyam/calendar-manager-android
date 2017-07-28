@@ -184,9 +184,11 @@ public class GeoMapInteractorImpl implements GeoMapInteractor {
 
             if (ObjectValidations.IsNotNull(location)) {
                 location.setChecked(true);
+                location.setCheckInDate(checkInResponse.getCreatedOn());
             } else {
                 Location checkInlocation = LocationMapper.toLocation(checkInResponse.getLocation());
                 checkInlocation.setChecked(true);
+                checkInlocation.setCheckInDate(checkInResponse.getCreatedOn());
                 locations.add(checkInlocation);
             }
         }

@@ -48,6 +48,7 @@ import com.binarium.calendarmanager.infrastructure.ObjectValidations;
 import com.binarium.calendarmanager.infrastructure.Preferences;
 import com.binarium.calendarmanager.infrastructure.ResourcesExtensions;
 import com.binarium.calendarmanager.infrastructure.SnackBarExtensions;
+import com.binarium.calendarmanager.infrastructure.StringValidations;
 import com.binarium.calendarmanager.infrastructure.Util;
 import com.binarium.calendarmanager.interfaces.geomap.GeoMapView;
 import com.binarium.calendarmanager.myapp.geofence.GeofenceRequestReceiver;
@@ -657,6 +658,13 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
         title.setText(location.getName());
         TextView snippet = (TextView) customInfoContents.findViewById(R.id.snippet);
         snippet.setText(snippetOfLocation);
+        if (location.isChecked() && StringValidations.IsNotNullOrEmpty(location.getCheckInDate())) {
+            TextView locationCheckInDate = (TextView) customInfoContents.findViewById(R.id.check_in_date);
+            locationCheckInDate.setVisibility(View.VISIBLE);
+            String checkInDateTitle = ResourcesExtensions.toString(R.string.snippet_check_in_date_title);
+            String[] checkInDate = location.getCheckInDate().split(" ");
+            locationCheckInDate.setText(checkInDateTitle + " " + checkInDate[1] + " " + checkInDate[2] + checkInDate[3]);
+        }
         return customInfoContents;
     }
 

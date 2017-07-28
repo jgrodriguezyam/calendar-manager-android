@@ -28,6 +28,7 @@
     <string name="snippet_radius_measure">mts</string>
     <string name="snippet_latitude_title">Latitud:</string>
     <string name="snippet_longitude_title">Longitud:</string>
+    <string name="snippet_check_in_date_title">Hora:</string>
 
     <!-- Drawer body -->
     <string name="menu_title_map">Mapa</string>
