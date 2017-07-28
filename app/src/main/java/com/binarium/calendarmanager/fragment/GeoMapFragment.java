@@ -654,6 +654,8 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
         View customInfoContents = getLayoutInflater(null).inflate(R.layout.custom_info_contents, null);
         ImageView image = (ImageView) customInfoContents.findViewById(R.id.image);
         image.setBackgroundResource(EnumExtensions.getImageOfLocationType(location.getType()));
+        if(location.isChecked())
+            image.setVisibility(View.VISIBLE);
         TextView title = (TextView) customInfoContents.findViewById(R.id.title);
         title.setText(location.getName());
         TextView snippet = (TextView) customInfoContents.findViewById(R.id.snippet);
