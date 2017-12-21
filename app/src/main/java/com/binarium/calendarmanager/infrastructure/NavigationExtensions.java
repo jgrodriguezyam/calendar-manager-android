@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.binarium.calendarmanager.R;
 import com.binarium.calendarmanager.activity.CheckInActivity;
+import com.binarium.calendarmanager.activity.FriendshipActivity;
 import com.binarium.calendarmanager.activity.GeoMapActivity;
 import com.binarium.calendarmanager.activity.LocationActivity;
 import com.binarium.calendarmanager.activity.LoginActivity;
@@ -31,6 +32,9 @@ public class NavigationExtensions {
                 break;
             case R.id.btn_location:
                 Util.sendAndFinish(activity, LocationActivity.class);
+                break;
+            case R.id.btn_friend:
+                Util.sendAndFinish(activity, FriendshipActivity.class);
                 break;
             case R.id.btn_profile:
                 Util.sendAndFinish(activity, ProfileActivity.class);

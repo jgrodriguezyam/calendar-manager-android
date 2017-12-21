@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">My Calendar</string>
-    <string name="url_base">http://calendarmanagerapi.gear.host</string>
-    <!--<string name="url_base">http://192.168.1.217:1988</string>-->
+    <!--<string name="url_base">http://calendarmanagerapi.gear.host</string>-->
+    <string name="url_base">http://192.168.1.152:1988</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
@@ -38,7 +38,7 @@
     <string name="btn_friend">Amigos</string>
     <string name="btn_profile">Perfil</string>
     <string name="btn_close_session">Cerrar sesión</string>
-    
+
     <!-- Notice Dialog -->
     <string name="dialog_listener_not_implemented">Falta implementar DialogListener en la actividad</string>
 
@@ -149,4 +149,7 @@
     <string name="tv_take_photo">Tomar foto</string>
     <string name="tv_photo_file">Tus fotos</string>
     <string name="btn_cancel_change_image">CANCELAR</string>
+
+    <!-- Friendship Activity -->
+    <string name="title_friendship_activity">Amigos</string>
 </resources>
