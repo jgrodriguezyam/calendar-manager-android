@@ -5,10 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,6 +14,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.view.View.OnClickListener;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
 
 import com.binarium.calendarmanager.R;
 import com.binarium.calendarmanager.infrastructure.ObjectValidations;
@@ -30,10 +29,12 @@ import com.binarium.calendarmanager.interfaces.profile.ProfileView;
 import com.binarium.calendarmanager.myapp.injector.InjectorUtils;
 import com.binarium.calendarmanager.presenters.ProfilePresenterImpl;
 import com.binarium.calendarmanager.viewmodels.user.User;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -41,19 +42,19 @@ import butterknife.ButterKnife;
  */
 
 public class ProfileFragment extends Fragment implements ProfileView, OnClickListener {
-    @Bind(R.id.iv_user_gender)
+    @BindView(R.id.iv_user_gender)
     ImageView ivUserGender;
 
-    @Bind(R.id.tv_user_gender)
+    @BindView(R.id.tv_user_gender)
     TextView tvUserGender;
 
-    @Bind(R.id.tv_user_email)
+    @BindView(R.id.tv_user_email)
     TextView tvUserEmail;
 
-    @Bind(R.id.tv_user_cell_number)
+    @BindView(R.id.tv_user_cell_number)
     TextView tvUserCellNumber;
 
-    @Bind(R.id.tv_user_username)
+    @BindView(R.id.tv_user_username)
     TextView tvUserUsername;
 
     private ProgressDialog progressDialog;

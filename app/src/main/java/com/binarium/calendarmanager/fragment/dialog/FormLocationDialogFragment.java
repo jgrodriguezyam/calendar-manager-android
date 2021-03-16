@@ -3,8 +3,6 @@ package com.binarium.calendarmanager.fragment.dialog;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.DialogFragment;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -32,6 +30,7 @@ import com.binarium.calendarmanager.infrastructure.ResourcesExtensions;
 import com.binarium.calendarmanager.infrastructure.SpinnerExtensions;
 import com.binarium.calendarmanager.infrastructure.enums.LocationType;
 import com.binarium.calendarmanager.viewmodels.location.Location;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Iterables;
@@ -40,54 +39,56 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import fr.ganfra.materialspinner.MaterialSpinner;
 
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 
+import androidx.fragment.app.DialogFragment;
+
 /**
  * Created by jrodriguez on 23/05/2017.
  */
 
 public class FormLocationDialogFragment extends DialogFragment implements OnClickListener, TextWatcher, OnItemSelectedListener, DatePickerDialogListener, OnTouchListener {
-    @Bind(R.id.tl_location_name)
+    @BindView(R.id.tl_location_name)
     TextInputLayout tlLocationName;
-    @Bind(R.id.et_location_name)
+    @BindView(R.id.et_location_name)
     EditText etLocationName;
 
-    @Bind(R.id.tv_error_location_radius)
+    @BindView(R.id.tv_error_location_radius)
     TextView radiusErrorTextView;
     private List<RadiusResponse> radius;
-    @Bind(R.id.sp_location_radius)
+    @BindView(R.id.sp_location_radius)
     MaterialSpinner radiusSpinner;
 
-    @Bind(R.id.tv_error_location_type)
+    @BindView(R.id.tv_error_location_type)
     TextView typesErrorTextView;
     private List<TypeResponse> types;
-    @Bind(R.id.sp_location_type)
+    @BindView(R.id.sp_location_type)
     MaterialSpinner typesSpinner;
 
-    @Bind(R.id.tl_location_start_date)
+    @BindView(R.id.tl_location_start_date)
     TextInputLayout tlLocationStartDate;
-    @Bind(R.id.et_location_start_date)
+    @BindView(R.id.et_location_start_date)
     EditText etLocationStartDate;
 
-    @Bind(R.id.tl_location_end_date)
+    @BindView(R.id.tl_location_end_date)
     TextInputLayout tlLocationEndDate;
-    @Bind(R.id.et_location_end_date)
+    @BindView(R.id.et_location_end_date)
     EditText etLocationEndDate;
 
-    @Bind(R.id.tl_location_comment)
+    @BindView(R.id.tl_location_comment)
     TextInputLayout tlLocationComment;
-    @Bind(R.id.et_location_comment)
+    @BindView(R.id.et_location_comment)
     EditText etLocationComment;
 
-    @Bind(R.id.btn_location_save)
+    @BindView(R.id.btn_location_save)
     Button btnLocationSave;
 
-    @Bind(R.id.btn_location_cancel)
+    @BindView(R.id.btn_location_cancel)
     Button btnLocationCancel;
 
     private static final String TAG_START_DATE = "TAG_START_DATE";

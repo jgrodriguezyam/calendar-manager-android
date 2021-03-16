@@ -2,7 +2,8 @@ package com.binarium.calendarmanager.myapp.injector;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.v4.app.Fragment;
+
+import androidx.fragment.app.Fragment;
 
 /**
  * Created by jrodriguez on 27/02/2017.

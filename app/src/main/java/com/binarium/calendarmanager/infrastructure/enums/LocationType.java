@@ -10,9 +10,9 @@ import java.util.List;
  */
 
 public enum LocationType {
-    EVENT(1, "Evento", R.drawable.ic_event),
-    ACTIVITY(2, "Actividad", R.drawable.ic_activity),
-    TASK(3, "Tarea", R.drawable.ic_task);
+    EVENT(1, "Event", R.drawable.ic_event),
+    ACTIVITY(2, "Activity", R.drawable.ic_activity),
+    TASK(3, "Task", R.drawable.ic_task);
 
     private int key;
     private String value;

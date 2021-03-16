@@ -1,0 +1,155 @@
+<resources>
+    <string name="app_name">My Calendar</string>
+    <string name="url_base">http://calendarmanagerapi.gear.host</string>
+<!--    <string name="url_base">http://192.168.1.152:1988</string>-->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <!-- Field Validation -->
+    <string name="required_fields">Campos requeridos</string>
+    <string name="required_field">Campo requerido</string>
+
+    <!-- Permission Validation -->
+    <string name="without_permission">Sin permisos</string>
+    <string name="permissions_required">Permisos requeridos</string>
+    <string name="without_permission_device">Sin permisos para obtener dispositivo</string>
+    <string name="without_permission_location">Sin permisos para obtener ubicación</string>
+
+    <!-- Google maps -->
+    <string name="google_maps_key">AIzaSyDY3o0cmVaR61xAn_uVBP8ClkbIQmhpXbo</string>
+    <string name="notification_geofence_transition_enter">Bienvenido, Ya puedes checar</string>
+    <string name="notification_geofence_transition_exit">Adios</string>
+    <string name="notification_geofence_transition_dwell">Ya puedes checar</string>
+    <string name="google_api_client_connection_suspended">GoogleApiClient Conección suspendida</string>
+    <string name="google_api_client_connection_failed">GoogleApiClient fallo la conecciónn</string>
+    <string name="snippet_date_title">Fecha:</string>
+    <string name="snippet_type_title">Tipo:</string>
+    <string name="snippet_radius_title">Radio:</string>
+    <string name="snippet_radius_measure">mts</string>
+    <string name="snippet_latitude_title">Latitud:</string>
+    <string name="snippet_longitude_title">Longitud:</string>
+    <string name="snippet_check_in_date_title">Hora:</string>
+
+    <!-- Drawer body -->
+    <string name="menu_title_map">Mapa</string>
+    <string name="btn_map">Ubicaciones</string>
+    <string name="btn_location">Realizadas</string>
+    <string name="menu_title_actions">Menu</string>
+    <string name="btn_friend">Amigos</string>
+    <string name="btn_profile">Perfil</string>
+    <string name="btn_close_session">Cerrar sesión</string>
+
+    <!-- Notice Dialog -->
+    <string name="dialog_listener_not_implemented">Falta implementar DialogListener en la actividad</string>
+
+    <!-- Login Activity -->
+    <string name="title_login_activity">Login</string>
+
+    <!-- Login Fragment -->
+    <string name="hint_user_name">Usuario</string>
+    <string name="hint_user_password">Contraseña</string>
+    <string name="btn_user_login">Entrar</string>
+    <string name="no_account_yet_create_one">¿No tiene una cuenta? Cree una.</string>
+    <string name="init_user_login">Entrando...</string>
+
+    <!-- Account Activity -->
+    <string name="title_account_activity">Registro</string>
+
+    <!-- Account Fragment -->
+    <string name="hint_user_first_name">Nombre</string>
+    <string name="hint_user_last_name">Apellido</string>
+    <string name="hint_user_gender">Género</string>
+    <string name="hint_user_email">Correo electrónico</string>
+    <string name="hint_user_cell_number">Telefono</string>
+    <string name="hint_user_username">Usuario</string>
+    <string name="hint_user_first_password">Contraseña</string>
+    <string name="hint_user_second_password">Confirmar Contraseña</string>
+    <string name="btn_user_save">Registrar</string>
+    <string name="init_user_save">Registrando...</string>
+    <string name="invalid_compare_password_fields">La contraseña no es la mismas</string>
+
+    <!-- Geo Map Activity -->
+    <string name="title_geo_map_activity">Mapa</string>
+
+    <!-- Geo Map Fragment -->
+    <string name="init_check_in">Registrando...</string>
+    <string name="init_get_all_locations">Obteniendo Ubicaciones...</string>
+    <string name="create_check_in_success">Registro exitoso :)</string>
+    <string name="check_in_without_location">No se ha podido obtener la ubicación</string>
+    <string name="init_create_location">Creando...</string>
+    <string name="init_update_location">Actualizando...</string>
+    <string name="init_delete_location">Eliminando...</string>
+    <string name="update_location_success">Actualización exitosa :)</string>
+    <string name="create_location_success">Creación exitosa :)</string>
+    <string name="delete_location_success">Eliminación exitosa :)</string>
+
+    <!-- Location Form Dialog -->
+    <string name="hint_location_name">Nombre</string>
+    <string name="hint_location_radius">Radio</string>
+    <string name="hint_location_type">Tipo</string>
+    <string name="hint_location_start_date">Fecha inicial</string>
+    <string name="hint_location_end_date">Fecha final</string>
+    <string name="hint_location_comment">Comentario</string>
+    <string name="btn_location_save">Guardar</string>
+    <string name="btn_location_cancel">Cancelar</string>
+    <string name="init_location_save">Agregando...</string>
+    <string name="required_location_start_date_field">Se requiere la fecha inicial</string>
+
+    <!-- Location Delete Dialog -->
+    <string name="title_delete_location">Eliminar ubicación</string>
+    <string name="message_delete_location">¿Estas seguro de querer eliminar</string>
+    <string name="btn_ok_delete_location">SI</string>
+    <string name="btn_cancel_delete_location">CANCELAR</string>
+
+    <!-- Geo Map Menu -->
+    <string name="btn_dots">...</string>
+    <string name="btn_refresh_map">Actualizar</string>
+    <string name="btn_location_list">Realizadas</string>
+    <string name="btn_road_map">Tráfico</string>
+    <string name="btn_map_type_normal">Normal</string>
+    <string name="btn_map_type_satellite">Satelite</string>
+    <string name="btn_map_type_terrain">Terreno</string>
+    <string name="hint_location_date">Fecha</string>
+
+    <!-- Location Activity -->
+    <string name="title_location_activity">Ubicaciones</string>
+
+    <!-- Location Fragment -->
+    <string name="location_without_my_location">No se ha podido obtener la ubicación</string>
+    <string name="location_init_get_all_locations">Obteniendo Ubicaciones...</string>
+    <string name="location_init_delete_location">Eliminando...</string>
+    <string name="location_delete_location_success">Eliminación exitosa :)</string>
+
+    <!-- Location Recycler View -->
+    <string name="recycler_location_date">Fecha:</string>
+    <string name="recycler_location_type">Tipo:</string>
+    <string name="recycler_location_radius">Radio:</string>
+    <string name="recycler_location_radius_measure">mts</string>
+    <string name="recycler_location_latitude">Latitud:</string>
+    <string name="recycler_location_longitude">Longitud:</string>
+
+    <!-- Profile Activity -->
+    <string name="title_profile_activity">Perfil</string>
+
+    <!-- Profile Fragment -->
+    <string name="tv_user_first_name">Nombre</string>
+    <string name="tv_user_last_name">Apellido</string>
+    <string name="tv_user_gender">Género</string>
+    <string name="tv_user_email">Correo</string>
+    <string name="tv_user_cell_number">Telefono</string>
+    <string name="tv_user_username">Usuario</string>
+    <string name="profile_in_error">Error no se encontro al usuario</string>
+    <string name="init_get_user">Cargando...</string>
+
+    <!-- Profile Menu -->
+    <string name="btn_add_image">Imagen</string>
+
+    <!-- Profile Image Dialog -->
+    <string name="title_change_image">Escoge tu foto de perfil</string>
+    <string name="tv_take_photo">Tomar foto</string>
+    <string name="tv_photo_file">Tus fotos</string>
+    <string name="btn_cancel_change_image">CANCELAR</string>
+
+    <!-- Friendship Activity -->
+    <string name="title_friendship_activity">Amigos</string>
+</resources>

@@ -1,155 +1,155 @@
 <resources>
     <string name="app_name">My Calendar</string>
-    <!--<string name="url_base">http://calendarmanagerapi.gear.host</string>-->
-    <string name="url_base">http://192.168.1.152:1988</string>
+    <string name="url_base">http://calendarmanagerapi.gear.host</string>
+<!--    <string name="url_base">http://192.168.1.152:1988</string>-->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <!-- Field Validation -->
-    <string name="required_fields">Campos requeridos</string>
-    <string name="required_field">Campo requerido</string>
+    <string name="required_fields">Required fields</string>
+    <string name="required_field">Required field</string>
 
     <!-- Permission Validation -->
-    <string name="without_permission">Sin permisos</string>
-    <string name="permissions_required">Permisos requeridos</string>
-    <string name="without_permission_device">Sin permisos para obtener dispositivo</string>
-    <string name="without_permission_location">Sin permisos para obtener ubicación</string>
+    <string name="without_permission">Without permission</string>
+    <string name="permissions_required">Required permissions</string>
+    <string name="without_permission_device">Without permission to get device</string>
+    <string name="without_permission_location">Without permission to get location</string>
 
     <!-- Google maps -->
     <string name="google_maps_key">AIzaSyDY3o0cmVaR61xAn_uVBP8ClkbIQmhpXbo</string>
-    <string name="notification_geofence_transition_enter">Bienvenido, Ya puedes checar</string>
-    <string name="notification_geofence_transition_exit">Adios</string>
-    <string name="notification_geofence_transition_dwell">Ya puedes checar</string>
-    <string name="google_api_client_connection_suspended">GoogleApiClient Conección suspendida</string>
-    <string name="google_api_client_connection_failed">GoogleApiClient fallo la conecciónn</string>
-    <string name="snippet_date_title">Fecha:</string>
-    <string name="snippet_type_title">Tipo:</string>
+    <string name="notification_geofence_transition_enter">Welcome to your destination</string>
+    <string name="notification_geofence_transition_exit">Bye</string>
+    <string name="notification_geofence_transition_dwell">Yo can check in</string>
+    <string name="google_api_client_connection_suspended">GoogleApiClient Connection suspended</string>
+    <string name="google_api_client_connection_failed">GoogleApiClient Connection failed</string>
+    <string name="snippet_date_title">Date:</string>
+    <string name="snippet_type_title">Type:</string>
     <string name="snippet_radius_title">Radio:</string>
     <string name="snippet_radius_measure">mts</string>
-    <string name="snippet_latitude_title">Latitud:</string>
-    <string name="snippet_longitude_title">Longitud:</string>
-    <string name="snippet_check_in_date_title">Hora:</string>
+    <string name="snippet_latitude_title">Latitude:</string>
+    <string name="snippet_longitude_title">Longitude:</string>
+    <string name="snippet_check_in_date_title">Time:</string>
 
     <!-- Drawer body -->
-    <string name="menu_title_map">Mapa</string>
-    <string name="btn_map">Ubicaciones</string>
-    <string name="btn_location">Realizadas</string>
+    <string name="menu_title_map">Map</string>
+    <string name="btn_map">Tasks</string>
+    <string name="btn_location">My Tasks</string>
     <string name="menu_title_actions">Menu</string>
-    <string name="btn_friend">Amigos</string>
-    <string name="btn_profile">Perfil</string>
-    <string name="btn_close_session">Cerrar sesión</string>
+    <string name="btn_friend">Friends</string>
+    <string name="btn_profile">Profile</string>
+    <string name="btn_close_session">Logout</string>
 
     <!-- Notice Dialog -->
-    <string name="dialog_listener_not_implemented">Falta implementar DialogListener en la actividad</string>
+    <string name="dialog_listener_not_implemented">Dialog listener not implemented</string>
 
     <!-- Login Activity -->
     <string name="title_login_activity">Login</string>
 
     <!-- Login Fragment -->
-    <string name="hint_user_name">Usuario</string>
-    <string name="hint_user_password">Contraseña</string>
-    <string name="btn_user_login">Entrar</string>
-    <string name="no_account_yet_create_one">¿No tiene una cuenta? Cree una.</string>
-    <string name="init_user_login">Entrando...</string>
+    <string name="hint_user_name">User</string>
+    <string name="hint_user_password">Password</string>
+    <string name="btn_user_login">Enter</string>
+    <string name="no_account_yet_create_one">You do not have an account? create a new one.</string>
+    <string name="init_user_login">Loading...</string>
 
     <!-- Account Activity -->
-    <string name="title_account_activity">Registro</string>
+    <string name="title_account_activity">Register</string>
 
     <!-- Account Fragment -->
-    <string name="hint_user_first_name">Nombre</string>
-    <string name="hint_user_last_name">Apellido</string>
-    <string name="hint_user_gender">Género</string>
-    <string name="hint_user_email">Correo electrónico</string>
-    <string name="hint_user_cell_number">Telefono</string>
-    <string name="hint_user_username">Usuario</string>
-    <string name="hint_user_first_password">Contraseña</string>
-    <string name="hint_user_second_password">Confirmar Contraseña</string>
-    <string name="btn_user_save">Registrar</string>
-    <string name="init_user_save">Registrando...</string>
-    <string name="invalid_compare_password_fields">La contraseña no es la mismas</string>
+    <string name="hint_user_first_name">Name</string>
+    <string name="hint_user_last_name">Lastname</string>
+    <string name="hint_user_gender">Gener</string>
+    <string name="hint_user_email">Email</string>
+    <string name="hint_user_cell_number">Phone</string>
+    <string name="hint_user_username">User</string>
+    <string name="hint_user_first_password">Password</string>
+    <string name="hint_user_second_password">Confirm Password</string>
+    <string name="btn_user_save">Save</string>
+    <string name="init_user_save">Saving...</string>
+    <string name="invalid_compare_password_fields">The password is not the same</string>
 
     <!-- Geo Map Activity -->
-    <string name="title_geo_map_activity">Mapa</string>
+    <string name="title_geo_map_activity">Map</string>
 
     <!-- Geo Map Fragment -->
-    <string name="init_check_in">Registrando...</string>
-    <string name="init_get_all_locations">Obteniendo Ubicaciones...</string>
-    <string name="create_check_in_success">Registro exitoso :)</string>
+    <string name="init_check_in">Saving...</string>
+    <string name="init_get_all_locations">Getting Locations...</string>
+    <string name="create_check_in_success">Saved successfully :)</string>
     <string name="check_in_without_location">No se ha podido obtener la ubicación</string>
-    <string name="init_create_location">Creando...</string>
-    <string name="init_update_location">Actualizando...</string>
-    <string name="init_delete_location">Eliminando...</string>
-    <string name="update_location_success">Actualización exitosa :)</string>
-    <string name="create_location_success">Creación exitosa :)</string>
-    <string name="delete_location_success">Eliminación exitosa :)</string>
+    <string name="init_create_location">Adding...</string>
+    <string name="init_update_location">Updating...</string>
+    <string name="init_delete_location">Removing...</string>
+    <string name="update_location_success">Updated successfully :)</string>
+    <string name="create_location_success">Created successfully :)</string>
+    <string name="delete_location_success">Removed successfully :)</string>
 
     <!-- Location Form Dialog -->
-    <string name="hint_location_name">Nombre</string>
+    <string name="hint_location_name">Name</string>
     <string name="hint_location_radius">Radio</string>
-    <string name="hint_location_type">Tipo</string>
-    <string name="hint_location_start_date">Fecha inicial</string>
-    <string name="hint_location_end_date">Fecha final</string>
-    <string name="hint_location_comment">Comentario</string>
-    <string name="btn_location_save">Guardar</string>
-    <string name="btn_location_cancel">Cancelar</string>
-    <string name="init_location_save">Agregando...</string>
-    <string name="required_location_start_date_field">Se requiere la fecha inicial</string>
+    <string name="hint_location_type">Type</string>
+    <string name="hint_location_start_date">Start date</string>
+    <string name="hint_location_end_date">End date</string>
+    <string name="hint_location_comment">Comments</string>
+    <string name="btn_location_save">Save</string>
+    <string name="btn_location_cancel">Cancel</string>
+    <string name="init_location_save">Adding...</string>
+    <string name="required_location_start_date_field">Start date is required</string>
 
     <!-- Location Delete Dialog -->
-    <string name="title_delete_location">Eliminar ubicación</string>
-    <string name="message_delete_location">¿Estas seguro de querer eliminar</string>
-    <string name="btn_ok_delete_location">SI</string>
-    <string name="btn_cancel_delete_location">CANCELAR</string>
+    <string name="title_delete_location">Remove location</string>
+    <string name="message_delete_location">do you want remove location</string>
+    <string name="btn_ok_delete_location">Yes</string>
+    <string name="btn_cancel_delete_location">Cancel</string>
 
     <!-- Geo Map Menu -->
     <string name="btn_dots">...</string>
-    <string name="btn_refresh_map">Actualizar</string>
-    <string name="btn_location_list">Realizadas</string>
-    <string name="btn_road_map">Tráfico</string>
+    <string name="btn_refresh_map">Update</string>
+    <string name="btn_location_list">My Tasks</string>
+    <string name="btn_road_map">Trafic</string>
     <string name="btn_map_type_normal">Normal</string>
-    <string name="btn_map_type_satellite">Satelite</string>
-    <string name="btn_map_type_terrain">Terreno</string>
-    <string name="hint_location_date">Fecha</string>
+    <string name="btn_map_type_satellite">Satellite</string>
+    <string name="btn_map_type_terrain">Terrain</string>
+    <string name="hint_location_date">Date</string>
 
     <!-- Location Activity -->
-    <string name="title_location_activity">Ubicaciones</string>
+    <string name="title_location_activity">Locations</string>
 
     <!-- Location Fragment -->
-    <string name="location_without_my_location">No se ha podido obtener la ubicación</string>
-    <string name="location_init_get_all_locations">Obteniendo Ubicaciones...</string>
-    <string name="location_init_delete_location">Eliminando...</string>
-    <string name="location_delete_location_success">Eliminación exitosa :)</string>
+    <string name="location_without_my_location">We can not get your location</string>
+    <string name="location_init_get_all_locations">Getting Locations...</string>
+    <string name="location_init_delete_location">Removing...</string>
+    <string name="location_delete_location_success">Removed Successfully :)</string>
 
     <!-- Location Recycler View -->
-    <string name="recycler_location_date">Fecha:</string>
-    <string name="recycler_location_type">Tipo:</string>
+    <string name="recycler_location_date">Date:</string>
+    <string name="recycler_location_type">Type:</string>
     <string name="recycler_location_radius">Radio:</string>
     <string name="recycler_location_radius_measure">mts</string>
-    <string name="recycler_location_latitude">Latitud:</string>
-    <string name="recycler_location_longitude">Longitud:</string>
+    <string name="recycler_location_latitude">Latitude:</string>
+    <string name="recycler_location_longitude">Longitude:</string>
 
     <!-- Profile Activity -->
-    <string name="title_profile_activity">Perfil</string>
+    <string name="title_profile_activity">Profile</string>
 
     <!-- Profile Fragment -->
-    <string name="tv_user_first_name">Nombre</string>
-    <string name="tv_user_last_name">Apellido</string>
-    <string name="tv_user_gender">Género</string>
-    <string name="tv_user_email">Correo</string>
-    <string name="tv_user_cell_number">Telefono</string>
-    <string name="tv_user_username">Usuario</string>
-    <string name="profile_in_error">Error no se encontro al usuario</string>
-    <string name="init_get_user">Cargando...</string>
+    <string name="tv_user_first_name">Name</string>
+    <string name="tv_user_last_name">Lastname</string>
+    <string name="tv_user_gender">Gener</string>
+    <string name="tv_user_email">Email</string>
+    <string name="tv_user_cell_number">Phone</string>
+    <string name="tv_user_username">User</string>
+    <string name="profile_in_error">Error user does not exist</string>
+    <string name="init_get_user">Loading...</string>
 
     <!-- Profile Menu -->
-    <string name="btn_add_image">Imagen</string>
+    <string name="btn_add_image">Image</string>
 
     <!-- Profile Image Dialog -->
-    <string name="title_change_image">Escoge tu foto de perfil</string>
-    <string name="tv_take_photo">Tomar foto</string>
-    <string name="tv_photo_file">Tus fotos</string>
-    <string name="btn_cancel_change_image">CANCELAR</string>
+    <string name="title_change_image">Choice a image</string>
+    <string name="tv_take_photo">Take a photo</string>
+    <string name="tv_photo_file">Your photos</string>
+    <string name="btn_cancel_change_image">Cancel</string>
 
     <!-- Friendship Activity -->
-    <string name="title_friendship_activity">Amigos</string>
+    <string name="title_friendship_activity">Friends</string>
 </resources>

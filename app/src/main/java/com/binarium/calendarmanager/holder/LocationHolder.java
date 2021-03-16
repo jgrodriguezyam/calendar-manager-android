@@ -1,10 +1,11 @@
 package com.binarium.calendarmanager.holder;
 
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.binarium.calendarmanager.R;
 import com.binarium.calendarmanager.infrastructure.EnumExtensions;
@@ -16,7 +17,7 @@ import com.binarium.calendarmanager.viewmodels.location.Location;
  * Created by jrodriguez on 27/07/2017.
  */
 
-public class LocationHolder extends ViewHolder {
+public class LocationHolder extends RecyclerView.ViewHolder {
     private Location location;
     private ImageView locationImage;
     private TextView locationName;

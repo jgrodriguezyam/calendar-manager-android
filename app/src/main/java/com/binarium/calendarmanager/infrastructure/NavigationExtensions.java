@@ -1,7 +1,6 @@
 package com.binarium.calendarmanager.infrastructure;
 
 import android.app.Activity;
-import android.support.design.widget.NavigationView;
 import android.view.View;
 import android.widget.TextView;
 
@@ -12,6 +11,7 @@ import com.binarium.calendarmanager.activity.GeoMapActivity;
 import com.binarium.calendarmanager.activity.LocationActivity;
 import com.binarium.calendarmanager.activity.LoginActivity;
 import com.binarium.calendarmanager.activity.ProfileActivity;
+import com.google.android.material.navigation.NavigationView;
 
 /**
  * Created by link_jorge on 24/12/2016.

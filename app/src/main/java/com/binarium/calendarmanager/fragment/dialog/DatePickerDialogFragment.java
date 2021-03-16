@@ -4,8 +4,9 @@ import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.Dialog;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.widget.DatePicker;
+
+import androidx.fragment.app.DialogFragment;
 
 import com.binarium.calendarmanager.fragment.listener.DatePickerDialogListener;
 

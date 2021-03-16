@@ -1,9 +1,10 @@
 package com.binarium.calendarmanager.adapter;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.binarium.calendarmanager.R;
 import com.binarium.calendarmanager.holder.LocationHolder;

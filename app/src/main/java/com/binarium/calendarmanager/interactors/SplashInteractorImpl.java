@@ -1,7 +1,8 @@
 package com.binarium.calendarmanager.interactors;
 
 import android.os.AsyncTask;
-import android.support.annotation.UiThread;
+
+import androidx.annotation.UiThread;
 
 import com.binarium.calendarmanager.dto.user.GetUserRequest;
 import com.binarium.calendarmanager.dto.user.LoginUserRequest;

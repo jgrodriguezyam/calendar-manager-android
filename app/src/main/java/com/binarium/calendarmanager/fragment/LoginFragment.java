@@ -2,9 +2,6 @@ package com.binarium.calendarmanager.fragment;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -14,6 +11,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.view.View.OnClickListener;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.binarium.calendarmanager.R;
 import com.binarium.calendarmanager.activity.AccountActivity;
@@ -25,10 +25,11 @@ import com.binarium.calendarmanager.infrastructure.Util;
 import com.binarium.calendarmanager.interfaces.login.LoginView;
 import com.binarium.calendarmanager.myapp.injector.InjectorUtils;
 import com.binarium.calendarmanager.presenters.LoginPresenterImpl;
+import com.google.android.material.textfield.TextInputLayout;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -36,20 +37,20 @@ import butterknife.ButterKnife;
  */
 
 public class LoginFragment extends Fragment implements LoginView, OnClickListener, TextWatcher {
-    @Bind(R.id.tl_user_name)
+    @BindView(R.id.tl_user_name)
     public TextInputLayout tlUserName;
-    @Bind(R.id.et_user_name)
+    @BindView(R.id.et_user_name)
     public EditText etUserName;
 
-    @Bind(R.id.tl_user_password)
+    @BindView(R.id.tl_user_password)
     public TextInputLayout tlUserPassword;
-    @Bind(R.id.et_user_password)
+    @BindView(R.id.et_user_password)
     public EditText etUserPassword;
 
-    @Bind(R.id.btn_user_login)
+    @BindView(R.id.btn_user_login)
     Button btnUserLogin;
 
-    @Bind(R.id.link_create_account)
+    @BindView(R.id.link_create_account)
     TextView linkCreateAccount;
 
     private ProgressDialog progressDialog;

@@ -2,9 +2,6 @@ package com.binarium.calendarmanager.fragment;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -16,6 +13,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.view.View.OnClickListener;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.binarium.calendarmanager.R;
 import com.binarium.calendarmanager.activity.LoginActivity;
@@ -31,61 +31,62 @@ import com.binarium.calendarmanager.interfaces.account.AccountView;
 import com.binarium.calendarmanager.myapp.injector.InjectorUtils;
 import com.binarium.calendarmanager.presenters.AccountPresenterImpl;
 import com.binarium.calendarmanager.viewmodels.user.User;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import fr.ganfra.materialspinner.MaterialSpinner;
 
 public class AccountFragment extends Fragment implements AccountView, OnClickListener, TextWatcher {
-    @Bind(R.id.tl_user_first_name)
+    @BindView(R.id.tl_user_first_name)
     public TextInputLayout tlUserFirstName;
-    @Bind(R.id.et_user_first_name)
+    @BindView(R.id.et_user_first_name)
     public EditText etUserFirstName;
 
-    @Bind(R.id.tl_user_last_name)
+    @BindView(R.id.tl_user_last_name)
     public TextInputLayout tlUserLastName;
-    @Bind(R.id.et_user_last_name)
+    @BindView(R.id.et_user_last_name)
     public EditText etUserLastName;
 
-    @Bind(R.id.tv_error_user_gender)
+    @BindView(R.id.tv_error_user_gender)
     public TextView gendersErrorTextView;
     private List<GenderResponse> genders;
-    @Bind(R.id.sp_user_gender)
+    @BindView(R.id.sp_user_gender)
     public MaterialSpinner gendersSpinner;
 
-    @Bind(R.id.tl_user_email)
+    @BindView(R.id.tl_user_email)
     public TextInputLayout tlUserEmail;
-    @Bind(R.id.et_user_email)
+    @BindView(R.id.et_user_email)
     public EditText etUserEmail;
 
-    @Bind(R.id.et_user_cell_number)
+    @BindView(R.id.et_user_cell_number)
     public EditText etUserCellNumber;
-    @Bind(R.id.tl_user_cell_number)
+    @BindView(R.id.tl_user_cell_number)
     public TextInputLayout tlUserCellNumber;
 
-    @Bind(R.id.et_user_username)
+    @BindView(R.id.et_user_username)
     public EditText etUserUsername;
-    @Bind(R.id.tl_user_username)
+    @BindView(R.id.tl_user_username)
     public TextInputLayout tlUserUsername;
 
-    @Bind(R.id.et_user_first_password)
+    @BindView(R.id.et_user_first_password)
     public EditText etUserFirstPassword;
-    @Bind(R.id.tl_user_first_password)
+    @BindView(R.id.tl_user_first_password)
     public TextInputLayout tlUserFirstPassword;
 
-    @Bind(R.id.et_user_second_password)
+    @BindView(R.id.et_user_second_password)
     public EditText etUserSecondPassword;
-    @Bind(R.id.tl_user_second_password)
+    @BindView(R.id.tl_user_second_password)
     public TextInputLayout tlUserSecondPassword;
 
     private ProgressDialog progressDialog;
 
-    @Bind(R.id.btn_user_save)
+    @BindView(R.id.btn_user_save)
     Button btnUserSave;
 
     @Inject

@@ -3,15 +3,6 @@ package com.binarium.calendarmanager.fragment;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.LayoutManager;
-import android.support.v7.widget.RecyclerView.Adapter;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,6 +11,13 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.view.View.OnTouchListener;
 import android.view.View.OnClickListener;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.binarium.calendarmanager.R;
 import com.binarium.calendarmanager.adapter.LocationAdapter;
@@ -45,7 +43,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -53,7 +51,7 @@ import butterknife.ButterKnife;
  */
 
 public class LocationFragment extends Fragment implements LocationView, OnTouchListener, DatePickerDialogListener, OnClickListener {
-    @Bind(R.id.recycler_view_location)
+    @BindView(R.id.recycler_view_location)
     RecyclerView recyclerViewLocation;
 
     private ProgressDialog progressDialog;
@@ -144,7 +142,7 @@ public class LocationFragment extends Fragment implements LocationView, OnTouchL
     @Override
     public void getAllLocationsSuccess(List<Location> locations) {
         this.locations = locations;
-        Adapter locationAdapter = new LocationAdapter(this.locations);
+        RecyclerView.Adapter locationAdapter = new LocationAdapter(this.locations);
         recyclerViewLocation.setAdapter(locationAdapter);
         locationAdapter.notifyDataSetChanged();
     }
@@ -254,7 +252,7 @@ public class LocationFragment extends Fragment implements LocationView, OnTouchL
 
     private void recyclerViewConfig() {
         recyclerViewLocation.setHasFixedSize(true);
-        LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerViewLocation.setLayoutManager(layoutManager);
     }
 

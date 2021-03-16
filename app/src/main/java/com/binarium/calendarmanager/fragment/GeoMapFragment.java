@@ -8,13 +8,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -31,6 +24,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.view.View.OnTouchListener;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 
 import com.binarium.calendarmanager.R;
 import com.binarium.calendarmanager.activity.LocationActivity;
@@ -79,6 +79,7 @@ import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Iterables;
@@ -89,7 +90,7 @@ import java.util.Calendar;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -97,19 +98,19 @@ import butterknife.ButterKnife;
  */
 
 public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListener, ConnectionCallbacks, OnConnectionFailedListener, ResultCallback, OnMapReadyCallback, OnMarkerClickListener, OnMapLongClickListener, OnMarkerDragListener, FormLocationDialogListener, InfoWindowAdapter, OnTouchListener, DatePickerDialogListener {
-    @Bind(R.id.fab_btn_check_in)
+    @BindView(R.id.fab_btn_check_in)
     FloatingActionButton fabBtnCheckIn;
 
-    @Bind(R.id.fab_btn_plus)
+    @BindView(R.id.fab_btn_plus)
     FloatingActionButton fabBtnPlus;
 
-    @Bind(R.id.fab_btn_delete)
+    @BindView(R.id.fab_btn_delete)
     FloatingActionButton fabBtnDelete;
 
-    @Bind(R.id.fab_btn_edit)
+    @BindView(R.id.fab_btn_edit)
     FloatingActionButton fabBtnEdit;
 
-    @Bind(R.id.fab_btn_share)
+    @BindView(R.id.fab_btn_share)
     FloatingActionButton fabBtnShare;
 
     private ProgressDialog progressDialog;
