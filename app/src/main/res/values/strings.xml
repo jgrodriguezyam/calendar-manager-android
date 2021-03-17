@@ -16,7 +16,7 @@
     <string name="without_permission_location">Without permission to get location</string>
 
     <!-- Google maps -->
-    <string name="google_maps_key">AIzaSyDY3o0cmVaR61xAn_uVBP8ClkbIQmhpXbo</string>
+    <string name="google_maps_key">AIzaSyBKfyjwqsb98WMI3Gf2Lo0HsUiPX6Q5bOc</string>
     <string name="notification_geofence_transition_enter">Welcome to your destination</string>
     <string name="notification_geofence_transition_exit">Bye</string>
     <string name="notification_geofence_transition_dwell">Yo can check in</string>

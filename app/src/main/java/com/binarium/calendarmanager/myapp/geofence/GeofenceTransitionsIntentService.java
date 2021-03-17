@@ -6,9 +6,10 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.util.Log;
 
-import androidx.core.app.NotificationCompat;
+import androidx.annotation.RequiresApi;
 
 import com.binarium.calendarmanager.R;
 import com.binarium.calendarmanager.activity.GeoMapActivity;
@@ -30,6 +31,7 @@ public class GeofenceTransitionsIntentService extends IntentService {
         super(TRANSITION_INTENT_SERVICE);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onHandleIntent(Intent intent) {
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
@@ -55,25 +57,28 @@ public class GeofenceTransitionsIntentService extends IntentService {
         }
 
         if (transitionType == Geofence.GEOFENCE_TRANSITION_EXIT) {
+            message = ResourcesExtensions.toString(R.string.notification_geofence_transition_exit);
             broadcastIntent.putExtra(Constants.SEND_LOCATION_PARAMETER, requestId);
             broadcastIntent.putExtra(Constants.IS_VISIBLE_PARAMETER, false);
         }
 
         if (transitionType == Geofence.GEOFENCE_TRANSITION_DWELL) {
+            message = ResourcesExtensions.toString(R.string.notification_geofence_transition_dwell);
             requestId = Integer.valueOf(geofencingEvent.getTriggeringGeofences().get(0).getRequestId());
             broadcastIntent.putExtra(Constants.SEND_LOCATION_PARAMETER, requestId);
             broadcastIntent.putExtra(Constants.IS_VISIBLE_PARAMETER, true);
         }
 
         if(StringValidations.IsNotNullOrEmpty(message)) {
-            generateNotification(Constants.GEOFENCE_LOCATION_BINARIUM, message);
+            generateNotification("Calendar Manager", message);
         }
 
         sendBroadcast(broadcastIntent);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void generateNotification(String locationId, String address) {
-        long when = System.currentTimeMillis();
+        long when = 3000;
         Intent notifyIntent = new Intent(this, GeoMapActivity.class);
         notifyIntent.putExtra("id", locationId);
         notifyIntent.putExtra("address", address);
@@ -81,17 +86,18 @@ public class GeofenceTransitionsIntentService extends IntentService {
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        NotificationCompat.Builder builder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.logo_plenumsoft)
-                        .setContentTitle(locationId)
-                        .setContentText(address)
-                        .setContentIntent(pendingIntent)
-                        .setAutoCancel(true)
-                        .setDefaults(Notification.DEFAULT_SOUND)
-                        .setWhen(when);
+        String channelId = "some_channel_id";
+        Notification notification = new Notification.Builder(this)
+                .setContentTitle(locationId)
+                .setContentText(address)
+                .setSmallIcon(R.drawable.logo_binarium)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true)
+                .setDefaults(Notification.DEFAULT_SOUND)
+                .setChannelId(channelId)
+                .build();
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify((int) when, builder.build());
+        notificationManager.notify((int) when, notification);
     }
 }

@@ -224,7 +224,7 @@ public class ProfileFragment extends Fragment implements ProfileView, OnClickLis
     }
 
     private void showChangeImageDialog() {
-        View changeProfileImage = getLayoutInflater(null).inflate(R.layout.change_profile_image, null);
+        View changeProfileImage = getActivity().getLayoutInflater().inflate(R.layout.change_profile_image, null);
         this.tvTakePhoto = (TextView) changeProfileImage.findViewById(R.id.tv_take_photo);
         this.tvPhotoFile = (TextView) changeProfileImage.findViewById(R.id.tv_photo_file);
         tvTakePhoto.setOnClickListener(this);

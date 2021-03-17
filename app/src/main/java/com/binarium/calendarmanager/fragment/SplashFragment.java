@@ -133,11 +133,11 @@ public class SplashFragment extends Fragment implements SplashView {
             if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)) {
                 showErrorMessage(ResourcesExtensions.toString(R.string.without_permission_location));
             } else {
-                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, Constants.MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
                 ActivityCompat.requestPermissions(getActivity(),
                         new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
                                 Manifest.permission.ACCESS_NOTIFICATION_POLICY,
-                                Manifest.permission.ACCESS_FINE_LOCATION}, Constants.MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+                                Manifest.permission.ACCESS_FINE_LOCATION,
+                                Manifest.permission.ACCESS_BACKGROUND_LOCATION}, Constants.MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
             }
         }else {
             userLogin();

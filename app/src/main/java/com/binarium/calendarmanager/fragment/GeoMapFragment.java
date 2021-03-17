@@ -652,7 +652,7 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
             return null;
 
         String snippetOfLocation = MapExtensions.getSnippetOfLocation(location);
-        View customInfoContents = getLayoutInflater(null).inflate(R.layout.custom_info_contents, null);
+        View customInfoContents = getActivity().getLayoutInflater().inflate(R.layout.custom_info_contents, null);
         ImageView image = (ImageView) customInfoContents.findViewById(R.id.image);
         image.setBackgroundResource(EnumExtensions.getImageOfLocationType(location.getType()));
         if(location.isChecked())
@@ -724,7 +724,7 @@ public class GeoMapFragment extends Fragment implements GeoMapView, OnClickListe
     private void addFilterToMenu() {
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         toolbar.setTitle(Constants.EMPTY_STRING);
-        View filterMenu = getLayoutInflater(null).inflate(R.layout.map_filter_menu, null);
+        View filterMenu = getActivity().getLayoutInflater().inflate(R.layout.map_filter_menu, null);
         this.etLocationDate = (EditText) filterMenu.findViewById(R.id.et_location_date);
         etLocationDate.setText(Preferences.getTodayDate());
         etLocationDate.setOnTouchListener(this);
